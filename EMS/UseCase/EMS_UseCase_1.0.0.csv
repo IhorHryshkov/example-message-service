@@ -1,0 +1,44 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1
+1,Page,,,,,,,,,Travel Reservation Use Case Diagram
+2,Rectangle Container,UML,1,,,,,,,Example Messages Service
+3,Actor,UML,1,,,,,,,User
+4,Use Case,UML,1,2,,,,,,Send message
+5,Text,Standard,1,,43,,,,,EMS_UseCase_1.0.0
+6,Text,Standard,1,,43,,,,,"Ihor Hryshkov  |  July 5, 2020"
+7,Use Case,UML,1,2,,,,,,Recieved message
+8,Use Case,UML,1,2,,,,,,Show users
+9,Use Case,UML,1,2,,,,,,Show counters
+10,Use Case,UML,1,2,,,,,,Register
+11,Use Case,UML,1,2,,,,,,Update user state
+12,Actor,UML,1,,,,,,,Service
+13,Use Case,UML,1,2,,,,,,Show statuses
+14,Use Case,UML,1,2,,,,,,Update counters
+15,Use Case,UML,1,2,,,,,,Show messages
+16,Use Case,UML,1,2,,,,,,Store message
+17,Use Case,UML,1,2,,,,,,Load messages
+18,Actor,UML,1,,,,,,,Client application
+19,Line,,1,,,3,4,None,None,
+20,Line,,1,,43,5,5,None,None,
+21,Line,,1,,,7,3,None,None,
+22,Line,,1,,,8,3,None,None,
+23,Line,,1,,,9,3,None,None,
+24,Line,,1,,,10,3,None,None,
+25,Line,,1,,,11,12,None,None,
+26,Line,,1,,,13,3,None,None,
+27,Line,,1,,,14,12,None,None,
+28,Line,,1,,,11,14,None,Arrow,<<include>>
+29,Line,,1,,,15,3,None,None,
+30,Line,,1,,,10,18,None,None,
+31,Line,,1,,,4,30,None,None,
+32,Line,,1,,,7,30,None,None,
+33,Line,,1,,,10,11,None,Arrow,<<include>>
+34,Line,,1,,,4,11,None,Arrow,<<include>>
+35,Line,,1,,,15,30,None,None,
+36,Line,,1,,,13,30,None,None,
+37,Line,,1,,,9,30,None,None,
+38,Line,,1,,,8,30,None,None,
+39,Line,,1,,,16,18,None,None,
+40,Line,,1,,,17,18,None,None,
+41,Line,,1,,,10,14,None,Arrow,<<include>>
+42,Line,,1,,,4,14,None,Arrow,<<include>>
+43,Group 1,,1,,,,,,,

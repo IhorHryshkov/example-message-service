@@ -1,0 +1,42 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1
+1,Page,,,,,,,,,Flowchart
+2,Text,Standard,1,,40,,,,,EMS_APIFlowchart_1.0.0
+3,Text,Standard,1,,40,,,,,"Ihor Hryshkov  |  July 5, 2020"
+4,Process,Flowchart Shapes,1,,41,,,,,API Endpoint localhost
+5,SVGPathBlock2,,1,,41,,,,,
+6,Decision,Flowchart Shapes,1,,,,,,,Request OK?
+7,Decision,Flowchart Shapes,1,,,,,,,Cached?
+8,Decision,Flowchart Shapes,1,,,,,,,Modified?
+9,Process,Flowchart Shapes,1,,,,,,,Store in cache
+10,Process,Flowchart Shapes,1,,,,,,,Return 200 or 201
+11,Terminator,Flowchart Shapes,1,,,,,,,Complete Request
+12,Process,Flowchart Shapes,1,,,,,,,Return 304
+13,Process,Flowchart Shapes,1,,,,,,,Request malformed
+14,Process,Flowchart Shapes,1,,,,,,,Return 400
+15,Terminator,Flowchart Shapes,1,,,,,,,Remedy error and try again
+16,Process,Flowchart Shapes,1,,,,,,,Invalid or missing query or path or body parameter
+17,Process,Flowchart Shapes,1,,,,,,,Return 422
+18,Process,Flowchart Shapes,1,,,,,,,Something's wrong (Temporary issue)
+19,Process,Flowchart Shapes,1,,,,,,,Return 5xx
+20,Terminator,Flowchart Shapes,1,,,,,,,Try again or contact support
+21,Line,,1,,40,,,None,None,
+22,Line,,1,,,5,6,None,Arrow,
+23,Line,,1,,,6,7,None,Arrow,Yes
+24,Line,,1,,,7,8,None,Arrow,Yes
+25,Line,,1,,,7,9,None,Arrow,No
+26,Line,,1,,,9,10,None,Arrow,
+27,Line,,1,,,10,11,None,Arrow,
+28,Line,,1,,,8,12,None,Arrow,No
+29,Line,,1,,,6,13,None,Arrow,No
+30,Line,,1,,,13,14,None,Arrow,
+31,Line,,1,,,16,17,None,Arrow,
+32,Line,,1,,,6,16,None,Arrow,
+33,Line,,1,,,14,15,None,Arrow,
+34,Line,,1,,,17,15,None,Arrow,
+35,Line,,1,,,6,18,None,Arrow,
+36,Line,,1,,,18,19,None,Arrow,
+37,Line,,1,,,19,20,None,Arrow,
+38,Line,,1,,,8,10,None,Arrow,Yes
+39,Line,,1,,,12,11,None,Arrow,
+40,Group 1,,1,,,,,,,
+41,Group 2,,1,,,,,,,

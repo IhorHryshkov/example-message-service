@@ -1,0 +1,13 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1,Text Area 2,Text Area 3,Text Area 4,Text Area 5,Text Area 6,Text Area 7,Text Area 8,Text Area 9,Text Area 10,Text Area 11,Text Area 12,Text Area 13,Text Area 14,Text Area 15,Text Area 16,Text Area 17,Text Area 18,Text Area 19
+1,Page,,,,,,,,,ERD Import Example,,,,,,,,,,,,,,,,,,
+2,Entity,Entity Relationship,1,,,,,,,users,PK,id,uuid,FK,state_id,smallint,,username,varchar(64),,meta,json,,created_at,timestamp without time zone,,updated_at,timestamp without time zone
+3,Text,Standard,1,,12,,,,,EMS_DB_ERD_1.0.1,,,,,,,,,,,,,,,,,,
+4,Text,Standard,1,,12,,,,,"Ihor Hryshkov  |  July 5, 2020",,,,,,,,,,,,,,,,,,
+5,Entity,Entity Relationship,1,,,,,,,status,PK,id,smallint,,name,varchar(64),,created_at,timestamp without time zone,,updated_at,timestamp without time zone,,,,,,
+6,Entity,Entity Relationship,1,,,,,,,types,PK,id,smallint,,name,varchar(64),,created_at,timestamp without time zone,,updated_at,timestamp without time zone,,,,,,
+7,Entity,Entity Relationship,1,,,,,,,counters,"PK,FK",id,uuid,"PK,FK",type_id,smallint,,counts,"numeric(1024,0)",,created_at,timestamp without time zone,,updated_at,timestamp without time zone,,,
+8,Line,,1,,12,3,,None,None,,,,,,,,,,,,,,,,,,,
+9,Line,,1,,,2,7,CFN ERD One Arrow,CFN ERD Zero Or More Arrow,,,,,,,,,,,,,,,,,,,
+10,Line,,1,,,6,7,CFN ERD One Arrow,CFN ERD Zero Or More Arrow,,,,,,,,,,,,,,,,,,,
+11,Line,,1,,,5,2,CFN ERD One Arrow,CFN ERD Zero Or More Arrow,,,,,,,,,,,,,,,,,,,
+12,Group 1,,1,,,,,,,,,,,,,,,,,,,,,,,,,

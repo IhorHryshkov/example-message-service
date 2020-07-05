@@ -1,0 +1,60 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1
+1,Page,,,,,,,,,UML Class
+2,MinimalTextBlock,Standard,1,,,,,,,
+3,Text,Standard,1,,36,,,,,EMS_UML_API_WebSocket_1.0.0
+4,Text,Standard,1,,36,,,,,"Ihor Hryshkov |  July 5, 2020"
+5,Class,UML,1,,37,,,,,"<<API>>
+localhost"
+6,Text,Standard,1,,37,,,,,"data
+error(code, message)
+timestamp"
+7,Text,Standard,1,,37,,,,,
+8,Class,UML,1,,38,,,,,"<<resource>>
+status"
+9,Text,Standard,1,,38,,,,,"user_id
+status_id"
+10,Text,Standard,1,,38,,,,,"POST(body)
+GET()"
+11,Class,UML,1,,39,,,,,"<<resource>>
+user"
+12,Text,Standard,1,,39,,,,,username
+13,Text,Standard,1,,39,,,,,"POST(body)
+GET()"
+14,Class,UML,1,,40,,,,,"<<resource>>
+counter"
+15,Text,Standard,1,,40,,,,,
+16,Text,Standard,1,,40,,,,,GET(user_id)
+17,Class,UML,1,,41,,,,,<<WebSocket>>
+18,Text,Standard,1,,41,,,,,
+19,Text,Standard,1,,41,,,,,
+20,Class,UML,1,,42,,,,,"<<resource>>
+message"
+21,Text,Standard,1,,42,,,,,"user_id
+message
+created_at"
+22,Text,Standard,1,,42,,,,,
+23,Class,UML,1,,43,,,,,"<<resource>>
+message_ok"
+24,Text,Standard,1,,43,,,,,timestamp
+25,Text,Standard,1,,43,,,,,
+26,Class,UML,1,,44,,,,,"<<resource>>
+message_error"
+27,Text,Standard,1,,44,,,,,"error(code, message)
+timestamp"
+28,Text,Standard,1,,44,,,,,
+29,Line,,1,,36,,3,None,None,
+30,Line,,1,,,6,8,None,Open Arrow,
+31,Line,,1,,,6,11,None,Open Arrow,
+32,Line,,1,,,7,14,None,Open Arrow,
+33,Line,,1,,,19,,None,Open Arrow,
+34,Line,,1,,,18,23,None,Open Arrow,
+35,Line,,1,,,18,26,None,Open Arrow,
+36,Group 1,,1,,,,,,,
+37,Group 2,,1,,,,,,,
+38,Group 3,,1,,,,,,,
+39,Group 4,,1,,,,,,,
+40,Group 5,,1,,,,,,,
+41,Group 6,,1,,,,,,,
+42,Group 7,,1,,,,,,,
+43,Group 8,,1,,,,,,,
+44,Group 9,,1,,,,,,,

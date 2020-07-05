@@ -1,0 +1,132 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1,Text Area 2
+1,Page,,,,,,,,,Higher Level UML Deployment Diagram,
+2,Text,Standard,1,,44,,,,,EMS_Deployment_1.0.0 - Higher Level,
+3,Text,Standard,1,,44,,,,,"Ihor Hryshkov  |  July 5, 2020",
+4,Node,UML,1,,,,,,," «device»
+Application Server",
+5,Node,UML,1,,,,,,," «container environment»
+Dcoker",
+6,Node,UML,1,,,,,,," «device»
+Application Server",
+7,Node,UML,1,,,,,,," «container environment»
+Docker ",
+8,Node,UML,1,,,,,,," «device»
+PC/Laptop/Mobile",
+9,Node,UML,1,,,,,,," «execution environment»
+Browser",
+10,Component,UML,1,,,,,,,"«component»
+localhost:3000",
+11,Node,UML,1,,,,,,," «execution environment»
+PostgresDB",
+12,Node,UML,1,,,,,,," «execution environment»
+Java/NodeJS/Python/GO",
+13,Component,UML,1,,,,,,,"«component»
+Example Messages service",
+14,Component,UML,1,,,,,,,"«component»
+Example Messages DB",
+15,Node,UML,1,,,,,,," «device»
+Application Server",
+16,Node,UML,1,,,,,,," «container environment»
+Docker ",
+17,Node,UML,1,,,,,,," «execution environment»
+RedisDB",
+18,Component,UML,1,,,,,,,"«component»
+Example Messages DB",
+19,Node,UML,1,,,,,,," «device»
+Application Server",
+20,Node,UML,1,,,,,,," «container environment»
+Docker ",
+21,Node,UML,1,,,,,,," «execution environment»
+RabbitMQ",
+22,Component,UML,1,,,,,,,"«component»
+Example Messages Queue",
+23,Node,UML,1,,,,,,," «device»
+Mobile",
+24,Node,UML,1,,,,,,," «execution environment»
+Mobile App",
+25,Component,UML,1,,,,,,,"«component»
+Example Messages Application",
+26,Node,UML,1,,,,,,," «device»
+Application Server",
+27,Node,UML,1,,,,,,," «container environment»
+Dcoker",
+28,Node,UML,1,,,,,,," «execution environment»
+Java/NodeJS/Python/GO",
+29,Component,UML,1,,,,,,,"«component»
+Example Messages Batch",
+30,Node,UML,1,,,,,,," «device»
+Application Server",
+31,Node,UML,1,,,,,,," «container environment»
+Docker ",
+32,Node,UML,1,,,,,,," «execution environment»
+ElasticSearch",
+33,Component,UML,1,,,,,,,"«component»
+Example Messages Logging",
+34,Line,,1,,44,2,2,None,None,,
+35,Line,,1,,,9,24,None,None,"«protocol»
+WebSocket",
+36,Line,,1,,,23,4,None,None,"«protocol»
+HTTP/WebSocket",
+37,Line,,1,,,8,4,None,None,"«protocol»
+HTTP/WebSocket",
+38,Line,,1,,,13,26,None,None,"«protocol»
+HTTP",
+39,Line,,1,,,4,6,None,None,"«protocol»
+TCP/IP, postgresql",
+40,Line,,1,,,4,15,None,None, ,"«protocol»
+TCP/IP, RESP"
+41,Line,,1,,,4,19,None,None,"«protocol»
+TCP/IP, AMQP",
+42,Line,,1,,,12,30,None,None,"«protocol»
+HTTP",
+43,Line,,1,,,27,19,None,None,"«protocol»
+TCP/IP, AMQP",
+44,Group 1,,1,,,,,,,,
+45,Page,,,,,,,,,Lower Level UML Deployment Diagram,
+46,Node,UML,45,,,,,,," «device»
+PC/Laptop",
+47,Node,UML,45,,,,,,," «OS»
+Windows/MacOS/Linux",
+48,Node,UML,45,,,,,,," «execution environment»
+Browser",
+49,Object,UML,45,,,,,,," «artifact»
+store.example.com",
+50,Component,UML,45,,,,,,,"«component»
+Web Store",
+51,Node,UML,45,,,,,,," «device»
+Application Server",
+52,Node,UML,45,,,,,,," «OS»
+SUSE Linux Enterprise 15",
+53,Node,UML,45,,,,,,," «execution environment»
+Node.js",
+54,Component,UML,45,,,,,,,"«component»
+Products",
+55,Node,UML,45,,,,,,," «device»
+Database Server",
+56,Node,UML,45,,,,,,," «OS»
+SUSE Linux Enterprise 15",
+57,Component,UML,45,,,,,,,"«component»
+Shopping Cart",
+58,Component,UML,45,,,,,,,"«component»
+User Account",
+59,Component,UML,45,,,,,,,"«component»
+Orders",
+60,Node,UML,45,,,,,,," «execution environment»
+MongoDB",
+61,Component,UML,45,,,,,,,"«collection»
+User Accounts",
+62,Component,UML,45,,,,,,,"«collection»
+Products",
+63,Component,UML,45,,,,,,,"«collection»
+Orders",
+64,Text,Standard,45,,,,,,,Lower Level Overview,
+65,Button,UI Mockups,45,,,,,,,"View Higher Level Overview  (Hold Shift + ⌘ or Ctrl, then click)",
+66,Text,Standard,45,,72,,,,,EMS_Deployment_1.0.0 - Lower Level,
+67,Text,Standard,45,,72,,,,,"Ihor Hryshkov  |  July 5, 2020",
+68,Line,,45,,,49,50,None,Arrow,   , «manifests»
+69,Line,,45,,72,66,66,None,None,,
+70,Line,,45,,,,,None,None,"«protocol»
+HTTPS",
+71,Line,,45,,,,,None,None,"«protocol»
+TCP/IP, Mongoose",
+72,Group 1,,45,,,,,,,,

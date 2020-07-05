@@ -1,0 +1,180 @@
+Id,Name,Shape Library,Page ID,Contained By,Group,Line Source,Line Destination,Source Arrow,Destination Arrow,Text Area 1
+1,Page,,,,,,,,,Application architecture example
+2,Text,Standard,1,,162,,,,,EMS_Architecture_1.0.0
+3,Text,Standard,1,,162,,,,,"Ihor Hryshkov  |  July 5, 2020"
+4,Node,UML,1,,,,,,,Example Messages Service Processing
+5,Node,UML,1,,,,,,,PostgresDB
+6,Node,UML,1,,,,,,,Web Client
+7,Database,Flowchart Shapes,1,,,,,,,
+8,Document,Flowchart Shapes,1,,,,,,,users
+9,Document,Flowchart Shapes,1,,,,,,,counters
+10,Document,Flowchart Shapes,1,,,,,,,types
+11,Document,Flowchart Shapes,1,,,,,,,status
+12,Text,Standard,1,,163,,,,,"REST API
+Add user"
+13,Provided Interface,UML,1,,163,,,,,
+14,Text,Standard,1,,164,,,,,"REST API
+Get users"
+15,Provided Interface,UML,1,,164,,,,,
+16,Text,Standard,1,,165,,,,,"REST API
+Get user counters"
+17,Provided Interface,UML,1,,165,,,,,
+18,Text,Standard,1,,166,,,,,"REST API
+Update user status"
+19,Provided Interface,UML,1,,166,,,,,
+20,Text,Standard,1,,167,,,,,"REST API
+Get statuses"
+21,Provided Interface,UML,1,,167,,,,,
+22,Node,UML,1,,,,,,,RedisDB
+23,Database,Flowchart Shapes,1,,,,,,,
+24,Node,UML,1,,,,,,,Rabbit MQ
+25,Node,UML,1,,,,,,,Batching 
+26,Node,UML,1,,,,,,,Logging
+27,Component Box,UML,1,,,,,,,Update statuses
+28,Component Box,UML,1,,,,,,,Logging data
+29,Component Box,UML,1,,,,,,,Users queues
+30,Text,Standard,1,,168,,,,,Web Socket Messages
+31,Provided Interface,UML,1,,168,,,,,
+32,Text,Standard,1,,169,,,,,Web Socket Status
+33,Provided Interface,UML,1,,169,,,,,
+34,Component Box,UML,1,,,,,,,Services
+35,Component Box,UML,1,,,,,,,View components
+36,Text,Standard,1,,170,,,,,Web Socket Status
+37,Provided Interface,UML,1,,170,,,,,
+38,Component Box,UML,1,,,,,,,User service
+39,Component Box,UML,1,,,,,,,Status service
+40,Component Box,UML,1,,,,,,,Counter service
+41,Component Box,UML,1,,,,,,,Network
+42,Component Box,UML,1,,,,,,,Database
+43,Database,Flowchart Shapes,1,,,,,,,DB
+44,Node,UML,1,,,,,,,Mobile client
+45,Text,Standard,1,,171,,,,,Web Socket Messages
+46,Provided Interface,UML,1,,171,,,,,
+47,Text,Standard,1,,172,,,,,Web Socket Status
+48,Provided Interface,UML,1,,172,,,,,
+49,Component Box,UML,1,,,,,,,Services
+50,Component Box,UML,1,,,,,,,View components
+51,Component Box,UML,1,,,,,,,Network
+52,Component Box,UML,1,,,,,,,Database
+53,Database,Flowchart Shapes,1,,,,,,,DB
+54,Component Box,UML,1,,,,,,,User database
+55,Component Box,UML,1,,,,,,,Status database
+56,Component Box,UML,1,,,,,,,Counter database
+57,Component Box,UML,1,,,,,,,Type database
+58,Component Box,UML,1,,,,,,,Cache database
+59,Multiple Documents,Flowchart Shapes,1,,,,,,,Caches
+60,Text,Standard,1,,173,,,,,	Legend
+61,Text,Standard,1,,174,,,,,Network interfaces
+62,Provided Interface,UML,1,,174,,,,,
+63,Component Box,UML,1,,173,,,,,Processing
+64,Database,Flowchart Shapes,1,,173,,,,,DB
+65,Document,Flowchart Shapes,1,,173,,,,,Tables or documents
+66,Node,UML,1,,173,,,,,Node
+67,Process,Flowchart Shapes,1,,,,,,,Multimedia elements
+68,Process,Flowchart Shapes,1,,,,,,,Multimedia elements
+69,Process,Flowchart Shapes,1,,,,,,,Multimedia elements
+70,Process,Flowchart Shapes,1,,,,,,,Paid user
+71,Process,Flowchart Shapes,1,,,,,,,Free user
+72,Component,UML,1,,,,,,,Free courses
+73,Component,UML,1,,,,,,,View  courses  only
+74,Component,UML,1,,,,,,,"10,000+ courses"
+75,Component,UML,1,,,,,,,Educational resources
+76,Component,UML,1,,,,,,,Limited number of courses
+77,Component,UML,1,,,,,,,Audio
+78,Component,UML,1,,,,,,,Images
+79,Component,UML,1,,,,,,,Video
+80,Component,UML,1,,,,,,,Text
+81,Component,UML,1,,,,,,,GIFs
+82,Decision,Flowchart Shapes,1,,,,,,,What language is their application set to?
+83,Component,UML,1,,,,,,,Audio
+84,Component,UML,1,,,,,,,Images
+85,Component,UML,1,,,,,,,Video
+86,Component,UML,1,,,,,,,GIFs
+87,Component,UML,1,,,,,,,Video
+88,Component,UML,1,,,,,,,GIFs
+89,Button,UI Mockups,1,,,,,,,"See current state  (Hold Shift + ⌘ or Ctrl, then click)"
+90,User Image,User Images,1,,,,,,,
+91,Rectangle,Geometric Shapes,1,,,,,,,Mobile app
+92,Rectangle,Geometric Shapes,1,,,,,,,
+93,User Image,User Images,1,,,,,,,
+94,Rectangle,Geometric Shapes,1,,,,,,,Mobile app
+95,User Image,User Images,1,,,,,,,
+96,User Image,User Images,1,,,,,,,
+97,Text,Standard,1,,,,,,,Website
+98,Rectangle,Geometric Shapes,1,,,,,,,Website
+99,User Image,User Images,1,,,,,,,
+100,Text,Standard,1,,,,,,,Future state
+101,Line,,1,,162,2,2,None,None,
+102,Line,,1,,,42,43,None,Arrow,
+103,Line,,1,,,42,34,Arrow,None,
+104,Line,,1,,,34,35,Arrow,Arrow,
+105,Line,,1,,,41,34,Arrow,Arrow,
+106,Line,,1,,,41,32,Arrow,None,
+107,Line,,1,,,41,30,Arrow,Arrow,
+108,Line,,1,,,41,12,None,Arrow,
+109,Line,,1,,,41,14,None,Arrow,
+110,Line,,1,,,41,16,None,Arrow,
+111,Line,,1,,,41,18,None,Arrow,
+112,Line,,1,,,41,20,None,Arrow,
+113,Line,,1,,,36,32,None,Arrow,
+114,Line,,1,,,52,53,None,Arrow,
+115,Line,,1,,,52,49,Arrow,None,
+116,Line,,1,,,49,50,Arrow,Arrow,
+117,Line,,1,,,51,49,Arrow,Arrow,
+118,Line,,1,,,51,47,Arrow,None,
+119,Line,,1,,,51,45,Arrow,Arrow,
+120,Line,,1,,,51,12,None,Arrow,
+121,Line,,1,,,51,14,None,Arrow,
+122,Line,,1,,,51,16,None,Arrow,
+123,Line,,1,,,51,18,None,Arrow,
+124,Line,,1,,,51,20,None,Arrow,
+125,Line,,1,,,36,47,None,Arrow,
+126,Line,,1,,,45,30,Arrow,Arrow,
+127,Line,,1,,,12,38,None,Arrow,
+128,Line,,1,,,14,38,None,Arrow,
+129,Line,,1,,,12,28,None,Arrow,
+130,Line,,1,,,38,129,None,Arrow,
+131,Line,,1,,,14,129,None,Arrow,
+132,Line,,1,,,16,129,None,Arrow,
+133,Line,,1,,,16,40,None,Arrow,
+134,Line,,1,,,40,129,None,Arrow,
+135,Line,,1,,,38,54,None,Arrow,
+136,Line,,1,,,38,58,None,Arrow,
+137,Line,,1,,,38,57,None,Arrow,
+138,Line,,1,,,40,58,None,Arrow,
+139,Line,,1,,,40,56,None,Arrow,
+140,Line,,1,,,18,129,None,Arrow,
+141,Line,,1,,,20,129,None,Arrow,
+142,Line,,1,,,18,39,None,Arrow,
+143,Line,,1,,,20,39,None,Arrow,
+144,Line,,1,,,58,59,None,Arrow,
+145,Line,,1,,,54,8,None,Arrow,
+146,Line,,1,,,56,9,None,Arrow,
+147,Line,,1,,,55,11,None,Arrow,
+148,Line,,1,,,57,10,None,Arrow,
+149,Line,,1,,,27,18,None,Arrow,
+150,Line,,1,,,149,20,None,Arrow,
+151,Line,,1,,,27,29,None,Arrow,
+152,Line,,1,,,39,129,None,Arrow,
+153,Line,,1,,,39,29,Arrow,Arrow,
+154,Line,,1,,,27,28,None,Arrow,
+155,Line,,1,,,39,36,None,Arrow,
+156,Line,,1,,173,60,60,None,Arrow,Data stream
+157,Line,,1,,,70,82,None,Arrow,
+158,Line,,1,,,71,82,None,Arrow,
+159,Line,,1,,,82,67,None,Arrow,English
+160,Line,,1,,,82,68,None,Arrow,German
+161,Line,,1,,,82,69,None,Arrow,Spanish
+162,Group 1,,1,,,,,,,
+163,Group 2,,1,,,,,,,
+164,Group 3,,1,,,,,,,
+165,Group 4,,1,,,,,,,
+166,Group 5,,1,,,,,,,
+167,Group 6,,1,,,,,,,
+168,Group 7,,1,,,,,,,
+169,Group 8,,1,,,,,,,
+170,Group 9,,1,,,,,,,
+171,Group 10,,1,,,,,,,
+172,Group 11,,1,,,,,,,
+173,Group 12,,1,,,,,,,
+174,Group 13,,1,,173,,,,,
