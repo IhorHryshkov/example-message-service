@@ -1,0 +1,207 @@
+databaseChangeLog:
+  - changeSet:
+      id: 08c51cf4-2a7d-4d21-8eb5-41560feff38a
+      author: Ihor Hryshkov
+      changes:
+        #Add tables
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_state_to_user
+                  name: status_id
+                  type: SMALLINT
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                  name: username
+                  type: VARCHAR(64)
+              - column:
+                  name: meta
+                  type: JSONB
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: now()
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: now()
+            schemaName:  public
+            tableName: users
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: SMALLINT
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                  name: name
+                  type: VARCHAR(64)
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: now()
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: now()
+            schemaName:  public
+            tableName: status
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                  name: id
+                  type: SMALLINT
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                  name: name
+                  type: VARCHAR(64)
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: now()
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: now()
+            schemaName:  public
+            tableName: types
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_users_to_counters
+                  name: user_id
+                  type: UUID
+              - column:
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_types_to_counters
+                  name: type_id
+                  type: SMALLINT
+              - column:
+                  name: counts
+                  type: NUMERIC(1024,0)
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: now()
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: now()
+            schemaName:  public
+            tableName: counters
+        #Add functions
+        - createProcedure:
+            encoding:  UTF-8
+            procedureBody:  |-
+              CREATE OR REPLACE FUNCTION public.trigger_update_timestamp() RETURNS TRIGGER AS $$
+                  BEGIN
+                      NEW.updated_at = NOW();
+                      RETURN NEW;
+                  END;
+              $$ LANGUAGE plpgsql;
+            schemaName: public
+        #Add sequence
+        - createSequence:
+            cacheSize:  1
+            cycle:  true
+            incrementBy:  1
+            maxValue:  32767
+            minValue:  1
+            schemaName:  public
+            sequenceName:  status_id_seq
+            startValue:  1
+        - createSequence:
+            cacheSize:  1
+            cycle:  true
+            incrementBy:  1
+            maxValue:  32767
+            minValue:  1
+            schemaName:  public
+            sequenceName:  types_id_seq
+            startValue:  1
+        #Add triggers
+        - sql:
+            sql: CREATE TRIGGER users_updated_at BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE PROCEDURE public.trigger_update_timestamp();
+        - sql:
+            sql: CREATE TRIGGER status_updated_at BEFORE UPDATE ON public.status FOR EACH ROW EXECUTE PROCEDURE public.trigger_update_timestamp();
+        - sql:
+            sql: CREATE TRIGGER types_updated_at BEFORE UPDATE ON public.types FOR EACH ROW EXECUTE PROCEDURE public.trigger_update_timestamp();
+        - sql:
+            sql: CREATE TRIGGER counters_updated_at BEFORE UPDATE ON public.counters FOR EACH ROW EXECUTE PROCEDURE public.trigger_update_timestamp();
+        #Add nextval
+        -  addDefaultValue:
+              columnName:  id
+              defaultValueSequenceNext:  status_id_seq
+              schemaName:  public
+              tableName:  status
+        -  addDefaultValue:
+              columnName:  id
+              defaultValueSequenceNext:  types_id_seq
+              schemaName:  public
+              tableName:  types
+        #Add constraint
+        -  addPrimaryKey:
+              clustered:  true
+              columnNames:  user_id, type_id
+              constraintName:  counters_pkey
+              schemaName:  public
+              tableName:  counters
+              validate:  true
+        -  addForeignKeyConstraint:
+              baseColumnNames:  status_id
+              baseTableName:  users
+              baseTableSchemaName:  public
+              constraintName:  fk_state_to_user
+              onDelete:  CASCADE
+              onUpdate:  RESTRICT
+              referencedColumnNames:  id
+              referencedTableName:  status
+              referencedTableSchemaName:  public
+              validate:  true
+        -  addForeignKeyConstraint:
+              baseColumnNames:  user_id
+              baseTableName:  counters
+              baseTableSchemaName:  public
+              constraintName:  fk_users_to_counters
+              onDelete:  CASCADE
+              onUpdate:  RESTRICT
+              referencedColumnNames:  id
+              referencedTableName:  users
+              referencedTableSchemaName:  public
+              validate:  true
+        -  addForeignKeyConstraint:
+              baseColumnNames:  type_id
+              baseTableName:  counters
+              baseTableSchemaName:  public
+              constraintName:  fk_types_to_counters
+              onDelete:  CASCADE
+              onUpdate:  RESTRICT
+              referencedColumnNames:  id
+              referencedTableName:  types
+              referencedTableSchemaName:  public
+              validate:  true
+

@@ -1,0 +1,26 @@
+#!/bin/bash
+set -e
+
+export DB_HOST=jdbc:postgresql://127.0.0.1:5452/ems_test;
+export DB_USER=postgres
+export DB_PASS=postgres
+export SHOW_SQL=true
+export FORMAT_SQL=true
+#export NOTIFICATION_POSTGRES_URL_SLAVE=postgres://postgres:postgres@127.0.0.1:5433/ptm_notification_test;
+#export NOTIFICATION_SENTINEL_PASS=redis-test
+#export NOTIFICATION_SENTINEL_PORT=26380
+#export NOTIFICATION_SENTINEL_NAME=pvc-account
+#export NOTIFICATION_SENTINEL_HOST=192.168.1.93
+#export NOTIFICATION_CLIENT_KEY=PVCdfbc85f4-c543-4147-a4fc-fecbefb60b52;
+#export NOTIFICATION_CLIENT_SECRET=PVC1557668551983-5c8009a0-a08b-4b5c-84ed-1a5bdf191111;
+#export NOTIFICATION_ACCOUNT_HOST=http://127.0.0.1:55020;
+#export NOTIFICATION_USERNAME=tester@tester.com;
+#export NOTIFICATION_PASSWORD=testPassword123;
+#export NOTIFICATION_RETRY_ACCOUNT_TIME=2000;
+#export NOTIFICATION_RABBIT_URL=amqp://rabbitmq:rabbitmq@127.0.0.1:5673/;
+#export NOTIFICATION_PTM_WHITE_LIST=http://127.0.0.1:55010;
+#export NOTIFICATION_PTM_SSL_KEY=;
+#export NOTIFICATION_PTM_SSL_CERT=;
+#export NOTIFICATION_PTM_PORT=55000;
+#export NOTIFICATION_PTM_LOG_LEVEL=all;
+#export ACCOUNT_PVC_PORT=55020

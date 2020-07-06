@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: cddbee91-976f-4b60-8521-6f6c6a062587
+      author: Ihor Hryshkov
+      changes:
+        #Add data
+        - insert:
+            columns:
+              - column:
+                  name:  name
+                  value:  Online
+            schemaName:  public
+            tableName:  status
+        - insert:
+            columns:
+              - column:
+                  name:  name
+                  value:  Offline
+            schemaName:  public
+            tableName:  status
+        - insert:
+            columns:
+              - column:
+                  name:  name
+                  value:  Online
+            schemaName:  public
+            tableName:  types
+        - insert:
+            columns:
+              - column:
+                  name:  name
+                  value:  Offline
+            schemaName:  public
+            tableName:  types
+        - insert:
+            columns:
+              - column:
+                  name:  name
+                  value:  Message
+            schemaName:  public
+            tableName:  types
