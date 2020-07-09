@@ -9,8 +9,6 @@ package com.example.ems.database.models;
 import com.example.ems.database.models.ids.CountersIds;
 import com.example.ems.utils.converters.LongTimestampConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,25 +20,24 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Counters {
+    @JsonIgnore
+    @EmbeddedId
+    private CountersIds keys;
 
-	@JsonIgnore
-	@EmbeddedId
-	private CountersIds keys;
-
-	@MapsId("userId")
-	@ManyToOne
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private Users user;
-	@MapsId("typeId")
-	@ManyToOne
-	@JoinColumn(name = "type_id", referencedColumnName = "id")
-	private Types type;
-	@Column(nullable = false)
-	private String counts;
-	@Column(name = "created_at", nullable = false)
-	@Convert(converter = LongTimestampConverter.class)
-	private Long createdAt;
-	@Column(name = "updated_at", nullable = false)
-	@Convert(converter = LongTimestampConverter.class)
-	private Long updatedAt;
+    @MapsId("userId")
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private Users user;
+    @MapsId("typeId")
+    @ManyToOne
+    @JoinColumn(name = "type_id", referencedColumnName = "id")
+    private Types type;
+    @Column(nullable = false)
+    private String counts;
+    @Column(name = "created_at", nullable = false)
+    @Convert(converter = LongTimestampConverter.class)
+    private Long createdAt;
+    @Column(name = "updated_at", nullable = false)
+    @Convert(converter = LongTimestampConverter.class)
+    private Long updatedAt;
 }
