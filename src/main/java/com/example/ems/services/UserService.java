@@ -6,45 +6,41 @@
  */
 package com.example.ems.services;
 
-import com.example.ems.database.dao.StatusDAO;
-import com.example.ems.database.models.Status;
-import com.example.ems.network.models.status.Add;
-import com.example.ems.network.models.status.All;
+import com.example.ems.database.dao.UsersDAO;
+import com.example.ems.database.models.Users;
+import com.example.ems.network.models.user.All;
 import com.example.ems.services.iface.MainService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
-public class UserService implements MainService<Status, All, Integer> {
+public class UserService implements MainService<Users, All, UUID> {
 
-	private final StatusDAO statusDAO;
+	private final UsersDAO usersDAO;
 
-	public UserService(StatusDAO statusDAO) {
-		this.statusDAO = statusDAO;
+	public UserService(UsersDAO usersDAO) {
+		this.usersDAO = usersDAO;
 	}
 
-	public Integer updateCounterAndStatus(Add data) {
+	@Override
+	public UUID add(Users data) {
 		return null;
 	}
 
 	@Override
-	public Integer add(Status data) {
+	public Users update(Users data, UUID id) {
 		return null;
 	}
 
 	@Override
-	public Status update(Status data, Integer integer) {
+	public Users getById(UUID id) {
 		return null;
 	}
 
 	@Override
-	public Status getById(Integer integer) {
-		return null;
-	}
-
-	@Override
-	public List<Status> all(All params) {
-		return this.statusDAO.findAll();
+	public List<Users> all(All params) {
+		return this.usersDAO.findAll();
 	}
 }

@@ -44,4 +44,9 @@ public class Users {
 	@ManyToOne
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_state_to_user"))
 	private Status status;
+
+	Users(String username, Status status) {
+		this.username = username;
+		this.status = status;
+	}
 }

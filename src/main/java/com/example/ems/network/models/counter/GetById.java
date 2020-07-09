@@ -16,6 +16,10 @@ public class GetById {
 	@Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$", message = "User ID is not UUID")
 	private String userId;
 
+	public UUID getUserId() {
+		return UUID.fromString(this.userId);
+	}
+
 	public String toJSON() {
 		return "{userId:\"" + this.userId + "\"}";
 	}

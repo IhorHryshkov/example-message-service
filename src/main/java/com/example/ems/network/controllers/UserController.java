@@ -1,0 +1,41 @@
+/**
+ * @project ems
+ * @author Ihor Hryshkov
+ * @version 1.0.0
+ * @since 2020-07-08T01:14
+ */
+package com.example.ems.network.controllers;
+
+import com.example.ems.database.models.Users;
+import com.example.ems.network.models.user.Add;
+import com.example.ems.network.models.user.All;
+import com.example.ems.services.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@RestController
+@RequestMapping(path = "/v1")
+public class UserController {
+
+	private final UserService userService;
+
+	UserController(UserService userService) {
+		this.userService = userService;
+	}
+
+	@GetMapping("/user")
+	@ResponseStatus(HttpStatus.OK)
+	List<Users> all(@Valid All query) {
+		return this.userService.all(query);
+	}
+
+	@PostMapping("/user")
+	ResponseEntity<String> add(@Valid @RequestBody Add addUser) {
+		return ResponseEntity.ok("Test post: " + addUser.toJSON());
+	}
+
+}

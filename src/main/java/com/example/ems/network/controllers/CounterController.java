@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/v1")
@@ -32,6 +31,6 @@ public class CounterController {
 	@GetMapping("/counter/{userId}")
 	@ResponseStatus(HttpStatus.OK)
 	List<Counters> getById(@Valid GetById pathParams) {
-		return counterService.getByUserId(UUID.fromString(pathParams.getUserId()));
+		return counterService.getByUserId(pathParams.getUserId());
 	}
 }
