@@ -15,4 +15,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         show_sql: ${SHOW_SQL}
-        format_sql: ${FORMAT_SQL}
+        format_sql: ${SHOW_SQL}
+        use_sql_comments: ${SHOW_SQL}
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE
