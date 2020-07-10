@@ -7,9 +7,11 @@
 package com.example.ems.network.controllers;
 
 import com.example.ems.database.models.Users;
+import com.example.ems.network.models.Res;
 import com.example.ems.network.models.user.Add;
 import com.example.ems.network.models.user.All;
 import com.example.ems.services.UserService;
+import com.example.ems.utils.network.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,21 +23,33 @@ import java.util.List;
 @RequestMapping(path = "/v1")
 public class UserController {
 
-	private final UserService userService;
+    private final UserService userService;
+    private final Response<Users> response;
 
-	UserController(UserService userService) {
-		this.userService = userService;
-	}
+    UserController(UserService userService, Response<Users> response) {
+        this.userService = userService;
+        this.response = response;
+    }
 
-	@GetMapping("/user")
-	@ResponseStatus(HttpStatus.OK)
-	List<Users> all(@Valid All query) {
-		return this.userService.all(query);
-	}
+    @ExceptionHandler({Exception.class})
+    public void handleException() {
+        //
+    }
 
-	@PostMapping("/user")
-	ResponseEntity<String> add(@Valid @RequestBody Add addUser) {
-		return ResponseEntity.ok("Test post: " + addUser.toJSON());
-	}
+    @GetMapping("/user")
+    @ResponseStatus(HttpStatus.OK)
+    List<Users> all(@Valid All query) {
+        return this.userService.all(query);
+    }
+
+    @PostMapping("/user")
+    ResponseEntity<Res<Users>> add(@Valid @RequestBody Add addUser) {
+        try {
+
+        } catch (Exception ex) {
+
+        }
+        return response.formattedSuccess();
+    }
 
 }
