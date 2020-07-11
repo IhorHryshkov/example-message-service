@@ -1,13 +1,13 @@
 spring:
   liquibase:
     changeLog: classpath:db/master-changelog.yaml
-    user: ${DB_USER}
-    password: ${DB_PASS}
-    url: ${DB_HOST}
+    user: ${PG_USER}
+    password: ${PG_PASS}
+    url: ${PG_HOST}
   datasource:
-    url: ${DB_HOST}
-    username: ${DB_USER}
-    password: ${DB_PASS}
+    url: ${PG_HOST}
+    username: ${PG_USER}
+    password: ${PG_PASS}
   jpa:
     hibernate:
       ddl-auto: none
@@ -22,3 +22,6 @@ logging:
     com.example.ems.*: ${LOG_LEVEL}
     org.hibernate.SQL: ${LOG_LEVEL}
     org.hibernate.type: ${LOG_LEVEL}
+---
+redis:
+  cacheTtl: 3600
