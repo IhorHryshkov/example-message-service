@@ -1,7 +1,8 @@
 package com.example.ems.utils.network;
 
-import com.example.ems.network.models.ResError;
+import com.example.ems.network.controllers.wrapper.EMSServletRequestWrapper;
 import com.example.ems.network.models.Res;
+import com.example.ems.network.models.ResError;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,16 +18,18 @@ import java.time.Instant;
 @Slf4j
 public class Response<A> {
 
-    public ResponseEntity<Res<A>> formattedSuccess(A data, MediaType type, HttpStatus status, String requestId) {
-        Res<A> result = new Res<A>(requestId, data, null, Instant.now().toEpochMilli());
-        log.trace("Response: {}, requestId: {}", result, requestId);
-        return ResponseEntity.status(status).contentType(type).body(result);
-    }
+	public ResponseEntity<Res<A>> formattedSuccess(A data, MediaType type, HttpStatus status, String requestId) {
+		Res<A> result = new Res<A>(requestId, data, null, Instant.now().toEpochMilli());
+		log.trace("requestId: {}, response: {}", requestId, result);
+		return ResponseEntity.status(status).contentType(type).body(result);
+	}
 
-    public ResponseEntity<Res<A>> formattedError(HttpServletRequest req, String message, MediaType type, HttpStatus status, String requestId) {
-        int newStatus = status != null && status.value() > 0 ? status.value() : 500;
-        Res<A> result = new Res<A>(requestId, null, new ResError(newStatus, message, req.getMethod(), req.getPathInfo()), Instant.now().toEpochMilli());
-        log.warn("Response: {}, requestId: {}", result, requestId);
-        return ResponseEntity.status(newStatus).contentType(type).body(result);
-    }
+	public ResponseEntity<Res<A>> formattedError(HttpServletRequest req, String message, MediaType type, HttpStatus status) {
+		String requestId = ((EMSServletRequestWrapper) req).getRequestId().toString();
+		int newStatus = status != null && status.value() > 0 ? status.value() : 500;
+		String requestURI = req.getQueryString() != null ? req.getRequestURI().concat("?").concat(req.getQueryString()) : req.getRequestURI();
+		Res<A> result = new Res<A>(requestId, null, new ResError(newStatus, message, req.getMethod(), requestURI), Instant.now().toEpochMilli());
+		log.warn("requestId: {}, response: {}", requestId, result);
+		return ResponseEntity.status(newStatus).contentType(type).body(result);
+	}
 }

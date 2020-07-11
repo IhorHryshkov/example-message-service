@@ -35,7 +35,7 @@ public class StatusController {
 
 	@PostMapping("/status")
 	ResponseEntity<String> add(@Valid @RequestBody Add addStatus) {
-		return ResponseEntity.ok("Test post: " + addStatus.toJSON());
+		return ResponseEntity.ok("Test post: " + addStatus);
 	}
 
 }

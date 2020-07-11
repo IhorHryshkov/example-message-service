@@ -19,5 +19,6 @@ spring:
         use_sql_comments: ${SHOW_SQL}
 logging:
   level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type: TRACE
+    com.example.ems.*: ${LOG_LEVEL}
+    org.hibernate.SQL: ${LOG_LEVEL}
+    org.hibernate.type: ${LOG_LEVEL}
