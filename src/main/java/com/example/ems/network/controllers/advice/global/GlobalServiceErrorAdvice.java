@@ -36,27 +36,24 @@ public class GlobalServiceErrorAdvice {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Res<Object>> handleAnyException(HttpServletRequest req, Exception e) {
-		String requestId = ((EMSServletRequestWrapper) req).getRequestId().toString();
-		log.error("requestId: {},\nmessage: {}", requestId, e.getMessage());
+		log.error("message: {}", e.getMessage());
 		e.printStackTrace();
 		return response.formattedError(req, messages.getInternalServerError().getMessage(), MediaType.APPLICATION_JSON, messages.getInternalServerError().getCode());
 	}
 
 	@ExceptionHandler(ResponseEmptyException.class)
 	public ResponseEntity<Res<Object>> handleNotModified(HttpServletRequest req, ResponseEmptyException e) {
-		String requestId = ((EMSServletRequestWrapper) req).getRequestId().toString();
-		log.info("requestId: {},\nmessage: {}", requestId, e.getMessage());
-		return response.formattedError(req, messages.getNotModified().getMessage(), MediaType.APPLICATION_JSON, messages.getNotModified().getCode());
+		log.info("message: {}", e.getMessage());
+		return response.formattedError(req, messages.getResultEmpty().getMessage(), MediaType.APPLICATION_JSON, messages.getResultEmpty().getCode());
 	}
 
 	@ExceptionHandler(BindException.class)
 	public ResponseEntity<Res<Object>> handleBindException(HttpServletRequest req, BindException e) {
-		String requestId = ((EMSServletRequestWrapper) req).getRequestId().toString();
 		List<String> errors = e.getAllErrors()
 				.stream()
 				.map(x -> x.getDefaultMessage())
 				.collect(Collectors.toList());
-		log.error("requestId: {},\nerrors: {},\nmessage: {}", requestId, errors, e.getMessage());
+		log.error("errors: {},\nmessage: {}", errors, e.getMessage());
 		e.printStackTrace();
 		return response.formattedError(req, messages.getRequestBodyIncorrect().getMessage(), MediaType.APPLICATION_JSON, messages.getRequestBodyIncorrect().getCode());
 	}

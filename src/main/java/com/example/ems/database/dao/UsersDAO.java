@@ -8,6 +8,7 @@ package com.example.ems.database.dao;
 
 import com.example.ems.database.models.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface UsersDAO extends JpaRepository<Users, Integer> {
+public interface UsersDAO extends JpaRepository<Users, Integer>, JpaSpecificationExecutor {
 }

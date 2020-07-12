@@ -14,21 +14,13 @@ import java.util.UUID;
 
 public class EMSServletRequestWrapper extends ContentCachingRequestWrapper {
 
-	private UUID requestId;
-	private String fullPathQuery;
-
 	public EMSServletRequestWrapper(HttpServletRequest request) {
 		super(request);
-		requestId = UUID.randomUUID();
-		fullPathQuery = request.getQueryString() != null ? request.getRequestURI().concat("?").concat(request.getQueryString()) : request.getRequestURI();
-		MDC.put("RID", requestId.toString());
-	}
 
-	public UUID getRequestId() {
-		return requestId;
-	}
+		UUID resId = UUID.randomUUID();
+		String fullPathQuery = request.getQueryString() != null ? request.getRequestURI().concat("?").concat(request.getQueryString()) : request.getRequestURI();
 
-	public String getFullPathQuery() {
-		return fullPathQuery;
+		MDC.put("resId", resId.toString());
+		MDC.put("fullPathQuery", fullPathQuery);
 	}
 }

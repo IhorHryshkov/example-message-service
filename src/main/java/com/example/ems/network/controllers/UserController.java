@@ -8,19 +8,19 @@ package com.example.ems.network.controllers;
 
 import com.example.ems.database.models.Users;
 import com.example.ems.network.controllers.exceptions.global.ResponseEmptyException;
-import com.example.ems.network.controllers.wrapper.EMSServletRequestWrapper;
 import com.example.ems.network.models.Res;
 import com.example.ems.network.models.user.Add;
-import com.example.ems.network.models.user.All;
+import com.example.ems.network.models.user.AllIn;
+import com.example.ems.network.models.user.AllOut;
 import com.example.ems.services.UserService;
 import com.example.ems.utils.network.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -39,16 +39,14 @@ public class UserController {
 
 	@GetMapping("/user")
 	@ResponseStatus(HttpStatus.OK)
-	ResponseEntity<Res<Object>> all(@Valid All query, HttpServletRequest request) {
-		String requestId = ((EMSServletRequestWrapper) request).getRequestId().toString();
-		String path = ((EMSServletRequestWrapper) request).getFullPathQuery();
-		query.setRequestId(requestId);
-		query.setPath(path);
-		List<Users> users = this.userService.all(query);
-		if (users == null || users.isEmpty()) {
+	ResponseEntity<Res<Object>> all(@Valid AllIn query) {
+		query.setResId(MDC.get("resId"));
+		query.setPath(MDC.get("fullPathQuery"));
+		AllOut<Users> users = this.userService.all(query);
+		if (users.getData() == null || users.getData().isEmpty()) {
 			throw new ResponseEmptyException();
 		}
-		return response.formattedSuccess(users, MediaType.APPLICATION_JSON, HttpStatus.OK.value(), requestId);
+		return response.formattedSuccess(users.getData(), MediaType.APPLICATION_JSON, HttpStatus.OK.value());
 	}
 
 	@PostMapping("/user")

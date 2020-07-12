@@ -25,7 +25,6 @@ import java.time.Duration;
 @EnableCaching
 @ConfigurationProperties(prefix = "config")
 @PropertySource(value = "classpath:redis.yml", factory = YamlPropertySourceFactory.class)
-@EnableRedisRepositories(basePackages = "com.example.ems.database.dao.redis")
 public class RedisConfig {
 
 	private String password;

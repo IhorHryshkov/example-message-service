@@ -15,7 +15,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class Res<A> {
-    private String requestId;
+    private String resId;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private A data;
     @JsonInclude(JsonInclude.Include.NON_NULL)
