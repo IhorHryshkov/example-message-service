@@ -14,6 +14,7 @@ import com.example.ems.network.models.user.Add;
 import com.example.ems.network.models.user.All;
 import com.example.ems.services.UserService;
 import com.example.ems.utils.network.Response;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping(path = "/v1")
 public class UserController {
@@ -39,12 +41,14 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	ResponseEntity<Res<Object>> all(@Valid All query, HttpServletRequest request) {
 		String requestId = ((EMSServletRequestWrapper) request).getRequestId().toString();
+		String path = ((EMSServletRequestWrapper) request).getFullPathQuery();
 		query.setRequestId(requestId);
+		query.setPath(path);
 		List<Users> users = this.userService.all(query);
 		if (users == null || users.isEmpty()) {
 			throw new ResponseEmptyException();
 		}
-		return response.formattedSuccess(users, MediaType.APPLICATION_JSON, HttpStatus.OK, requestId);
+		return response.formattedSuccess(users, MediaType.APPLICATION_JSON, HttpStatus.OK.value(), requestId);
 	}
 
 	@PostMapping("/user")

@@ -1,4 +1,4 @@
-package com.example.ems.config.factory;
+package com.example.ems.config.redis.factory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
@@ -9,7 +9,6 @@ import org.springframework.core.io.support.PropertySourceFactory;
 
 import java.io.IOException;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class YamlPropertySourceFactory implements PropertySourceFactory {

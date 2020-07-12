@@ -4,7 +4,7 @@
  * @version 1.0.0
  * @since 2020-07-08T03:13
  */
-package com.example.ems.utils.converters;
+package com.example.ems.utils.converters.pg;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

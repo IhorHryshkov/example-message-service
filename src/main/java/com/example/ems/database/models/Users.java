@@ -6,7 +6,7 @@
  */
 package com.example.ems.database.models;
 
-import com.example.ems.utils.converters.LongTimestampConverter;
+import com.example.ems.utils.converters.pg.LongTimestampConverter;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +15,7 @@ import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Data
@@ -25,7 +26,7 @@ import java.util.UUID;
 		name = "jsonb",
 		typeClass = JsonBinaryType.class
 )
-public class Users {
+public class Users implements Serializable {
 	@Id
 	@Type(type = "pg-uuid")
 	@Column(columnDefinition = "uuid")

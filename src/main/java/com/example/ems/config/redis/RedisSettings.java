@@ -1,5 +1,6 @@
-package com.example.ems.config;
+package com.example.ems.config.redis;
 
+import com.example.ems.config.redis.models.HashName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,6 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "redis")
 public class RedisSettings {
-    private Integer cacheTtl;
+	private Integer cacheTtl;
+	private HashName hashName;
 }

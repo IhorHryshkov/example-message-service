@@ -7,19 +7,20 @@
 package com.example.ems.database.models;
 
 import com.example.ems.database.models.ids.CountersIds;
-import com.example.ems.utils.converters.LongTimestampConverter;
+import com.example.ems.utils.converters.pg.LongTimestampConverter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Counters {
+public class Counters implements Serializable {
     @JsonIgnore
     @EmbeddedId
     private CountersIds keys;

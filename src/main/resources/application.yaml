@@ -1,4 +1,7 @@
 spring:
+  output:
+    ansi:
+      enabled: always
   liquibase:
     changeLog: classpath:db/master-changelog.yaml
     user: ${PG_USER}
@@ -18,6 +21,8 @@ spring:
         format_sql: ${SHOW_SQL}
         use_sql_comments: ${SHOW_SQL}
 logging:
+  pattern:
+    console: '${CONSOLE_LOG_PATTERN:%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(pid:${PID:- }){magenta} %clr(rid:%X{RID}){yellow} %clr(---){faint} %clr([%t]){faint} %clr(%-5logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}}'
   level:
     com.example.ems.*: ${LOG_LEVEL}
     org.hibernate.SQL: ${LOG_LEVEL}

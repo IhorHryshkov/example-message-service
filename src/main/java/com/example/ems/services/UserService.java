@@ -8,16 +8,20 @@ package com.example.ems.services;
 
 import com.example.ems.database.dao.UsersDAO;
 import com.example.ems.database.models.Users;
-import com.example.ems.network.controllers.exceptions.global.ResponseEmptyException;
+import com.example.ems.network.models.status.Add;
 import com.example.ems.network.models.user.All;
 import com.example.ems.services.iface.MainService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
-public class UserService implements MainService<Users, All, UUID> {
+public class UserService {
 
 	private final UsersDAO usersDAO;
 
@@ -25,22 +29,12 @@ public class UserService implements MainService<Users, All, UUID> {
 		this.usersDAO = usersDAO;
 	}
 
-	@Override
-	public UUID add(Users data) {
+	@CacheEvict(value = "userCache", allEntries = true)
+	public UUID add(Add data) {
 		return null;
 	}
 
-	@Override
-	public Users update(Users data, UUID id) {
-		return null;
-	}
-
-	@Override
-	public Users getById(UUID id) {
-		return null;
-	}
-
-	@Override
+	@Cacheable(value = "userCache", key = "#root.methodName + \"::\" + #params.toHashKey()", unless = "#result.size() == 0")
 	public List<Users> all(All params) {
 		return this.usersDAO.findAll();
 	}

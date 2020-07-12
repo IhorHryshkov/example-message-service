@@ -5,7 +5,6 @@ import com.example.ems.network.models.Res;
 import com.example.ems.network.models.ResError;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -18,16 +17,16 @@ import java.time.Instant;
 @Slf4j
 public class Response<A> {
 
-	public ResponseEntity<Res<A>> formattedSuccess(A data, MediaType type, HttpStatus status, String requestId) {
+	public ResponseEntity<Res<A>> formattedSuccess(A data, MediaType type, Integer status, String requestId) {
 		Res<A> result = new Res<A>(requestId, data, null, Instant.now().toEpochMilli());
 		log.trace("requestId: {}, response: {}", requestId, result);
 		return ResponseEntity.status(status).contentType(type).body(result);
 	}
 
-	public ResponseEntity<Res<A>> formattedError(HttpServletRequest req, String message, MediaType type, HttpStatus status) {
+	public ResponseEntity<Res<A>> formattedError(HttpServletRequest req, String message, MediaType type, Integer status) {
 		String requestId = ((EMSServletRequestWrapper) req).getRequestId().toString();
-		int newStatus = status != null && status.value() > 0 ? status.value() : 500;
-		String requestURI = req.getQueryString() != null ? req.getRequestURI().concat("?").concat(req.getQueryString()) : req.getRequestURI();
+		int newStatus = status != null && status > 0 ? status : 500;
+		String requestURI = ((EMSServletRequestWrapper) req).getFullPathQuery();
 		Res<A> result = new Res<A>(requestId, null, new ResError(newStatus, message, req.getMethod(), requestURI), Instant.now().toEpochMilli());
 		log.warn("requestId: {}, response: {}", requestId, result);
 		return ResponseEntity.status(newStatus).contentType(type).body(result);

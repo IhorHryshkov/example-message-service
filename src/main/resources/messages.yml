@@ -1,0 +1,16 @@
+message:
+  invalidData:
+    message: Invalid data
+    code: 400
+  requestBodyIncorrect:
+    message: Request body or query or params data is incorrect
+    code: 422
+  internalServerError:
+    message: Internal server error, please try again later.
+    code: 500
+  resultEmpty:
+    message: No Content
+    code: 204
+  notModified:
+    message: Not Modified
+    code: 304
