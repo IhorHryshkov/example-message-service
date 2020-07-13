@@ -28,5 +28,10 @@ logging:
     org.hibernate.SQL: ${LOG_LEVEL}
     org.hibernate.type: ${LOG_LEVEL}
 ---
+server:
+  tomcat:
+    threads:
+      max: 10000
+---
 redis:
-  cacheTtl: 3600
+  cacheTtl: 600

@@ -20,6 +20,11 @@ public class EMSServletRequestWrapper extends ContentCachingRequestWrapper {
 		UUID resId = UUID.randomUUID();
 		String fullPathQuery = request.getQueryString() != null ? request.getRequestURI().concat("?").concat(request.getQueryString()) : request.getRequestURI();
 
+		String ifNoneMatch = request.getHeader("if-none-match");
+		if (ifNoneMatch != null && !ifNoneMatch.isEmpty()) {
+			MDC.put("ifNoneMatch", ifNoneMatch.replaceAll("\"", ""));
+		}
+
 		MDC.put("resId", resId.toString());
 		MDC.put("fullPathQuery", fullPathQuery);
 	}

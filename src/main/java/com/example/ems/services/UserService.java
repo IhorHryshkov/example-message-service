@@ -7,7 +7,6 @@
 package com.example.ems.services;
 
 import com.example.ems.database.dao.UsersDAO;
-import com.example.ems.database.dao.specification.UsersSpecification;
 import com.example.ems.database.models.Users;
 import com.example.ems.network.models.user.Add;
 import com.example.ems.network.models.user.AllIn;
@@ -39,11 +38,11 @@ public class UserService {
 		return null;
 	}
 
-	@Cacheable(value = "userCache", key = "#root.getMethodName() + \"::\" + #params.toHashKey()", unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
+	@Cacheable(value = "userCache", key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()", unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
 	public AllOut<Users> all(AllIn params) {
 		List<Users> users = this.usersDAO.findAll(findByCriteria(params));
 		String etag = DigestUtils.sha256Hex(String.format("%s:%s:%d", UUID.randomUUID().toString(), params.getPath(), Instant.now().toEpochMilli()));
 
-		return new AllOut<>(etag, users, params.getIfNoneMatch());
+		return new AllOut<>(etag, users);
 	}
 }

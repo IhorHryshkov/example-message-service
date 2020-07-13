@@ -1,21 +1,31 @@
 package com.example.ems.config.redis;
 
 import com.example.ems.config.redis.factory.YamlPropertySourceFactory;
+import io.lettuce.core.ClientOptions;
+import io.lettuce.core.resource.ClientResources;
+import io.lettuce.core.resource.DefaultClientResources;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisPassword;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.time.Duration;
 
@@ -25,58 +35,82 @@ import java.time.Duration;
 @EnableCaching
 @ConfigurationProperties(prefix = "config")
 @PropertySource(value = "classpath:redis.yml", factory = YamlPropertySourceFactory.class)
+@EnableTransactionManagement
 public class RedisConfig {
 
 	private String password;
 	private String host;
 	private Integer port;
-	private Long timeout;
 	private Integer database;
 
-	@Bean
-	JedisConnectionFactory jedisConnectionFactory() {
-		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(host, port);
-		redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
-		redisStandaloneConfiguration.setDatabase(database);
+	private final RedisSettings redisSettings;
 
-		JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
-		jedisClientConfiguration.connectTimeout(Duration.ofMillis(timeout));
+	RedisConfig(RedisSettings redisSettings) {
+		this.redisSettings = redisSettings;
+	}
 
-		return new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration.build());
+
+	@Bean(destroyMethod = "shutdown")
+	ClientResources clientResources() {
+		return DefaultClientResources.create();
 	}
 
 	@Bean
-	public RedisTemplate<Object, Object> redisTemplate() {
+	public RedisStandaloneConfiguration redisStandaloneConfiguration() {
+		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration(host, port);
+		redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
+		redisStandaloneConfiguration.setDatabase(database);
+		return redisStandaloneConfiguration;
+	}
+
+	@Bean
+	public ClientOptions clientOptions() {
+		return ClientOptions.builder()
+				.disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS)
+				.autoReconnect(true)
+				.build();
+	}
+
+	@Bean
+	LettucePoolingClientConfiguration lettucePoolConfig(ClientOptions options, @Qualifier("clientResources") ClientResources dcr) {
+		return LettucePoolingClientConfiguration.builder()
+				.poolConfig(new GenericObjectPoolConfig())
+				.clientOptions(options)
+				.clientResources(dcr)
+				.build();
+	}
+
+	@Bean
+	public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration,
+	                                                LettucePoolingClientConfiguration lettucePoolConfig) {
+		return new LettuceConnectionFactory(redisStandaloneConfiguration, lettucePoolConfig);
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(name = "redisTemplate")
+	@Primary
+	public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
 		RedisTemplate<Object, Object> template = new RedisTemplate<>();
-		template.setConnectionFactory(jedisConnectionFactory());
-//		template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
-//		template.setKeySerializer(new StringRedisSerializer());
-//		template.setHashKeySerializer(new GenericJackson2JsonRedisSerializer());
-//		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+		template.setKeySerializer(new StringRedisSerializer());
+		template.setHashKeySerializer(new StringRedisSerializer());
+		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+		template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
+		template.setConnectionFactory(redisConnectionFactory);
 		return template;
 	}
 
 	@Bean
 	public RedisCacheConfiguration cacheConfiguration() {
-		RedisCacheConfiguration cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-				.entryTtl(Duration.ofSeconds(600))
+		return RedisCacheConfiguration.defaultCacheConfig()
+				.entryTtl(Duration.ofSeconds(redisSettings.getCacheTtl()))
 				.disableCachingNullValues();
-		return cacheConfig;
 	}
 
 	@Bean
-	public RedisCacheManager cacheManager() {
-		RedisCacheManager rcm = RedisCacheManager.builder(jedisConnectionFactory())
+	public RedisCacheManager cacheManager(LettuceConnectionFactory lettuceConnectionFactory) {
+		return RedisCacheManager.builder(lettuceConnectionFactory)
 				.cacheDefaults(cacheConfiguration())
 				.transactionAware()
 				.build();
-		return rcm;
 	}
-
-//	@Bean
-//	public RedisCustomConversions redisCustomConversions(RedisWritingStringConverter redisWritingStringConverter,
-//	                                                     RedisReadingStringConverter redisReadingStringConverter) {
-//		return new RedisCustomConversions(Arrays.asList(redisWritingStringConverter, redisReadingStringConverter));
-//	}
-
 }

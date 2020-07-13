@@ -33,9 +33,6 @@ public class AllIn {
 
 	private String path;
 
-	private String ifNoneMatch;
-
-
 	public UUID getUserId() {
 		return this.userId != null ? UUID.fromString(this.userId) : null;
 	}

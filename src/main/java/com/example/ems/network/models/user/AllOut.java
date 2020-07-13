@@ -19,5 +19,4 @@ import java.util.List;
 public class AllOut<A> implements Serializable {
 	private String etag;
 	private List<A> data;
-	private String ifNoneMatch;
 }

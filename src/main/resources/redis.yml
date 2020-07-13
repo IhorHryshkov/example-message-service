@@ -2,5 +2,4 @@ config:
   password: ${REDIS_PASS}
   host: ${REDIS_HOST}
   port: ${REDIS_PORT}
-  timeout: ${REDIS_TIMEOUT}
   database: ${REDIS_DB}

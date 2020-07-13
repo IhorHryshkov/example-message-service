@@ -10,7 +10,6 @@ export LOG_LEVEL=trace
 export REDIS_PASS=redis-test
 export REDIS_HOST=localhost
 export REDIS_PORT=6390
-export REDIS_TIMEOUT=30000
-export REDIS_DB=0
+export REDIS_DB=1
 
 ./gradlew bootRun

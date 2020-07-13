@@ -8,7 +8,7 @@ package com.example.ems.network.controllers.advice.global;
 
 import com.example.ems.config.messages.Messages;
 import com.example.ems.network.controllers.exceptions.global.ResponseEmptyException;
-import com.example.ems.network.controllers.wrapper.EMSServletRequestWrapper;
+import com.example.ems.network.controllers.exceptions.global.ResponseIfNoneMatchException;
 import com.example.ems.network.models.Res;
 import com.example.ems.utils.network.Response;
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +42,15 @@ public class GlobalServiceErrorAdvice {
 	}
 
 	@ExceptionHandler(ResponseEmptyException.class)
-	public ResponseEntity<Res<Object>> handleNotModified(HttpServletRequest req, ResponseEmptyException e) {
+	public ResponseEntity<Res<Object>> handleResultEmpty(HttpServletRequest req, ResponseEmptyException e) {
 		log.info("message: {}", e.getMessage());
-		return response.formattedError(req, messages.getResultEmpty().getMessage(), MediaType.APPLICATION_JSON, messages.getResultEmpty().getCode());
+		return response.formattedError(req, null, MediaType.APPLICATION_JSON, messages.getResultEmpty().getCode());
+	}
+
+	@ExceptionHandler(ResponseIfNoneMatchException.class)
+	public ResponseEntity<Res<Object>> handleNotModified(HttpServletRequest req, ResponseIfNoneMatchException e) {
+		log.info("message: {}", e.getMessage());
+		return response.formattedError(req, null, MediaType.APPLICATION_JSON, messages.getNotModified().getCode());
 	}
 
 	@ExceptionHandler(BindException.class)
