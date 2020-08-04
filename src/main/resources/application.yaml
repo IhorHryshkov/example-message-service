@@ -29,9 +29,21 @@ logging:
     org.hibernate.type: ${LOG_LEVEL}
 ---
 server:
+  port: ${PORT}
   tomcat:
     threads:
       max: 10000
 ---
 redis:
   cacheTtl: 600
+---
+parameters:
+  controllers:
+    counter:
+      rootPath: "/v1/counter"
+      getById: "/{userId}"
+    status:
+      rootPath: "/v1/status"
+    user:
+      rootPath: "/v1/user"
+

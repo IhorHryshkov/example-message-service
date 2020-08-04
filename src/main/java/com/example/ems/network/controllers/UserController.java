@@ -3,7 +3,7 @@
  * @author Ihor Hryshkov
  * @version 1.0.0
  * @since 2020-07-08T01:14
- */
+ **/
 package com.example.ems.network.controllers;
 
 import com.example.ems.database.models.Users;
@@ -27,7 +27,7 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/v1")
+@RequestMapping(path = "${parameters.controllers.user.rootPath}")
 public class UserController {
 
 	private final UserService userService;
@@ -40,16 +40,16 @@ public class UserController {
 		this.cacheService = cacheService;
 	}
 
-	@GetMapping("/user")
+	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
-	ResponseEntity<Res<Object>> all(@Valid AllIn query) {
-		query.setResId(MDC.get("resId"));
-		query.setPath(MDC.get("fullPathQuery"));
+	ResponseEntity<Res<Object>> all(@Valid AllIn params) {
+		params.setResId(MDC.get("resId"));
+		params.setPath(MDC.get("fullPathQuery"));
 
 		if (this.cacheService.exist(String.format("userCache::all::forMatch::%s", MDC.get("ifNoneMatch")))) {
 			throw new ResponseIfNoneMatchException();
 		}
-		AllOut<Users> users = this.userService.all(query);
+		AllOut<Users> users = this.userService.all(params);
 		if (users.getData() == null || users.getData().isEmpty()) {
 			throw new ResponseEmptyException();
 		}
@@ -57,7 +57,7 @@ public class UserController {
 		return response.formattedSuccess(users.getData(), MediaType.APPLICATION_JSON, HttpStatus.OK.value(), users.getEtag());
 	}
 
-	@PostMapping("/user")
+	@PostMapping
 	ResponseEntity<Res<Users>> add(@Valid @RequestBody Add addUser) {
 		return null;
 	}

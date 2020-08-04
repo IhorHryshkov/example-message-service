@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/v1")
+@RequestMapping(path = "${parameters.controllers.status.rootPath}")
 public class StatusController {
 
 	private final StatusService statusService;
@@ -27,13 +27,13 @@ public class StatusController {
 		this.statusService = statusService;
 	}
 
-	@GetMapping("/status")
+	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
 	List<Status> all(@Valid All query) {
 		return this.statusService.all(query);
 	}
 
-	@PostMapping("/status")
+	@PostMapping
 	ResponseEntity<String> add(@Valid @RequestBody Add addStatus) {
 		return ResponseEntity.ok("Test post: " + addStatus);
 	}

@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+export PORT=31111
 export PG_HOST=jdbc:postgresql://127.0.0.1:5452/ems_test
 export PG_USER=postgres
 export PG_PASS=postgres
