@@ -1,6 +1,6 @@
 package com.example.ems.config.messages;
 
-import com.example.ems.config.messages.models.Message;
+import com.example.ems.dto.network.controller.Message;
 import com.example.ems.config.redis.factory.YamlPropertySourceFactory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,4 +25,5 @@ public class Messages {
 	private Message internalServerError;
 	private Message resultEmpty;
 	private Message notModified;
+	private Message usernameUsed;
 }

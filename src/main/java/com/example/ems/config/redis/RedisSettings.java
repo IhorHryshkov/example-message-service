@@ -1,6 +1,6 @@
 package com.example.ems.config.redis;
 
-import com.example.ems.config.redis.models.HashName;
+import com.example.ems.dto.database.redis.HashName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

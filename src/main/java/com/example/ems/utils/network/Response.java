@@ -1,7 +1,7 @@
 package com.example.ems.utils.network;
 
-import com.example.ems.network.models.Res;
-import com.example.ems.network.models.ResError;
+import com.example.ems.dto.network.controller.Res;
+import com.example.ems.dto.network.controller.ResError;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;

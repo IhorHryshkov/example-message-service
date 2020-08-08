@@ -6,9 +6,9 @@
  */
 package com.example.ems.network.controllers;
 
-import com.example.ems.database.models.Status;
-import com.example.ems.network.models.status.Add;
-import com.example.ems.network.models.status.All;
+import com.example.ems.dto.database.pg.Status;
+import com.example.ems.dto.network.controller.status.Add;
+import com.example.ems.dto.network.controller.status.All;
 import com.example.ems.services.StatusService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

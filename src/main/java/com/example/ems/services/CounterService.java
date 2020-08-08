@@ -6,10 +6,10 @@
  */
 package com.example.ems.services;
 
-import com.example.ems.database.dao.CountersDAO;
-import com.example.ems.database.models.Counters;
-import com.example.ems.network.models.counter.GetByIdIn;
-import com.example.ems.network.models.counter.GetByIdOut;
+import com.example.ems.database.dao.pg.CountersDAO;
+import com.example.ems.dto.database.pg.Counters;
+import com.example.ems.dto.network.controller.counter.GetByIdIn;
+import com.example.ems.dto.network.controller.counter.GetByIdOut;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.cache.annotation.Cacheable;

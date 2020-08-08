@@ -9,7 +9,8 @@ package com.example.ems.network.controllers.advice.global;
 import com.example.ems.config.messages.Messages;
 import com.example.ems.network.controllers.exceptions.global.ResponseEmptyException;
 import com.example.ems.network.controllers.exceptions.global.ResponseIfNoneMatchException;
-import com.example.ems.network.models.Res;
+import com.example.ems.network.controllers.exceptions.user.ResponseUsernameUsedException;
+import com.example.ems.dto.network.controller.Res;
 import com.example.ems.utils.network.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -51,6 +52,12 @@ public class GlobalServiceErrorAdvice {
 	public ResponseEntity<Res<Object>> handleNotModified(HttpServletRequest req, ResponseIfNoneMatchException e) {
 		log.info("message: {}", e.getMessage());
 		return response.formattedError(req, null, MediaType.APPLICATION_JSON, messages.getNotModified().getCode());
+	}
+
+	@ExceptionHandler(ResponseUsernameUsedException.class)
+	public ResponseEntity<Res<Object>> handleUsernameUsed(HttpServletRequest req, ResponseUsernameUsedException e) {
+		log.info("message: {}", e.getMessage());
+		return response.formattedError(req, messages.getUsernameUsed().getMessage(), MediaType.APPLICATION_JSON, messages.getUsernameUsed().getCode());
 	}
 
 	@ExceptionHandler(BindException.class)

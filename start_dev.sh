@@ -2,6 +2,10 @@
 set -e
 
 export PORT=31111
+export MQ_HOST=localhost
+export MQ_PORT=5690
+export MQ_USER=rabbitmq
+export MQ_PASS=rabbitmq
 export PG_HOST=jdbc:postgresql://127.0.0.1:5452/ems_test
 export PG_USER=postgres
 export PG_PASS=postgres

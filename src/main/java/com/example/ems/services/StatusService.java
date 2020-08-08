@@ -6,10 +6,10 @@
  */
 package com.example.ems.services;
 
-import com.example.ems.database.dao.StatusDAO;
-import com.example.ems.database.models.Status;
-import com.example.ems.network.models.status.Add;
-import com.example.ems.network.models.status.All;
+import com.example.ems.database.dao.pg.StatusDAO;
+import com.example.ems.dto.database.pg.Status;
+import com.example.ems.dto.network.controller.status.Add;
+import com.example.ems.dto.network.controller.status.All;
 import com.example.ems.services.iface.MainService;
 import org.springframework.stereotype.Service;
 

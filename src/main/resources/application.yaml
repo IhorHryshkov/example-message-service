@@ -1,4 +1,15 @@
 spring:
+  rabbitmq:
+    host: ${MQ_HOST}
+    port: ${MQ_PORT}
+    username: ${MQ_USER}
+    password: ${MQ_PASS}
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 5
+        default-requeue-rejected: false
   output:
     ansi:
       enabled: always

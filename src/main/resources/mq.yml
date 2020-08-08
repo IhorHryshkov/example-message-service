@@ -1,0 +1,8 @@
+rabbit:
+  retryCount: 1
+  user:
+    exchange: amq.direct
+    routingKey: user
+    durable: true
+    exclusive: false
+    autoDelete: false

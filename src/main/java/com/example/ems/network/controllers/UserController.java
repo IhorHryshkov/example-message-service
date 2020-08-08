@@ -6,15 +6,15 @@
  **/
 package com.example.ems.network.controllers;
 
-import com.example.ems.database.models.Users;
+import com.example.ems.dto.database.pg.Users;
+import com.example.ems.dto.network.controller.Res;
+import com.example.ems.dto.network.controller.user.AddIn;
+import com.example.ems.dto.network.controller.user.AllIn;
+import com.example.ems.dto.network.controller.user.AllOut;
 import com.example.ems.network.controllers.exceptions.global.ResponseEmptyException;
-import com.example.ems.network.controllers.exceptions.global.ResponseIfNoneMatchException;
-import com.example.ems.network.models.Res;
-import com.example.ems.network.models.user.Add;
-import com.example.ems.network.models.user.AllIn;
-import com.example.ems.network.models.user.AllOut;
 import com.example.ems.services.CacheService;
 import com.example.ems.services.UserService;
+import com.example.ems.utils.enums.States;
 import com.example.ems.utils.network.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -31,35 +31,42 @@ import javax.validation.Valid;
 public class UserController {
 
 	private final UserService userService;
-	private final CacheService cacheService;
 	private final Response<Object> response;
+	private final CacheService cacheService;
 
-	UserController(CacheService cacheService, UserService userService, Response<Object> response) {
+	UserController(UserService userService, CacheService cacheService, Response<Object> response) {
 		this.userService = userService;
 		this.response = response;
 		this.cacheService = cacheService;
 	}
 
 	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
 	ResponseEntity<Res<Object>> all(@Valid AllIn params) {
 		params.setResId(MDC.get("resId"));
 		params.setPath(MDC.get("fullPathQuery"));
-
-		if (this.cacheService.exist(String.format("userCache::all::forMatch::%s", MDC.get("ifNoneMatch")))) {
-			throw new ResponseIfNoneMatchException();
-		}
+		this.cacheService.existOrIfNoneMatch(String.format("userCache::all::forMatch::%s", MDC.get("ifNoneMatch")));
 		AllOut<Users> users = this.userService.all(params);
 		if (users.getData() == null || users.getData().isEmpty()) {
 			throw new ResponseEmptyException();
 		}
-		this.cacheService.set(String.format("userCache::%s::forMatch::%s", "all", users.getEtag()), "");
+		this.cacheService.setKeyForCheckWithTtlDivider(String.format("userCache::all::forMatch::%s", users.getEtag()), 2);
 		return response.formattedSuccess(users.getData(), MediaType.APPLICATION_JSON, HttpStatus.OK.value(), users.getEtag());
 	}
 
 	@PostMapping
-	ResponseEntity<Res<Users>> add(@Valid @RequestBody Add addUser) {
-		return null;
+	ResponseEntity<Res<Object>> add(@Valid @RequestBody AddIn params) {
+		params.setResId(MDC.get("resId"));
+
+//		if (this.cacheService.exist(String.format("userState::add::%s::%s", States.IN_PROGRESS, params.toHashKey()))) {
+//			return response.formattedSuccess(new State(States.IN_PROGRESS.toString()), MediaType.APPLICATION_JSON, HttpStatus.ACCEPTED.value(), "");
+//		}
+
+		this.userService.add(params);
+
+//		this.stateService.set(String.format("userState::add::%s::%s", States.IN_PROGRESS, params.toHashKey()), params);
+
+		params.setResId(null);
+		return response.formattedSuccess(params, MediaType.APPLICATION_JSON, HttpStatus.CREATED.value(), "");
 	}
 
 }

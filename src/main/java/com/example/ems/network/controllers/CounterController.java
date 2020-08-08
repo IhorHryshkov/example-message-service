@@ -6,13 +6,13 @@
  */
 package com.example.ems.network.controllers;
 
-import com.example.ems.database.models.Counters;
+import com.example.ems.dto.database.pg.Counters;
+import com.example.ems.dto.network.controller.Res;
+import com.example.ems.dto.network.controller.counter.GetByIdIn;
+import com.example.ems.dto.network.controller.counter.GetByIdOut;
 import com.example.ems.network.controllers.exceptions.global.ResponseEmptyException;
 import com.example.ems.network.controllers.exceptions.global.ResponseIfNoneMatchException;
-import com.example.ems.network.models.Res;
-import com.example.ems.network.models.counter.GetByIdIn;
-import com.example.ems.network.models.counter.GetByIdOut;
-import com.example.ems.services.CacheService;
+import com.example.ems.database.dao.redis.CacheDAO;
 import com.example.ems.services.CounterService;
 import com.example.ems.utils.network.Response;
 import org.slf4j.MDC;
@@ -31,13 +31,13 @@ import javax.validation.Valid;
 public class CounterController {
 
 	private final CounterService counterService;
-	private final CacheService cacheService;
+	private final CacheDAO cacheDAO;
 	private final Response<Object> response;
 
-	CounterController(CounterService counterService, CacheService cacheService, Response<Object> response) {
+	CounterController(CounterService counterService, CacheDAO cacheDAO, Response<Object> response) {
 		this.counterService = counterService;
 		this.response = response;
-		this.cacheService = cacheService;
+		this.cacheDAO = cacheDAO;
 	}
 
 	@GetMapping("${parameters.controllers.counter.getById}")
@@ -46,14 +46,14 @@ public class CounterController {
 		params.setResId(MDC.get("resId"));
 		params.setPath(MDC.get("fullPathQuery"));
 
-		if (this.cacheService.exist(String.format("counterCache::getById::forMatch::%s", MDC.get("ifNoneMatch")))) {
+		if (this.cacheDAO.exist(String.format("counterCache::getById::forMatch::%s", MDC.get("ifNoneMatch")))) {
 			throw new ResponseIfNoneMatchException();
 		}
 		GetByIdOut<Counters> counters = counterService.getByUserId(params);
 		if (counters.getData() == null || counters.getData().isEmpty()) {
 			throw new ResponseEmptyException();
 		}
-		this.cacheService.set(String.format("counterCache::getById::forMatch::%s", counters.getEtag()), "");
+		this.cacheDAO.set(String.format("counterCache::getById::forMatch::%s", counters.getEtag()), "");
 		return response.formattedSuccess(counters.getData(), MediaType.APPLICATION_JSON, HttpStatus.OK.value(), counters.getEtag());
 	}
 }
