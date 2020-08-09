@@ -1,8 +1,14 @@
 rabbit:
   retryCount: 1
   user:
-    exchange: amq.direct
-    routingKey: user
+    exchange: user
+    routingKey: add
+    durable: true
+    exclusive: false
+    autoDelete: false
+  websocket:
+    exchange: websocket
+    routingKey: send
     durable: true
     exclusive: false
     autoDelete: false

@@ -14,7 +14,7 @@ spring:
     ansi:
       enabled: always
   liquibase:
-    changeLog: classpath:db/master-changelog.yaml
+    changeLog: classpath:db/pg/master-changelog.yaml
     user: ${PG_USER}
     password: ${PG_PASS}
     url: ${PG_HOST}
@@ -47,8 +47,12 @@ server:
 ---
 redis:
   cacheTtl: 600
+  luaResPath:
+    add: db/redis/lua/add.lua
 ---
 parameters:
+  default:
+    status: online
   controllers:
     counter:
       rootPath: "/v1/counter"

@@ -1,6 +1,7 @@
 package com.example.ems.config.redis;
 
 import com.example.ems.dto.database.redis.HashName;
+import com.example.ems.dto.database.redis.LuaResPath;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,5 @@ import org.springframework.stereotype.Component;
 public class RedisSettings {
 	private Integer cacheTtl;
 	private HashName hashName;
+	private LuaResPath luaResPath;
 }

@@ -10,5 +10,9 @@ import com.example.ems.dto.database.pg.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface UsersDAO extends JpaRepository<Users, Integer>, JpaSpecificationExecutor<Users> {
+import java.util.List;
+import java.util.UUID;
+
+public interface UsersDAO extends JpaRepository<Users, UUID>, JpaSpecificationExecutor<Users> {
+	List<Users> findByStatusNameIgnoreCaseAndUsername(String name, String username);
 }

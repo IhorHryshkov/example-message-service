@@ -7,6 +7,7 @@
 package com.example.ems.services;
 
 import com.example.ems.config.rabbitmq.RabbitMQSettings;
+import com.example.ems.dto.mq.QueueConf;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
@@ -36,25 +37,31 @@ public class QueueService {
 	) {
 		this.amqpAdmin = amqpAdmin;
 		this.amqpTemplate = amqpTemplate;
-		this.rabbitMQSettings = rabbitMQSettings;
 		this.listenerMQRegistry = listenerMQRegistry;
+		this.rabbitMQSettings = rabbitMQSettings;
 	}
 
-	public void sendMessage(String queueName, String id, Object data) {
-		QueueBuilder queueBuilder = rabbitMQSettings.getUser().getDurable() ? QueueBuilder.durable(queueName) : QueueBuilder.nonDurable(queueName);
-		if (rabbitMQSettings.getUser().getExclusive()) {
+	public RabbitMQSettings getRabbitMQSettings() {
+		return this.rabbitMQSettings;
+	}
+
+	public void sendMessage(String queueName, Object data, QueueConf conf) {
+		QueueBuilder queueBuilder = conf.getDurable() ? QueueBuilder.durable(queueName) : QueueBuilder.nonDurable(queueName);
+		if (conf.getExclusive()) {
 			queueBuilder.exclusive();
 		}
-		if (rabbitMQSettings.getUser().getAutoDelete()) {
+		if (conf.getAutoDelete()) {
 			queueBuilder.autoDelete();
 		}
-		queue = queueBuilder.deadLetterExchange(rabbitMQSettings.getUser().getExchange()).deadLetterRoutingKey(queueName).build();
-		exchange = ExchangeBuilder.directExchange(rabbitMQSettings.getUser().getExchange()).build();
+		queue = queueBuilder.deadLetterExchange(conf.getExchange()).deadLetterRoutingKey(queueName).build();
+		log.debug("getQueueProperties1: {}", amqpAdmin.getQueueProperties(queueName));
+		exchange = ExchangeBuilder.directExchange(conf.getExchange()).build();
 		binding = BindingBuilder.bind(queue).to(exchange).with(queueName);
 		amqpAdmin.declareQueue(queue);
 		amqpAdmin.declareBinding(binding);
-		amqpTemplate.convertAndSend(rabbitMQSettings.getUser().getExchange(), queueName, data);
-		initQueueListener(queueName, id);
+		amqpTemplate.convertAndSend(conf.getExchange(), queueName, data);
+		initQueueListener(queueName, conf.getExchange());
+		log.debug("getQueueProperties2: {}", amqpAdmin.getQueueProperties(queueName));
 	}
 
 	public boolean endedRetryCount(Message message) {

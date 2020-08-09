@@ -11,10 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
@@ -22,8 +19,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 public class Status implements Serializable {
-
 	@Id
+	@SequenceGenerator(name = "status_seq_gen", sequenceName = "status_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "status_seq_gen")
 	private Integer id;
 	@Column(nullable = false)
 	private String name;
@@ -34,7 +32,7 @@ public class Status implements Serializable {
 	@Convert(converter = LongTimestampConverter.class)
 	private Long updatedAt;
 
-	Status(String name) {
+	public Status(String name) {
 		this.name = name;
 	}
 }

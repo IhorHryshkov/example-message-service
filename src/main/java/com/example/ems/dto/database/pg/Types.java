@@ -11,10 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
@@ -23,6 +20,8 @@ import java.io.Serializable;
 @Entity
 public class Types implements Serializable {
 	@Id
+	@SequenceGenerator(name = "types_seq_gen", sequenceName = "types_id_seq", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "types_seq_gen")
 	private Integer id;
 	@Column(nullable = false)
 	private String name;

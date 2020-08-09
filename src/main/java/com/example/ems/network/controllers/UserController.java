@@ -8,6 +8,7 @@ package com.example.ems.network.controllers;
 
 import com.example.ems.dto.database.pg.Users;
 import com.example.ems.dto.network.controller.Res;
+import com.example.ems.dto.network.controller.State;
 import com.example.ems.dto.network.controller.user.AddIn;
 import com.example.ems.dto.network.controller.user.AllIn;
 import com.example.ems.dto.network.controller.user.AllOut;
@@ -57,13 +58,10 @@ public class UserController {
 	ResponseEntity<Res<Object>> add(@Valid @RequestBody AddIn params) {
 		params.setResId(MDC.get("resId"));
 
-//		if (this.cacheService.exist(String.format("userState::add::%s::%s", States.IN_PROGRESS, params.toHashKey()))) {
-//			return response.formattedSuccess(new State(States.IN_PROGRESS.toString()), MediaType.APPLICATION_JSON, HttpStatus.ACCEPTED.value(), "");
-//		}
-
-		this.userService.add(params);
-
-//		this.stateService.set(String.format("userState::add::%s::%s", States.IN_PROGRESS, params.toHashKey()), params);
+		States state = this.userService.add(params);
+		if (state != States.RESOLVE) {
+			return response.formattedSuccess(new State(state.toString()), MediaType.APPLICATION_JSON, HttpStatus.ACCEPTED.value(), "");
+		}
 
 		params.setResId(null);
 		return response.formattedSuccess(params, MediaType.APPLICATION_JSON, HttpStatus.CREATED.value(), "");
