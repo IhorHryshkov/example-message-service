@@ -7,6 +7,7 @@
 package com.example.ems.services;
 
 import com.example.ems.config.rabbitmq.RabbitMQSettings;
+import com.example.ems.dto.mq.QueueBind;
 import com.example.ems.dto.mq.QueueConf;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
@@ -25,10 +26,6 @@ public class QueueService {
 	private final RabbitMQSettings rabbitMQSettings;
 	private final RabbitListenerEndpointRegistry listenerMQRegistry;
 
-	private Queue queue;
-	private DirectExchange exchange;
-	private Binding binding;
-
 	QueueService(
 			AmqpAdmin amqpAdmin,
 			AmqpTemplate amqpTemplate,
@@ -46,19 +43,9 @@ public class QueueService {
 	}
 
 	public void sendMessage(String queueName, Object data, QueueConf conf) {
-		QueueBuilder queueBuilder = conf.getDurable() ? QueueBuilder.durable(queueName) : QueueBuilder.nonDurable(queueName);
-		if (conf.getExclusive()) {
-			queueBuilder.exclusive();
-		}
-		if (conf.getAutoDelete()) {
-			queueBuilder.autoDelete();
-		}
-		queue = queueBuilder.deadLetterExchange(conf.getExchange()).deadLetterRoutingKey(queueName).build();
-		log.debug("getQueueProperties1: {}", amqpAdmin.getQueueProperties(queueName));
-		exchange = ExchangeBuilder.directExchange(conf.getExchange()).build();
-		binding = BindingBuilder.bind(queue).to(exchange).with(queueName);
-		amqpAdmin.declareQueue(queue);
-		amqpAdmin.declareBinding(binding);
+		QueueBind queueBind = buildQueueAndBind(queueName, conf);
+		amqpAdmin.declareQueue(queueBind.getQueue());
+		amqpAdmin.declareBinding(queueBind.getBinding());
 		amqpTemplate.convertAndSend(conf.getExchange(), queueName, data);
 		initQueueListener(queueName, conf.getExchange());
 		log.debug("getQueueProperties2: {}", amqpAdmin.getQueueProperties(queueName));
@@ -75,8 +62,23 @@ public class QueueService {
 	}
 
 	public void removeDeclares(String queueName, String id) {
-		amqpAdmin.removeBinding(binding);
 		removeQueueListener(queueName, id);
+	}
+
+	private QueueBind buildQueueAndBind(String queueName, QueueConf conf) {
+		QueueBuilder queueBuilder = conf.getDurable() ? QueueBuilder.durable(queueName) : QueueBuilder.nonDurable(queueName);
+		if (conf.getExclusive()) {
+			queueBuilder.exclusive();
+		}
+		if (conf.getAutoDelete()) {
+			queueBuilder.autoDelete();
+		}
+		;
+		Queue queue = queueBuilder.deadLetterExchange(conf.getExchange()).deadLetterRoutingKey(queueName).build();
+		log.debug("getQueueProperties1: {}", amqpAdmin.getQueueProperties(queueName));
+		DirectExchange exchange = ExchangeBuilder.directExchange(conf.getExchange()).build();
+		Binding binding = BindingBuilder.bind(queue).to(exchange).with(queueName);
+		return new QueueBind(queue, binding);
 	}
 
 	public void initQueueListener(String queueName, String id) {

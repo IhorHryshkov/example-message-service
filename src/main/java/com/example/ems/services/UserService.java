@@ -12,6 +12,7 @@ import com.example.ems.database.dao.redis.StateDAO;
 import com.example.ems.dto.database.pg.Status;
 import com.example.ems.dto.database.pg.Users;
 import com.example.ems.dto.network.controller.user.AddIn;
+import com.example.ems.dto.network.controller.user.AddOut;
 import com.example.ems.dto.network.controller.user.AllIn;
 import com.example.ems.dto.network.controller.user.AllOut;
 import com.example.ems.utils.enums.States;
@@ -82,8 +83,10 @@ public class UserService {
 			if (statuses == null || statuses.isEmpty()) {
 				log.error("Default status by name {} not found in table", defaultStatus);
 			} else {
-				this.usersDAO.save(new Users(data.getUsername(), statuses.get(0)));
-//				this.queueService.sendMessage(String.format("websocket.%s", data.getUsername()), data, this.queueService.getRabbitMQSettings().getWebsocket());
+				Users user = new Users(data.getUsername(), statuses.get(0));
+				user = this.usersDAO.save(user);
+				AddOut addOut = new AddOut(user.getId().toString(), data.getUsername(), data.getResId());
+				this.queueService.sendMessage(String.format("websocket.%s", data.getUsername()), addOut, this.queueService.getRabbitMQSettings().getWebsocket());
 			}
 		}
 		this.stateDAO.del(String.format("userState::add::%s", States.IN_PROGRESS), data.toHashKey());
