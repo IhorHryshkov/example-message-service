@@ -11,7 +11,6 @@ import com.example.ems.dto.network.controller.Res;
 import com.example.ems.services.CallbackService;
 import com.example.ems.utils.network.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +36,7 @@ public class CallbackController {
 
 	@PostMapping
 	ResponseEntity<Res<Object>> add(@Valid @RequestBody Callback params) {
-		params.setResId(MDC.get("resId"));
+		log.debug("Request callback: {}", params);
 
 		this.callbackService.removeState(params.getResId());
 

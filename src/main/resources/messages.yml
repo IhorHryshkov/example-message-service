@@ -6,7 +6,7 @@ message:
     message: Username is used, please try to use other username
     code: 400
   requestBodyIncorrect:
-    message: Request body or query or params data is incorrect
+    message: Request body or query or path params data is incorrect
     code: 422
   internalServerError:
     message: Internal server error, please try again later.

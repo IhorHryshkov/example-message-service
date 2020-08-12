@@ -7,15 +7,16 @@
 package com.example.ems.network.controllers.advice.global;
 
 import com.example.ems.config.messages.Messages;
+import com.example.ems.dto.network.controller.Res;
 import com.example.ems.network.controllers.exceptions.global.ResponseEmptyException;
 import com.example.ems.network.controllers.exceptions.global.ResponseIfNoneMatchException;
 import com.example.ems.network.controllers.exceptions.user.ResponseUsernameUsedException;
-import com.example.ems.dto.network.controller.Res;
 import com.example.ems.utils.network.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -40,6 +41,12 @@ public class GlobalServiceErrorAdvice {
 		log.error("message: {}", e.getMessage());
 		e.printStackTrace();
 		return response.formattedError(req, messages.getInternalServerError().getMessage(), MediaType.APPLICATION_JSON, messages.getInternalServerError().getCode());
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<Res<Object>> handleValidationException(HttpServletRequest req, Exception e) {
+		log.error("message: {}", e.getMessage());
+		return response.formattedError(req, messages.getRequestBodyIncorrect().getMessage(), MediaType.APPLICATION_JSON, messages.getRequestBodyIncorrect().getCode());
 	}
 
 	@ExceptionHandler(ResponseEmptyException.class)

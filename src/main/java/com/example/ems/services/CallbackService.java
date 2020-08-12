@@ -17,6 +17,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Slf4j
 @Service
 public class CallbackService {
@@ -46,12 +48,18 @@ public class CallbackService {
 				MDC.put("resId", addOut.getResId());
 				log.debug("Get data AddIn: {}", addOut);
 				if (!this.queueService.endedRetryCount(message)) {
-					if (this.stateDAO.add(String.format("userState::callback::%s", States.IN_PROGRESS), addOut.getResId(), addOut) != null) {
-						throw new NoAckException(String.format("Waiting OK by user ID: %s", addOut.getUserId()));
+					if (this.stateDAO.exist(String.format("userState::callback::%s", States.RESOLVE), addOut.getResId())) {
+						this.stateDAO.del(String.format("userState::callback::%s", States.RESOLVE), addOut.getResId());
+						return;
 					}
+					if (this.stateDAO.add(String.format("userState::callback::%s", States.IN_PROGRESS), addOut.getResId(), addOut) == null) {
+						this.simpMessagingTemplate.convertAndSend(String.format("/queue/%s", addOut.getUsername()), addOut);
+					}
+					throw new NoAckException(String.format("Waiting RESOLVE by res ID: %s", addOut.getResId()));
+				} else {
+					this.queueService.sendMessage(String.format("websocket.%s", addOut.getUsername()), addOut, this.queueService.getRabbitMQSettings().getWebsocket());
+					this.stateDAO.del(String.format("userState::callback::%s", States.IN_PROGRESS), addOut.getResId());
 				}
-				this.simpMessagingTemplate.convertAndSend(String.format("/queue/%s", addOut.getUsername()), addOut);
-				break;
 			}
 			default:
 				log.warn("__TypeId__ not found for message: {}", message);
@@ -59,6 +67,9 @@ public class CallbackService {
 	}
 
 	public void removeState(String resId) {
-
+		if (this.stateDAO.exist(String.format("userState::callback::%s", States.IN_PROGRESS), resId)) {
+			this.stateDAO.add(String.format("userState::callback::%s", States.RESOLVE), resId, Instant.now().toEpochMilli());
+			this.stateDAO.del(String.format("userState::callback::%s", States.IN_PROGRESS), resId);
+		}
 	}
 }
