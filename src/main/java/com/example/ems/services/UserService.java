@@ -83,7 +83,13 @@ public class UserService {
 			if (statuses == null || statuses.isEmpty()) {
 				log.error("Default status by name {} not found in table", defaultStatus);
 			} else {
-				Users user = new Users(data.getUsername(), statuses.get(0));
+				List<Users> users = this.usersDAO.findByUsername(data.getUsername());
+				Users user = users != null && !users.isEmpty() ? users.get(0) : null;
+				if (user == null) {
+					user = new Users(data.getUsername(), statuses.get(0));
+				} else {
+					user.setStatus(statuses.get(0));
+				}
 				user = this.usersDAO.save(user);
 				AddOut addOut = new AddOut(user.getId().toString(), data.getUsername(), data.getResId());
 				this.queueService.sendMessage(String.format("websocket.%s", data.getUsername()), addOut, this.queueService.getRabbitMQSettings().getWebsocket());

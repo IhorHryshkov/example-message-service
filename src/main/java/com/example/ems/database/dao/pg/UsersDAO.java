@@ -15,4 +15,6 @@ import java.util.UUID;
 
 public interface UsersDAO extends JpaRepository<Users, UUID>, JpaSpecificationExecutor<Users> {
 	List<Users> findByStatusNameIgnoreCaseAndUsername(String name, String username);
+
+	List<Users> findByUsername(String username);
 }

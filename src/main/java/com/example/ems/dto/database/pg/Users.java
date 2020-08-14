@@ -11,6 +11,7 @@ import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -30,7 +31,8 @@ public class Users implements Serializable {
 	@Id
 	@Type(type = "pg-uuid")
 	@Column(columnDefinition = "uuid")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator = "OldOrNewIdGenerator")
+	@GenericGenerator(name = "OldOrNewIdGenerator", strategy = "com.example.ems.utils.converters.pg.OldOrNewIdGenerator")
 	private UUID id;
 	@Column(nullable = false)
 	private String username;
