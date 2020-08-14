@@ -9,14 +9,21 @@ package com.example.ems.services;
 import com.example.ems.database.dao.pg.StatusDAO;
 import com.example.ems.dto.database.pg.Status;
 import com.example.ems.dto.network.controller.status.Add;
-import com.example.ems.dto.network.controller.status.All;
+import com.example.ems.dto.network.controller.status.AllIn;
+import com.example.ems.dto.network.controller.status.AllOut;
 import com.example.ems.services.iface.MainService;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
+
+import static com.example.ems.database.dao.pg.specification.StatusSpecification.findByCriteria;
 
 @Service
-public class StatusService implements MainService<Status, All, Integer> {
+public class StatusService implements MainService<Status, AllIn, Integer, AllOut<Status>> {
 
 	private final StatusDAO statusDAO;
 
@@ -25,25 +32,30 @@ public class StatusService implements MainService<Status, All, Integer> {
 	}
 
 	public Integer updateCounterAndStatus(Add data) {
-		return null;
+		throw new RuntimeException("Method is not implemented");
 	}
 
 	@Override
 	public Integer add(Status data) {
-		return null;
+		throw new RuntimeException("Method is not implemented");
 	}
 
 	@Override
 	public Status update(Status data, Integer integer) {
-		return null;
+		throw new RuntimeException("Method is not implemented");
 	}
 
 	@Override
 	public Status getById(Integer integer) {
-		return null;
+		throw new RuntimeException("Method is not implemented");
 	}
 
-	public List<Status> all(All params) {
-		return this.statusDAO.findAll();
+	@Override
+	@Cacheable(value = "statusCache", key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()", unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
+	public AllOut<Status> all(AllIn params) {
+		List<Status> statuses = this.statusDAO.findAll(findByCriteria(params));
+		String etag = DigestUtils.sha256Hex(String.format("%s:%s:%d", UUID.randomUUID().toString(), params.getPath(), Instant.now().toEpochMilli()));
+
+		return new AllOut<>(etag, statuses);
 	}
 }

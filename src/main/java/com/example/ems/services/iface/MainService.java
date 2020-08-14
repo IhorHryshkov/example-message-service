@@ -6,14 +6,12 @@
  */
 package com.example.ems.services.iface;
 
-import java.util.List;
-
-public interface MainService<A, P, ID> {
+public interface MainService<A, P, ID, ALL> {
 	ID add(A data);
 
 	A update(A data, ID id);
 
 	A getById(ID id);
 
-	List<A> all(P params);
+	ALL all(P params);
 }

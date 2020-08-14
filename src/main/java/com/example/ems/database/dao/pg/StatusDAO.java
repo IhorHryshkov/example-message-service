@@ -8,9 +8,10 @@ package com.example.ems.database.dao.pg;
 
 import com.example.ems.dto.database.pg.Status;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-public interface StatusDAO extends JpaRepository<Status, Integer> {
+public interface StatusDAO extends JpaRepository<Status, Integer>, JpaSpecificationExecutor<Status> {
 	List<Status> findByNameIgnoreCase(String name);
 }
