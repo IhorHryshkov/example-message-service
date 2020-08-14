@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AllIn {
-	@Size(min = 3, max = 64, message = "Status have incorrect size")
+	@Size(min = 3, max = 64, message = "Status name have incorrect size")
 	@Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "Status name have incorrect symbols")
 	private String name;
 

@@ -15,6 +15,7 @@ import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,14 +40,15 @@ public class StateDAO {
 	}
 
 	public Object add(String hashName, String key, Object value) {
-		List result = (List) redisTemplate.execute(addLua, Arrays.asList(hashName, key), value);
+		List result = (List) redisTemplate.execute(addLua, Arrays.asList(hashName, key), value, Instant.now().toEpochMilli());
 		log.debug("Add result: {}", result);
 		return result == null || result.isEmpty() ? null : result.get(0);
 	}
 
 	public boolean del(String hashName, String key) {
-		Long result = redisTemplate.opsForHash().delete(hashName, key);
-		return result > 0;
+		Long resultHash = redisTemplate.opsForHash().delete(hashName, key);
+		Long resultTime = redisTemplate.opsForHash().delete(String.format("%s::%s", hashName, "expire"), key);
+		return resultHash > 0 && resultTime > 0;
 	}
 
 	public boolean exist(String hashName, String key) {

@@ -6,12 +6,12 @@
  */
 package com.example.ems.services.iface;
 
-public interface MainService<A, P, ID, ALL> {
-	ID add(A data);
+public interface MainService<A, ID, ALL, ALLR, ADD, ADDR, UPD, UPDR> {
+	ADDR add(ADD data);
 
-	A update(A data, ID id);
+	UPDR update(UPD data, ID id);
 
 	A getById(ID id);
 
-	ALL all(P params);
+	ALLR all(ALL params);
 }

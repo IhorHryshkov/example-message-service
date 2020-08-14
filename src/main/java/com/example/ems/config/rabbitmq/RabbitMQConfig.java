@@ -39,6 +39,7 @@ public class RabbitMQConfig {
 		RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
 		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getUser().getExchange()).build());
 		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getWebsocket().getExchange()).build());
+		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getStatus().getExchange()).build());
 		return rabbitAdmin;
 	}
 

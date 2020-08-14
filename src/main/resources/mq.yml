@@ -6,6 +6,12 @@ rabbit:
     durable: true
     exclusive: false
     autoDelete: false
+  status:
+    exchange: status
+    routingKey: update
+    durable: true
+    exclusive: false
+    autoDelete: false
   websocket:
     exchange: websocket
     routingKey: send

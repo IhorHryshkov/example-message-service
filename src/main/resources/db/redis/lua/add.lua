@@ -8,6 +8,7 @@ redis.replicate_commands()
 local hashName = KEYS[1]
 local key = KEYS[2]
 local value = ARGV[1]
+local time = ARGV[2]
 
 local returnValue = redis.call("HGET", hashName, key)
 
@@ -15,5 +16,6 @@ if (returnValue) then
     return 1;
 else
     redis.call("HSET", hashName, key, value)
+    redis.call("HSET", hashName .. "::expire", key, time)
     return nil;
 end

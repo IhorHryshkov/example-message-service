@@ -59,7 +59,7 @@ public class UserService {
 	@CacheEvict(value = "userCache", allEntries = true)
 	public States add(AddIn data) {
 		if (this.stateDAO.add(String.format("userState::add::%s", States.IN_PROGRESS), data.toHashKey(), data) != null) {
-			log.info("Username {} add is progress", data.getUsername());
+			log.info("Username {} add is in progress", data.getUsername());
 			return States.IN_PROGRESS;
 		}
 		List<Users> users = this.usersDAO.findByStatusNameIgnoreCaseAndUsername(defaultStatus, data.getUsername());

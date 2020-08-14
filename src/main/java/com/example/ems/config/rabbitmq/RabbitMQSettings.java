@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 @PropertySource(value = "classpath:mq.yml", factory = YamlPropertySourceFactory.class)
 public class RabbitMQSettings {
 	private QueueConf user;
+	private QueueConf status;
 	private QueueConf websocket;
 	private Long retryCount;
 }
