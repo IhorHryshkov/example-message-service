@@ -5,6 +5,12 @@ message:
   usernameUsed:
     message: Username is used, please try to use other username
     code: 400
+  userIdNotFound:
+    message: User ID not found
+    code: 400
+  endpointNotFound:
+    message: Request endpoint not supported
+    code: 404
   requestBodyIncorrect:
     message: Request body or query or path params data is incorrect
     code: 422

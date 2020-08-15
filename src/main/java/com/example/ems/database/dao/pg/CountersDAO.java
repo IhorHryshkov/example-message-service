@@ -14,6 +14,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CountersDAO extends JpaRepository<Counters, CountersIds> {
-
-	List<Counters> findByUserId(UUID userId);
+	List<Counters> findByKeysUserId(UUID userId);
 }

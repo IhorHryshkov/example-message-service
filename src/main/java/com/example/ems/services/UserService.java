@@ -6,15 +6,20 @@
  */
 package com.example.ems.services;
 
+import com.example.ems.database.dao.pg.CountersDAO;
 import com.example.ems.database.dao.pg.StatusDAO;
+import com.example.ems.database.dao.pg.TypesDAO;
 import com.example.ems.database.dao.pg.UsersDAO;
 import com.example.ems.database.dao.redis.StateDAO;
+import com.example.ems.dto.database.pg.Counters;
 import com.example.ems.dto.database.pg.Status;
+import com.example.ems.dto.database.pg.Types;
 import com.example.ems.dto.database.pg.Users;
-import com.example.ems.dto.network.controller.user.AddIn;
-import com.example.ems.dto.network.controller.user.AddOut;
-import com.example.ems.dto.network.controller.user.AllIn;
-import com.example.ems.dto.network.controller.user.AllOut;
+import com.example.ems.dto.database.pg.ids.CountersIds;
+import com.example.ems.dto.mq.CallbackMQ;
+import com.example.ems.dto.mq.StatusMQ;
+import com.example.ems.dto.network.controller.user.*;
+import com.example.ems.network.controllers.exceptions.status.UserIDNotFoundException;
 import com.example.ems.utils.enums.States;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -24,8 +29,10 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -39,70 +46,176 @@ public class UserService {
 	@Value("${parameters.default.status}")
 	private String defaultStatus;
 
-	private final UsersDAO usersDAO;
-	private final StatusDAO statusDAO;
-	private final StateDAO stateDAO;
+	private final UsersDAO     usersDAO;
+	private final StatusDAO    statusDAO;
+	private final StateDAO     stateDAO;
+	private final TypesDAO     typesDAO;
+	private final CountersDAO  countersDAO;
 	private final QueueService queueService;
 
 	public UserService(
 			UsersDAO usersDAO,
 			StateDAO stateDAO,
 			StatusDAO statusDAO,
+			TypesDAO typesDAO,
+			CountersDAO countersDAO,
 			QueueService queueService
 	) {
-		this.usersDAO = usersDAO;
-		this.statusDAO = statusDAO;
-		this.stateDAO = stateDAO;
+		this.usersDAO     = usersDAO;
+		this.statusDAO    = statusDAO;
+		this.stateDAO     = stateDAO;
+		this.typesDAO     = typesDAO;
+		this.countersDAO  = countersDAO;
 		this.queueService = queueService;
 	}
 
 	@CacheEvict(value = "userCache", allEntries = true)
 	public States add(AddIn data) {
-		if (this.stateDAO.add(String.format("userState::add::%s", States.IN_PROGRESS), data.toHashKey(), data) != null) {
+		if (this.stateDAO.add(String.format("userState::add::%s", States.IN_PROGRESS), data.toHashKey(), data) !=
+		    null) {
 			log.info("Username {} add is in progress", data.getUsername());
 			return States.IN_PROGRESS;
 		}
-		List<Users> users = this.usersDAO.findByStatusNameIgnoreCaseAndUsername(defaultStatus, data.getUsername());
-		if (users != null && !users.isEmpty()) {
+		Users user = this.usersDAO.findByStatusNameIgnoreCaseAndUsername(defaultStatus, data.getUsername())
+		                          .stream()
+		                          .findFirst()
+		                          .orElse(null);
+		if (user != null) {
 			log.info("User {} is online", data.getUsername());
 			this.stateDAO.del(String.format("userState::add::%s", States.IN_PROGRESS), data.toHashKey());
 			return States.IN_PROGRESS;
 		}
-		this.queueService.sendMessage(String.format("add.%s", data.getUsername()), data, this.queueService.getRabbitMQSettings().getUser());
+		this.queueService.sendMessage(
+				String.format("add.%s", data.getUsername()),
+				new CallbackMQ<>(data.getUsername(), data.getResId(), data),
+				this.queueService.getRabbitMQSettings().getUserAdd()
+		);
+		return States.RESOLVE;
+	}
+
+	//id - still the same as a id name
+	@RabbitListener(id = "userAdd")
+	public void listenUserAdd(Message message, CallbackMQ<AddIn> in) {
+		MDC.put("resId", in.getResId());
+		log.debug("Message: {}", message);
+		AddIn data = in.getData();
+		if (this.queueService.isGoRetry(message)) {
+			log.debug("Data: {}", data);
+			Status status = this.statusDAO.findByNameIgnoreCase(defaultStatus).stream().findFirst().orElse(null);
+			if (status == null) {
+				log.error("Default status by name {} not found in table", defaultStatus);
+			} else {
+				Users user = this.usersDAO.findByUsername(data.getUsername()).stream().findFirst().orElse(null);
+				if (user == null) {
+					user = new Users(data.getUsername(), status);
+				} else {
+					user.setStatus(status);
+				}
+				user = this.usersDAO.save(user);
+				AddOut addOut = new AddOut(user.getId().toString(), data.getResId());
+				this.queueService.sendMessage(
+						String.format("websocket.%s", in.getQueueName()),
+						new CallbackMQ<>(in.getQueueName(), in.getResId(), addOut),
+						this.queueService.getRabbitMQSettings().getWebsocket()
+				);
+			}
+		}
+		this.stateDAO.del(String.format("userState::add::%s", States.IN_PROGRESS), data.toHashKey());
+		this.queueService.removeDeclares(
+				String.format("add.%s", in.getQueueName()),
+				this.queueService.getRabbitMQSettings().getUserAdd().getExchange()
+		);
+	}
+
+	@Caching(evict = {
+			@CacheEvict(value = "counterCache", allEntries = true),
+			@CacheEvict(value = "userCache", allEntries = true)
+	})
+	public States updateCounterAndStatus(UpdateIn data) {
+		if (this.stateDAO.add(
+				String.format("userState::updateCounterAndStatus::%s", States.IN_PROGRESS),
+				data.toHashKey(),
+				data
+		) != null) {
+			log.info("Status ID {} by User ID {} is in progress", data.getStatusId(), data.getUserId());
+			return States.IN_PROGRESS;
+		}
+		Users user = this.usersDAO.findById(UUID.fromString(data.getUserId())).orElse(null);
+		if (user == null) {
+			log.error("User ID {} not found", data.getUserId());
+			this.stateDAO.del(
+					String.format("userState::updateCounterAndStatus::%s", States.IN_PROGRESS),
+					data.toHashKey()
+			);
+			throw new UserIDNotFoundException();
+		}
+		user.getStatus().setId(data.getStatusId());
+		this.queueService.sendMessage(
+				String.format("update.%s", user.getUsername()),
+				new CallbackMQ<>(
+						user.getUsername(),
+						data.getResId(),
+						new StatusMQ(user, data)
+				),
+				this.queueService.getRabbitMQSettings().getUserUpdate()
+		);
 		return States.RESOLVE;
 	}
 
 	//id - still the same as a exchange name
-	@RabbitListener(id = "user")
-	public void listen(Message message, AddIn data) {
-		MDC.put("resId", data.getResId());
-		log.debug("Message: {}", message);
-		if (!this.queueService.endedRetryCount(message)) {
-			log.debug("Data: {}", data);
-			List<Status> statuses = this.statusDAO.findByNameIgnoreCase(defaultStatus);
-			if (statuses == null || statuses.isEmpty()) {
-				log.error("Default status by name {} not found in table", defaultStatus);
+	@RabbitListener(id = "userUpdate")
+	public void listenUserUpdate(Message message, CallbackMQ<StatusMQ> in) {
+		MDC.put("resId", in.getResId());
+		log.debug("CallbackMQ: {}", in.getData());
+		Users    user     = in.getData().getUser();
+		UpdateIn updateIn = in.getData().getUpdate();
+		if (this.queueService.isGoRetry(message)) {
+			user = this.usersDAO.save(user);
+			Types type = this.typesDAO.findByNameIgnoreCase(user.getStatus().getName())
+			                          .stream()
+			                          .findFirst()
+			                          .orElse(null);
+			Counters counter = null;
+			if (type == null) {
+				log.warn("Type name {} not found", user.getStatus().getName());
 			} else {
-				List<Users> users = this.usersDAO.findByUsername(data.getUsername());
-				Users user = users != null && !users.isEmpty() ? users.get(0) : null;
-				if (user == null) {
-					user = new Users(data.getUsername(), statuses.get(0));
+				CountersIds countersIds = new CountersIds(user.getId(), type.getId());
+				counter = this.countersDAO.findById(countersIds).orElse(null);
+				if (counter == null) {
+					counter = new Counters(countersIds, BigInteger.valueOf(1L));
 				} else {
-					user.setStatus(statuses.get(0));
+					counter.setCounts(counter.getCounts().add(BigInteger.valueOf(1L)));
 				}
-				user = this.usersDAO.save(user);
-				AddOut addOut = new AddOut(user.getId().toString(), data.getUsername(), data.getResId());
-				this.queueService.sendMessage(String.format("websocket.%s", data.getUsername()), addOut, this.queueService.getRabbitMQSettings().getWebsocket());
+				this.countersDAO.save(counter);
 			}
+			UpdateOut updateOut = new UpdateOut(user.getId().toString(), in.getResId());
+			this.queueService.sendMessage(
+					String.format("websocket.%s", in.getQueueName()),
+					new CallbackMQ<>(in.getQueueName(), in.getResId(), updateOut),
+					this.queueService.getRabbitMQSettings().getWebsocket()
+			);
 		}
-		this.stateDAO.del(String.format("userState::add::%s", States.IN_PROGRESS), data.toHashKey());
-		this.queueService.removeDeclares(String.format("add.%s", data.getUsername()), this.queueService.getRabbitMQSettings().getUser().getExchange());
+		this.stateDAO.del(
+				String.format("userState::updateCounterAndStatus::%s", States.IN_PROGRESS),
+				updateIn.toHashKey()
+		);
+		this.queueService.removeDeclares(
+				String.format("update.%s", in.getQueueName()),
+				this.queueService.getRabbitMQSettings().getUserUpdate().getExchange()
+		);
 	}
 
-	@Cacheable(value = "userCache", key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()", unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
+	@Cacheable(value = "userCache",
+	           key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()",
+	           unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
 	public AllOut<Users> all(AllIn params) {
 		List<Users> users = this.usersDAO.findAll(findByCriteria(params));
-		String etag = DigestUtils.sha256Hex(String.format("%s:%s:%d", UUID.randomUUID().toString(), params.getPath(), Instant.now().toEpochMilli()));
+		String etag = DigestUtils.sha256Hex(String.format(
+				"%s:%s:%d",
+				UUID.randomUUID().toString(),
+				params.getPath(),
+				Instant.now().toEpochMilli()
+		));
 
 		return new AllOut<>(etag, users);
 	}

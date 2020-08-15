@@ -7,7 +7,7 @@
 package com.example.ems.services;
 
 import com.example.ems.database.dao.redis.StateDAO;
-import com.example.ems.dto.network.controller.user.AddOut;
+import com.example.ems.dto.mq.CallbackMQ;
 import com.example.ems.network.controllers.exceptions.websocket.NoAckException;
 import com.example.ems.utils.enums.States;
 import lombok.extern.slf4j.Slf4j;
@@ -37,39 +37,42 @@ public class CallbackService {
 	@RabbitListener(id = "websocket")
 	public void listen(
 			Message message,
-			AddOut addOut
+			CallbackMQ<Object> in
 	) {
-		MDC.put("resId", "");
+		MDC.put("resId", in.getResId());
 		log.debug("Message: {}", message);
-		String typeId = message.getMessageProperties().getHeader("__TypeId__");
-		log.debug("TypeId: {}", typeId);
-		switch (typeId) {
-			case "com.example.ems.dto.network.controller.user.AddOut": {
-				MDC.put("resId", addOut.getResId());
-				log.debug("Get data AddIn: {}", addOut);
-				if (!this.queueService.endedRetryCount(message)) {
-					if (this.stateDAO.exist(String.format("userState::callback::%s", States.RESOLVE), addOut.getResId())) {
-						this.stateDAO.del(String.format("userState::callback::%s", States.RESOLVE), addOut.getResId());
-						return;
-					}
-					if (this.stateDAO.add(String.format("userState::callback::%s", States.IN_PROGRESS), addOut.getResId(), addOut) == null) {
-						this.simpMessagingTemplate.convertAndSend(String.format("/queue/%s", addOut.getUsername()), addOut);
-					}
-					throw new NoAckException(String.format("Waiting RESOLVE by res ID: %s", addOut.getResId()));
-				} else {
-					this.queueService.sendMessage(String.format("websocket.%s", addOut.getUsername()), addOut, this.queueService.getRabbitMQSettings().getWebsocket());
-					this.stateDAO.del(String.format("userState::callback::%s", States.IN_PROGRESS), addOut.getResId());
-				}
+		log.debug("Data: {}", in);
+		this.sendDataToClient(message, in);
+	}
+
+	private void sendDataToClient(
+			Message message,
+			CallbackMQ<Object> data
+	) {
+		String resolveKey = String.format("state::callback::%s", States.RESOLVE);
+		String inProgressKey = String.format("state::callback::%s", States.IN_PROGRESS);
+		MDC.put("resId", data.getResId());
+		log.debug("Get data resId: {}", data.getResId());
+		if (this.queueService.isGoRetry(message)) {
+			if (this.stateDAO.exist(resolveKey, data.getResId())) {
+				this.stateDAO.del(resolveKey, data.getResId());
+				return;
 			}
-			default:
-				log.warn("__TypeId__ not found for message: {}", message);
+			if (this.stateDAO.add(inProgressKey, data.getResId(), data) == null) {
+				this.simpMessagingTemplate.convertAndSend(String.format("/queue/%s", data.getQueueName()), data.getData());
+			}
+			throw new NoAckException(String.format("Waiting RESOLVE by res ID: %s", data.getResId()));
+		} else {
+			this.queueService.sendMessage(String.format("websocket.%s", data.getQueueName()), data, this.queueService.getRabbitMQSettings().getWebsocket());
+			this.stateDAO.del(inProgressKey, data.getResId());
 		}
+
 	}
 
 	public void removeState(String resId) {
-		if (this.stateDAO.exist(String.format("userState::callback::%s", States.IN_PROGRESS), resId)) {
-			this.stateDAO.add(String.format("userState::callback::%s", States.RESOLVE), resId, Instant.now().toEpochMilli());
-			this.stateDAO.del(String.format("userState::callback::%s", States.IN_PROGRESS), resId);
+		if (this.stateDAO.exist(String.format("state::callback::%s", States.IN_PROGRESS), resId)) {
+			this.stateDAO.add(String.format("state::callback::%s", States.RESOLVE), resId, Instant.now().toEpochMilli());
+			this.stateDAO.del(String.format("state::callback::%s", States.IN_PROGRESS), resId);
 		}
 	}
 }

@@ -11,7 +11,7 @@ import com.example.ems.dto.network.controller.Res;
 import com.example.ems.dto.network.controller.State;
 import com.example.ems.dto.network.controller.status.AllIn;
 import com.example.ems.dto.network.controller.status.AllOut;
-import com.example.ems.dto.network.controller.status.UpdateIn;
+import com.example.ems.dto.network.controller.user.UpdateIn;
 import com.example.ems.network.controllers.exceptions.global.ResponseEmptyException;
 import com.example.ems.services.CacheService;
 import com.example.ems.services.StatusService;
@@ -52,17 +52,4 @@ public class StatusController {
 		this.cacheService.setKeyForCheckWithTtlDivider(String.format("statusCache::all::forMatch::%s", statuses.getEtag()), 2);
 		return response.formattedSuccess(statuses.getData(), MediaType.APPLICATION_JSON, HttpStatus.OK.value(), statuses.getEtag());
 	}
-
-	@PutMapping
-	ResponseEntity<Res<Object>> update(@Valid @RequestBody UpdateIn params) {
-		params.setResId(MDC.get("resId"));
-
-		States state = this.statusService.updateCounterAndStatus(params);
-		if (state != States.RESOLVE) {
-			return response.formattedSuccess(new State(state.toString()), MediaType.APPLICATION_JSON, HttpStatus.ACCEPTED.value(), "");
-		}
-
-		return response.formattedSuccess(params, MediaType.APPLICATION_JSON, HttpStatus.OK.value(), "");
-	}
-
 }

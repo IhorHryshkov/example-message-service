@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "rabbit")
 @PropertySource(value = "classpath:mq.yml", factory = YamlPropertySourceFactory.class)
 public class RabbitMQSettings {
-	private QueueConf user;
-	private QueueConf status;
+	private QueueConf userAdd;
+	private QueueConf userUpdate;
 	private QueueConf websocket;
 	private Long retryCount;
 }

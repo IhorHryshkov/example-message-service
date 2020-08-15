@@ -37,9 +37,9 @@ public class RabbitMQConfig {
 	@Bean
 	public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
 		RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getUser().getExchange()).build());
+		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getUserAdd().getExchange()).build());
 		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getWebsocket().getExchange()).build());
-		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getStatus().getExchange()).build());
+		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getUserUpdate().getExchange()).build());
 		return rabbitAdmin;
 	}
 

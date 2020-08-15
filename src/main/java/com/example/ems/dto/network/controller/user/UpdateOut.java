@@ -11,16 +11,16 @@ import lombok.*;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Data
 @EqualsAndHashCode
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddOut {
-	@Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$", message = "Response ID is not UUID")
+public class UpdateOut {
+
+	@Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$", message = "User ID is not UUID")
 	private String userId;
 
 	@Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$", message = "Response ID is not UUID")
@@ -31,7 +31,7 @@ public class AddOut {
 	}
 
 	public String toStringKey() {
-		return String.format("%s:%s", userId);
+		return String.format("%s", userId);
 	}
 
 }

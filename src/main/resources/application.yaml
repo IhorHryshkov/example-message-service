@@ -64,6 +64,7 @@ parameters:
       rootPath: "/v1/status"
     user:
       rootPath: "/v1/user"
+      update: "/{userId}"
     callback:
       rootPath: "/v1/callback/approve"
 

@@ -1,13 +1,13 @@
 rabbit:
   retryCount: 1
-  user:
-    exchange: user
+  userAdd:
+    exchange: userAdd
     routingKey: add
     durable: true
     exclusive: false
     autoDelete: false
-  status:
-    exchange: status
+  userUpdate:
+    exchange: userUpdate
     routingKey: update
     durable: true
     exclusive: false

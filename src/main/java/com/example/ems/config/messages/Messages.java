@@ -22,8 +22,10 @@ import org.springframework.stereotype.Component;
 public class Messages {
 	private Message invalidData;
 	private Message requestBodyIncorrect;
+	private Message endpointNotFound;
 	private Message internalServerError;
 	private Message resultEmpty;
 	private Message notModified;
 	private Message usernameUsed;
+	private Message userIdNotFound;
 }

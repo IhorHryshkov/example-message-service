@@ -25,10 +25,10 @@ public class Status implements Serializable {
 	private Integer id;
 	@Column(nullable = false)
 	private String name;
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "created_at", insertable = false)
 	@Convert(converter = LongTimestampConverter.class)
 	private Long createdAt;
-	@Column(name = "updated_at", nullable = false)
+	@Column(name = "updated_at", insertable = false)
 	@Convert(converter = LongTimestampConverter.class)
 	private Long updatedAt;
 

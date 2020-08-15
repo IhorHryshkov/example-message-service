@@ -9,6 +9,8 @@ package com.example.ems.database.dao.pg;
 import com.example.ems.dto.database.pg.Types;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TypesDAO extends JpaRepository<Types, Integer> {
+import java.util.List;
 
+public interface TypesDAO extends JpaRepository<Types, Integer> {
+	List<Types> findByNameIgnoreCase(String name);
 }

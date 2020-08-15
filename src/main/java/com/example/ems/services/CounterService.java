@@ -29,10 +29,17 @@ public class CounterService {
 		this.countersDAO = countersDAO;
 	}
 
-	@Cacheable(value = "counterCache", key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()", unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
+	@Cacheable(value = "counterCache",
+	           key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()",
+	           unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
 	public GetByIdOut<Counters> getByUserId(GetByIdIn params) {
-		List<Counters> counters = countersDAO.findByUserId(params.getUserId());
-		String etag = DigestUtils.sha256Hex(String.format("%s:%s:%d", UUID.randomUUID().toString(), params.getPath(), Instant.now().toEpochMilli()));
+		List<Counters> counters = countersDAO.findByKeysUserId(params.getUserId());
+		String         etag     = DigestUtils.sha256Hex(String.format(
+				"%s:%s:%d",
+				UUID.randomUUID().toString(),
+				params.getPath(),
+				Instant.now().toEpochMilli()
+		));
 
 		return new GetByIdOut<>(etag, counters);
 	}

@@ -51,14 +51,13 @@ public class QueueService {
 		log.debug("getQueueProperties2: {}", amqpAdmin.getQueueProperties(queueName));
 	}
 
-	public boolean endedRetryCount(Message message) {
+	public boolean isGoRetry(Message message) {
 		List<Map<String, ?>> xDeathHeader = message.getMessageProperties().getXDeathHeader();
 		if (xDeathHeader != null && !xDeathHeader.isEmpty()) {
-			Long count = (Long) xDeathHeader.get(0).get("count");
-			return count >= this.rabbitMQSettings.getRetryCount();
+			Long count = (Long) xDeathHeader.stream().findFirst().filter(x -> x.containsKey("count")).map(x -> x.get("count")).orElse(null);
+			return count == null || count < this.rabbitMQSettings.getRetryCount();
 		}
-
-		return false;
+		return true;
 	}
 
 	public void removeDeclares(String queueName, String id) {
