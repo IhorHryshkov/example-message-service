@@ -29,4 +29,14 @@ public class CacheService {
 	public void setKeyForCheckWithTtlDivider(String key, Integer divider) {
 		this.cacheDAO.setTtl(key, "", divider);
 	}
+
+	public void hexistOrIfNoneMatch(String key, String hash) {
+		if (this.cacheDAO.hexist(key, hash)) {
+			throw new ResponseIfNoneMatchException();
+		}
+	}
+
+	public void hset(String key, String hash, Object value) {
+		this.cacheDAO.hset(key, hash, value);
+	}
 }

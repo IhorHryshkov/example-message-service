@@ -128,7 +128,8 @@ public class UserService {
 	}
 
 	@Caching(evict = {
-			@CacheEvict(value = "counterCache", allEntries = true),
+			@CacheEvict(value = "counterCache::getById::forMatch", key = "#data.toHashUserId()"),
+			@CacheEvict(value = "counterCache::getByUserId::ifNoneMatch", key = "#data.toHashUserId()"),
 			@CacheEvict(value = "userCache", allEntries = true)
 	})
 	public States updateCounterAndStatus(UpdateIn data) {
@@ -140,15 +141,14 @@ public class UserService {
 			log.info("Status ID {} by User ID {} is in progress", data.getStatusId(), data.getUserId());
 			return States.IN_PROGRESS;
 		}
-		Users user = this.usersDAO.findById(UUID.fromString(data.getUserId())).orElse(null);
-		if (user == null) {
-			log.error("User ID {} not found", data.getUserId());
-			this.stateDAO.del(
-					String.format("userState::updateCounterAndStatus::%s", States.IN_PROGRESS),
-					data.toHashKey()
-			);
-			throw new UserIDNotFoundException();
-		}
+
+		Users user = getUserOrNotFound(
+				data.getUserId(),
+				"userState::updateCounterAndStatus::%s",
+				data.toHashKey(),
+				data.toHashUserId()
+		);
+
 		user.getStatus().setId(data.getStatusId());
 		this.queueService.sendMessage(
 				String.format("update.%s", user.getUsername()),
@@ -218,5 +218,21 @@ public class UserService {
 		));
 
 		return new AllOut<>(etag, users);
+	}
+
+	@Cacheable(value = "userCache",
+	           key = "#root.getMethodName() + \"::ifNoneMatch::\" + #hashUserId",
+	           unless = "#result == null")
+	public Users getUserOrNotFound(UUID userId, String delStateKey, String hashKeyToDel, String hashUserId) {
+		Users user = this.usersDAO.findById(userId).orElse(null);
+		if (user == null) {
+			log.error("User ID {} not found", userId);
+			this.stateDAO.del(
+					String.format(delStateKey, States.IN_PROGRESS),
+					hashKeyToDel
+			);
+			throw new UserIDNotFoundException();
+		}
+		return user;
 	}
 }

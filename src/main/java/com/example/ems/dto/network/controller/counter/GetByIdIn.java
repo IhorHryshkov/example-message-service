@@ -29,7 +29,7 @@ public class GetByIdIn {
 	private String path;
 
 	public UUID getUserId() {
-		return UUID.fromString(this.userId);
+		return this.userId != null ? UUID.fromString(userId) : null;
 	}
 
 	public String toHashKey() {

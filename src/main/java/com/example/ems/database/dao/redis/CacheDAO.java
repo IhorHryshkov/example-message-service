@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class CacheDAO {
 	private final RedisTemplate<Object, Object> redisTemplate;
-	private final RedisSettings redisSettings;
+	private final RedisSettings                 redisSettings;
 
 	CacheDAO(RedisTemplate<Object, Object> redisTemplate, RedisSettings redisSettings) {
 		this.redisTemplate = redisTemplate;
@@ -25,8 +25,13 @@ public class CacheDAO {
 	}
 
 	public Boolean exist(String key) {
-		log.debug("exist: {}", key);
+		log.debug("exist key: {}", key);
 		return this.redisTemplate.hasKey(key);
+	}
+
+	public Boolean hexist(String key, String hash) {
+		log.debug("hexist hash: {} and key: {}", hash, key);
+		return hash != null && this.redisTemplate.opsForHash().hasKey(key, hash);
 	}
 
 	public void setTtl(String key, Object value, Integer divider) {
@@ -35,5 +40,9 @@ public class CacheDAO {
 
 	public void set(String key, Object value) {
 		this.redisTemplate.boundValueOps(key).set(value);
+	}
+
+	public void hset(String key, String hash, Object value) {
+		this.redisTemplate.opsForHash().put(key, hash, value);
 	}
 }

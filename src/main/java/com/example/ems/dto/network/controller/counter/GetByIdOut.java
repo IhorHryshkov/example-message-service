@@ -18,5 +18,5 @@ import java.util.List;
 @AllArgsConstructor
 public class GetByIdOut<A> implements Serializable {
 	private String etag;
-	private List<A> data;
+	private A data;
 }
