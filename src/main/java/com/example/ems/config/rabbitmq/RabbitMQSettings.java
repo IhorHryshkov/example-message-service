@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 public class RabbitMQSettings {
 	private QueueConf userAdd;
 	private QueueConf userUpdate;
+	private QueueConf counterAdd;
 	private QueueConf websocket;
-	private Long retryCount;
+	private Long      retryCount;
 }

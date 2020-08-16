@@ -12,6 +12,12 @@ rabbit:
     durable: true
     exclusive: false
     autoDelete: false
+  counterAdd:
+    exchange: counterAdd
+    routingKey: add
+    durable: true
+    exclusive: false
+    autoDelete: false
   websocket:
     exchange: websocket
     routingKey: send
