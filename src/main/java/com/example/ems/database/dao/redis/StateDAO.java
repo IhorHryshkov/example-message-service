@@ -23,7 +23,7 @@ import java.util.List;
 @Component
 public class StateDAO {
 	private final RedisTemplate<Object, Object> redisTemplate;
-	private final RedisSettings redisSettings;
+	private final RedisSettings                 redisSettings;
 
 	private DefaultRedisScript<Object> addLua;
 
@@ -40,7 +40,12 @@ public class StateDAO {
 	}
 
 	public Object add(String hashName, String key, Object value) {
-		List result = (List) redisTemplate.execute(addLua, Arrays.asList(hashName, key), value, Instant.now().toEpochMilli());
+		List result = (List) redisTemplate.execute(
+				addLua,
+				Arrays.asList(hashName, key),
+				value,
+				Instant.now().toEpochMilli()
+		);
 		log.debug("Add result: {}", result);
 		return result == null || result.isEmpty() ? null : result.get(0);
 	}
@@ -52,8 +57,7 @@ public class StateDAO {
 	}
 
 	public boolean exist(String hashName, String key) {
-		Object result = redisTemplate.opsForHash().get(hashName, key);
-		return result != null;
+		return redisTemplate.opsForHash().hasKey(hashName, key);
 	}
 
 }

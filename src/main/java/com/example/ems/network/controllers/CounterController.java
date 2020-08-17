@@ -6,7 +6,6 @@
  */
 package com.example.ems.network.controllers;
 
-import com.example.ems.database.dao.redis.CacheDAO;
 import com.example.ems.dto.database.pg.Counters;
 import com.example.ems.dto.network.controller.Res;
 import com.example.ems.dto.network.controller.State;
@@ -14,7 +13,6 @@ import com.example.ems.dto.network.controller.counter.AddIn;
 import com.example.ems.dto.network.controller.counter.GetByIdIn;
 import com.example.ems.dto.network.controller.counter.GetByIdOut;
 import com.example.ems.network.controllers.exceptions.global.ResponseEmptyException;
-import com.example.ems.network.controllers.exceptions.global.ResponseIfNoneMatchException;
 import com.example.ems.services.CacheService;
 import com.example.ems.services.CounterService;
 import com.example.ems.utils.enums.States;
@@ -26,13 +24,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "${parameters.controllers.counter.rootPath}")
 @Validated
 public class CounterController {
 
-	private final CounterService counterService;
-	private final CacheService cacheService;
+	private final CounterService   counterService;
+	private final CacheService     cacheService;
 	private final Response<Object> response;
 
 	CounterController(CounterService counterService, CacheService cacheService, Response<Object> response) {
@@ -50,8 +50,8 @@ public class CounterController {
 				String.format("counterCache::getById::forMatch::%s", params.toHashKey()),
 				MDC.get("ifNoneMatch")
 		);
-		GetByIdOut<Counters> counters = counterService.getByUserId(params);
-		if (counters.getData() == null) {
+		GetByIdOut<List<Counters>> counters = counterService.getByUserId(params);
+		if (counters.getData() == null || counters.getData().isEmpty()) {
 			throw new ResponseEmptyException();
 		}
 		this.cacheService.hset(

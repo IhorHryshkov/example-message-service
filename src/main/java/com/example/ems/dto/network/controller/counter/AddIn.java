@@ -26,8 +26,8 @@ public class AddIn implements Serializable {
 	@Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
 	         message = "User ID is not UUID")
 	private String  userId;
-	@Min(value = 1, message = "Status ID cannot be negative or 0")
-	private Integer statusId;
+	@Min(value = 1, message = "Type ID cannot be negative or 0")
+	private Integer typeId;
 
 	private Long count;
 
@@ -48,7 +48,7 @@ public class AddIn implements Serializable {
 	}
 
 	public String toStringKey() {
-		return String.format("%s::%s::%d", userId, statusId, count);
+		return String.format("%s::%s::%d", userId, typeId, count);
 	}
 
 }
