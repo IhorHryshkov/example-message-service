@@ -62,6 +62,8 @@ parameters:
       getById: "/{userId}"
     status:
       rootPath: "/v1/status"
+    type:
+      rootPath: "/v1/type"
     user:
       rootPath: "/v1/user"
       update: "/{userId}"
