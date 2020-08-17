@@ -49,8 +49,8 @@ public class StatusService
 	}
 
 	@Override
-	@Cacheable(value = "statusCache",
-	           key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()",
+	@Cacheable(value = "statusCache::all::ifNoneMatch",
+	           key = "#params.toHashKey()",
 	           unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
 	public AllOut<Status> all(AllIn params) {
 		List<Status> statuses = this.statusDAO.findAll(findByCriteria(params));

@@ -209,8 +209,8 @@ public class UserService {
 		);
 	}
 
-	@Cacheable(value = "userCache",
-	           key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()",
+	@Cacheable(value = "userCache::all::ifNoneMatch",
+	           key = "#params.toHashKey()",
 	           unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
 	public AllOut<Users> all(AllIn params) {
 		List<Users> users = usersDAO.findAll(findByCriteria(params));

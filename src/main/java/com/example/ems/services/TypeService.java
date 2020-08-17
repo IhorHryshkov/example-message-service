@@ -49,8 +49,8 @@ public class TypeService
 	}
 
 	@Override
-	@Cacheable(value = "typeCache",
-	           key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()",
+	@Cacheable(value = "typeCache::all::ifNoneMatch",
+	           key = "#params.toHashKey()",
 	           unless = "#result == null || #result.getData() == null || #result.getData().size() == 0")
 	public AllOut<Types> all(AllIn params) {
 		List<Types> types = this.typesDAO.findAll(findByCriteria(params));

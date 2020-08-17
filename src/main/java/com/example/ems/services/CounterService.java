@@ -58,8 +58,8 @@ public class CounterService {
 		this.userCounterComponent = userCounterComponent;
 	}
 
-	@Cacheable(value = "counterCache",
-	           key = "#root.getMethodName() + \"::ifNoneMatch::\" + #params.toHashKey()",
+	@Cacheable(value = "counterCache::getByUserId::ifNoneMatch",
+	           key = "#params.toHashKey()",
 	           unless = "#result == null || #result.getData() == null")
 	public GetByIdOut<List<Counters>> getByUserId(GetByIdIn params) {
 		List<Counters> counters = countersDAO.findByKeysUserId(params.getUserId());
