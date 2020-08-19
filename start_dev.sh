@@ -17,4 +17,5 @@ export REDIS_HOST=localhost
 export REDIS_PORT=6390
 export REDIS_DB=1
 
+./gradlew clean test --tests 'unit.com.example.ems.*'
 ./gradlew bootRun

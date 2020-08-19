@@ -6,16 +6,18 @@
  */
 package com.example.ems.dto.mq;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode
 @ToString
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class QueueConf {
-	private String exchange;
-	private String routingKey;
+	private String  exchange;
+	private String  routingKey;
 	private Boolean durable;
 	private Boolean exclusive;
 	private Boolean autoDelete;

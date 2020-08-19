@@ -1,5 +1,6 @@
 package com.example.ems.config.rabbitmq;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.ExchangeBuilder;
@@ -14,13 +15,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class RabbitMQConfig {
 
-	private final RabbitMQSettings rabbitMQSettings;
-
-	RabbitMQConfig(RabbitMQSettings rabbitMQSettings) {
-		this.rabbitMQSettings = rabbitMQSettings;
-	}
+	private RabbitMQSettings rabbitMQSettings;
 
 	@Bean
 	public MessageConverter jsonMessageConverter() {
