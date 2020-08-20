@@ -38,8 +38,8 @@ import java.time.Duration;
 @EnableTransactionManagement
 public class RedisConfig {
 
-	private String password;
-	private String host;
+	private String  password;
+	private String  host;
 	private Integer port;
 	private Integer database;
 
@@ -51,7 +51,7 @@ public class RedisConfig {
 
 
 	@Bean(destroyMethod = "shutdown")
-	ClientResources clientResources() {
+	public ClientResources clientResources() {
 		return DefaultClientResources.create();
 	}
 
@@ -72,17 +72,22 @@ public class RedisConfig {
 	}
 
 	@Bean
-	LettucePoolingClientConfiguration lettucePoolConfig(ClientOptions options, @Qualifier("clientResources") ClientResources dcr) {
+	public LettucePoolingClientConfiguration lettucePoolConfig(
+			ClientOptions options,
+			@Qualifier("clientResources") ClientResources dcr
+	) {
 		return LettucePoolingClientConfiguration.builder()
-				.poolConfig(new GenericObjectPoolConfig())
+				.poolConfig(new GenericObjectPoolConfig<>())
 				.clientOptions(options)
 				.clientResources(dcr)
 				.build();
 	}
 
 	@Bean
-	public RedisConnectionFactory connectionFactory(RedisStandaloneConfiguration redisStandaloneConfiguration,
-	                                                LettucePoolingClientConfiguration lettucePoolConfig) {
+	public RedisConnectionFactory connectionFactory(
+			RedisStandaloneConfiguration redisStandaloneConfiguration,
+			LettucePoolingClientConfiguration lettucePoolConfig
+	) {
 		return new LettuceConnectionFactory(redisStandaloneConfiguration, lettucePoolConfig);
 	}
 

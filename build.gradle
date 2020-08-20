@@ -1,6 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'com.adarshr.test-logger' version '2.1.0'
     id 'java'
 }
 
@@ -26,12 +27,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.liquibase:liquibase-core'
-    implementation 'com.greghaskins:spectrum:1.2.0'
 
-    compile group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '2.9.12'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.14'
-    compile group: 'redis.clients', name: 'jedis', version: '3.3.0'
-    compile group: 'io.lettuce', name: 'lettuce-core', version: '5.3.1.RELEASE'
+    implementation 'com.greghaskins:spectrum:1.2.0'
+    implementation 'com.vladmihalcea:hibernate-types-52:2.9.12'
+    implementation 'org.apache.commons:commons-pool2:2.8.1'
+    implementation 'commons-codec:commons-codec:1.14'
+    implementation 'io.lettuce:lettuce-core:5.3.1.RELEASE'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
@@ -48,4 +49,22 @@ dependencies {
 test {
     useJUnit()
     maxHeapSize = '1G'
+    testlogger {
+        theme 'mocha'
+        showExceptions true
+        showStackTraces true
+        showFullStackTraces false
+        showCauses true
+        slowThreshold 2000
+        showSummary true
+        showSimpleNames false
+        showPassed true
+        showSkipped true
+        showFailed true
+        showStandardStreams false
+        showPassedStandardStreams true
+        showSkippedStandardStreams true
+        showFailedStandardStreams true
+        logLevel 'lifecycle'
+    }
 }
