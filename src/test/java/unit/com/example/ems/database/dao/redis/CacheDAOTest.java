@@ -99,6 +99,7 @@ class CacheDAOTest {
 
   @Test
   void hset() {
+
     when(redisTemplate.opsForHash()).thenReturn(hashOperations);
     ArgumentCaptor<String> hashCapture = ArgumentCaptor.forClass(String.class);
     ArgumentCaptor<String> valueCapture = ArgumentCaptor.forClass(String.class);
