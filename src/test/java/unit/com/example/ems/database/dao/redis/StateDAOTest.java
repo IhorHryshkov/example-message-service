@@ -37,9 +37,12 @@ class StateDAOTest {
         .as("Have some error")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
-    assertThat(stateDAO.add("test", "test", "test")).as("Result is null").isNull();
-    assertThat(stateDAO.add("test", "test", "test")).as("Result is empty").isNull();
-    assertThat(stateDAO.add("test", "test", "test")).as("Key is found").isEqualTo("data");
+    assertThat(stateDAO.add("test", "test", "test"))
+            .as("Result is null").isNull();
+    assertThat(stateDAO.add("test", "test", "test"))
+            .as("Result is empty").isNull();
+    assertThat(stateDAO.add("test", "test", "test"))
+            .as("Key is found").isEqualTo("data");
 
   }
 
