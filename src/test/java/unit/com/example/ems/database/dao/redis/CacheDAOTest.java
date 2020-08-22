@@ -99,12 +99,14 @@ class CacheDAOTest {
 
   @Test
   void hset() {
-
     when(redisTemplate.opsForHash())
             .thenReturn(hashOperations);
-    ArgumentCaptor<String> hashCapture = ArgumentCaptor.forClass(String.class);
-    ArgumentCaptor<String> valueCapture = ArgumentCaptor.forClass(String.class);
-    ArgumentCaptor<String> keyCapture = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<String> hashCapture = ArgumentCaptor
+            .forClass(String.class);
+    ArgumentCaptor<String> valueCapture = ArgumentCaptor
+            .forClass(String.class);
+    ArgumentCaptor<String> keyCapture = ArgumentCaptor
+            .forClass(String.class);
     doNothing().when(hashOperations).put(keyCapture.capture(), hashCapture.capture(), valueCapture.capture());
     cacheDAO.hset("key", "test", "data");
     assertThat(keyCapture.getValue()).as("Key value is correct").isEqualTo("key");
