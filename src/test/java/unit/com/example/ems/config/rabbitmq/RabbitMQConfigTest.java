@@ -48,9 +48,7 @@ class RabbitMQConfigTest {
 			);
 		});
 		describe("RabbitMQConfig 'amqpTemplate' method test", () -> {
-			beforeEach(() -> {
-				when(connectionFactory.createConnection()).thenReturn(connection);
-			});
+			beforeEach(() -> when(connectionFactory.createConnection()).thenReturn(connection));
 			it(
 					"Should return is not null value",
 					() -> assertThat(rabbitMQConfig.amqpTemplate(connectionFactory))

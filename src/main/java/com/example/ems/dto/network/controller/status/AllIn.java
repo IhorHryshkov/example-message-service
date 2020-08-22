@@ -7,9 +7,7 @@
 package com.example.ems.dto.network.controller.status;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.validation.constraints.Max;
@@ -20,6 +18,8 @@ import javax.validation.constraints.Size;
 @Data
 @EqualsAndHashCode
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AllIn {
 	@Size(min = 3, max = 64, message = "Status name have incorrect size")

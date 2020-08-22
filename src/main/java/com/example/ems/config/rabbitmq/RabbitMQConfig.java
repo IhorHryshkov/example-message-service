@@ -1,6 +1,6 @@
 package com.example.ems.config.rabbitmq;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.ExchangeBuilder;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RabbitMQConfig {
 
 	private RabbitMQSettings rabbitMQSettings;
@@ -36,13 +36,13 @@ public class RabbitMQConfig {
 	public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
 		RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
 		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getUserAdd().getExchange())
-		                                           .build());
+				                            .build());
 		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getWebsocket().getExchange())
-		                                           .build());
+				                            .build());
 		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getUserUpdate().getExchange())
-		                                           .build());
+				                            .build());
 		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getCounterAdd().getExchange())
-		                                           .build());
+				                            .build());
 		return rabbitAdmin;
 	}
 

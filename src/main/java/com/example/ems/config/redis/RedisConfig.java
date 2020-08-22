@@ -106,6 +106,7 @@ public class RedisConfig {
 
 	@Bean
 	public RedisCacheConfiguration cacheConfiguration() {
+		log.debug("cacheConfiguration: {}", redisSettings.getCacheTtl());
 		return RedisCacheConfiguration.defaultCacheConfig()
 				.entryTtl(Duration.ofSeconds(redisSettings.getCacheTtl()))
 				.disableCachingNullValues();

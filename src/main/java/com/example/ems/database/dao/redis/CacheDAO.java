@@ -31,7 +31,10 @@ public class CacheDAO {
 
 	public Boolean hexist(String key, String hash) {
 		log.debug("hexist hash: {} and key: {}", hash, key);
-		return hash != null && this.redisTemplate.opsForHash().hasKey(key, hash);
+		if (hash == null) {
+			return false;
+		}
+		return this.redisTemplate.opsForHash().hasKey(key, hash);
 	}
 
 	public void setTtl(String key, Object value, Integer divider) {
