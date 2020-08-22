@@ -1,6 +1,0 @@
-- id: google-style-java
-  name: Google Java Code Style for Java
-  description: Formats code in Google's Java codestyle.
-  entry: ./google_style.sh
-  language: script
-  files: \.java$

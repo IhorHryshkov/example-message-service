@@ -61,7 +61,8 @@ class StateDAOTest {
 
   @Test
   void exist() {
-    when(redisTemplate.opsForHash()).thenReturn(hashOperations);
+    when(redisTemplate.opsForHash())
+            .thenReturn(hashOperations);
     when(hashOperations.hasKey(anyString(), anyString()))
         .thenThrow(new RuntimeException("Test"))
         .thenReturn(null, false, true);
@@ -69,8 +70,11 @@ class StateDAOTest {
         .as("Check a key have error")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
-    assertThat(stateDAO.exist("test", "test")).as("Exist key is null").isNull();
-    assertThat(stateDAO.exist("test", "test")).as("Key is not found").isFalse();
-    assertThat(stateDAO.exist("test", "test")).as("Key is found").isTrue();
+    assertThat(stateDAO.exist("test", "test"))
+            .as("Exist key is null").isNull();
+    assertThat(stateDAO.exist("test", "test"))
+            .as("Key is not found").isFalse();
+    assertThat(stateDAO.exist("test", "test"))
+            .as("Key is found").isTrue();
   }
 }
