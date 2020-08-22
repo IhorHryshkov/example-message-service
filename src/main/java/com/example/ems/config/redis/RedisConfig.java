@@ -4,7 +4,6 @@ import com.example.ems.config.redis.factory.YamlPropertySourceFactory;
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.resource.ClientResources;
 import io.lettuce.core.resource.DefaultClientResources;
-import java.time.Duration;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
@@ -16,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -24,9 +24,15 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @Slf4j
@@ -115,5 +121,16 @@ public class RedisConfig {
         .cacheDefaults(cacheConfiguration())
         .transactionAware()
         .build();
+  }
+
+  @Bean
+  public Map<String, DefaultRedisScript<Object>> luaScripts() {
+    HashMap<String, DefaultRedisScript<Object>> scripts = new HashMap<>();
+    DefaultRedisScript<Object> addLua = new DefaultRedisScript<>();
+    addLua.setScriptSource(
+        new ResourceScriptSource(new ClassPathResource(redisSettings.getLuaResPath().getAdd())));
+    addLua.setResultType(Object.class);
+    scripts.put("add", addLua);
+    return scripts;
   }
 }
