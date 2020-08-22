@@ -108,11 +108,8 @@ class CacheDAOTest {
         .when(hashOperations)
         .put(keyCapture.capture(), hashCapture.capture(), valueCapture.capture());
     cacheDAO.hset("key", "test", "data");
-    assertThat(keyCapture.getValue())
-            .as("Key value is correct").isEqualTo("key");
-    assertThat(hashCapture.getValue())
-            .as("Hash value is correct").isEqualTo("test");
-    assertThat(valueCapture.getValue())
-            .as("Data is correct").isEqualTo("data");
+    assertThat(keyCapture.getValue()).as("Key value is correct").isEqualTo("key");
+    assertThat(hashCapture.getValue()).as("Hash value is correct").isEqualTo("test");
+    assertThat(valueCapture.getValue()).as("Data is correct").isEqualTo("data");
   }
 }
