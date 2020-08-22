@@ -16,9 +16,9 @@ import lombok.ToString;
 @ToString
 @RequiredArgsConstructor
 public class QueueConf {
-	private String  exchange;
-	private String  routingKey;
-	private Boolean durable;
-	private Boolean exclusive;
-	private Boolean autoDelete;
+  private String exchange;
+  private String routingKey;
+  private Boolean durable;
+  private Boolean exclusive;
+  private Boolean autoDelete;
 }

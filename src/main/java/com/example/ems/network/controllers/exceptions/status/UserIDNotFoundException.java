@@ -8,8 +8,7 @@ package com.example.ems.network.controllers.exceptions.status;
 
 public class UserIDNotFoundException extends RuntimeException {
 
-	public UserIDNotFoundException() {
-		super("User ID not found");
-	}
-
+  public UserIDNotFoundException() {
+    super("User ID not found");
+  }
 }

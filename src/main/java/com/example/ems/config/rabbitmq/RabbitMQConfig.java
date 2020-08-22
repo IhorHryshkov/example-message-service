@@ -18,36 +18,38 @@ import org.springframework.context.annotation.Configuration;
 @AllArgsConstructor
 public class RabbitMQConfig {
 
-	private RabbitMQSettings rabbitMQSettings;
+  private RabbitMQSettings rabbitMQSettings;
 
-	@Bean
-	public MessageConverter jsonMessageConverter() {
-		return new Jackson2JsonMessageConverter();
-	}
+  @Bean
+  public MessageConverter jsonMessageConverter() {
+    return new Jackson2JsonMessageConverter();
+  }
 
-	@Bean
-	public AmqpTemplate amqpTemplate(ConnectionFactory connectionFactory) {
-		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		rabbitTemplate.setMessageConverter(jsonMessageConverter());
-		return rabbitTemplate;
-	}
+  @Bean
+  public AmqpTemplate amqpTemplate(ConnectionFactory connectionFactory) {
+    final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
+    rabbitTemplate.setMessageConverter(jsonMessageConverter());
+    return rabbitTemplate;
+  }
 
-	@Bean
-	public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
-		RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getUserAdd().getExchange())
-				                            .build());
-		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getWebsocket().getExchange())
-				                            .build());
-		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getUserUpdate().getExchange())
-				                            .build());
-		rabbitAdmin.declareExchange(ExchangeBuilder.directExchange(this.rabbitMQSettings.getCounterAdd().getExchange())
-				                            .build());
-		return rabbitAdmin;
-	}
+  @Bean
+  public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
+    RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+    rabbitAdmin.declareExchange(
+        ExchangeBuilder.directExchange(this.rabbitMQSettings.getUserAdd().getExchange()).build());
+    rabbitAdmin.declareExchange(
+        ExchangeBuilder.directExchange(this.rabbitMQSettings.getWebsocket().getExchange()).build());
+    rabbitAdmin.declareExchange(
+        ExchangeBuilder.directExchange(this.rabbitMQSettings.getUserUpdate().getExchange())
+            .build());
+    rabbitAdmin.declareExchange(
+        ExchangeBuilder.directExchange(this.rabbitMQSettings.getCounterAdd().getExchange())
+            .build());
+    return rabbitAdmin;
+  }
 
-	@Bean(name = RabbitListenerConfigUtils.RABBIT_LISTENER_ENDPOINT_REGISTRY_BEAN_NAME)
-	public RabbitListenerEndpointRegistry defaultRabbitListenerEndpointRegistry() {
-		return new RabbitListenerEndpointRegistry();
-	}
+  @Bean(name = RabbitListenerConfigUtils.RABBIT_LISTENER_ENDPOINT_REGISTRY_BEAN_NAME)
+  public RabbitListenerEndpointRegistry defaultRabbitListenerEndpointRegistry() {
+    return new RabbitListenerEndpointRegistry();
+  }
 }

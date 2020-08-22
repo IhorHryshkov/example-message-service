@@ -6,13 +6,12 @@
  */
 package com.example.ems.dto.database.pg.ids;
 
-import lombok.*;
-import org.hibernate.annotations.Type;
-
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import lombok.*;
+import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
@@ -21,10 +20,10 @@ import java.util.UUID;
 @ToString
 @Embeddable
 public class CountersIds implements Serializable {
-	@Type(type = "pg-uuid")
-	@Column(columnDefinition = "uuid", name = "user_id", insertable = false, updatable = false)
-	private UUID userId;
+  @Type(type = "pg-uuid")
+  @Column(columnDefinition = "uuid", name = "user_id", insertable = false, updatable = false)
+  private UUID userId;
 
-	@Column(name = "type_id", insertable = false, updatable = false)
-	private Integer typeId;
+  @Column(name = "type_id", insertable = false, updatable = false)
+  private Integer typeId;
 }

@@ -7,11 +7,11 @@
 package com.example.ems.services.iface;
 
 public interface MainService<A, ID, ALL, ALLR, ADD, ADDR, UPD, UPDR> {
-	ADDR add(ADD data);
+  ADDR add(ADD data);
 
-	UPDR update(UPD data, ID id);
+  UPDR update(UPD data, ID id);
 
-	A getById(ID id);
+  A getById(ID id);
 
-	ALLR all(ALL params);
+  ALLR all(ALL params);
 }

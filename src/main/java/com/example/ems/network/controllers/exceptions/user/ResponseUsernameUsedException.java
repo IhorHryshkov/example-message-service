@@ -8,8 +8,7 @@ package com.example.ems.network.controllers.exceptions.user;
 
 public class ResponseUsernameUsedException extends RuntimeException {
 
-    public ResponseUsernameUsedException() {
-        super("Username is used, please try to use other username");
-    }
-
+  public ResponseUsernameUsedException() {
+    super("Username is used, please try to use other username");
+  }
 }

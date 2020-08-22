@@ -14,29 +14,29 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class CacheService {
-	private final CacheDAO cacheDAO;
+  private final CacheDAO cacheDAO;
 
-	CacheService(CacheDAO cacheDAO) {
-		this.cacheDAO = cacheDAO;
-	}
+  CacheService(CacheDAO cacheDAO) {
+    this.cacheDAO = cacheDAO;
+  }
 
-	public void existOrIfNoneMatch(String key) {
-		if (this.cacheDAO.exist(key)) {
-			throw new ResponseIfNoneMatchException();
-		}
-	}
+  public void existOrIfNoneMatch(String key) {
+    if (this.cacheDAO.exist(key)) {
+      throw new ResponseIfNoneMatchException();
+    }
+  }
 
-	public void setKeyForCheckWithTtlDivider(String key, Integer divider) {
-		this.cacheDAO.setTtl(key, "", divider);
-	}
+  public void setKeyForCheckWithTtlDivider(String key, Integer divider) {
+    this.cacheDAO.setTtl(key, "", divider);
+  }
 
-	public void hexistOrIfNoneMatch(String key, String hash) {
-		if (this.cacheDAO.hexist(key, hash)) {
-			throw new ResponseIfNoneMatchException();
-		}
-	}
+  public void hexistOrIfNoneMatch(String key, String hash) {
+    if (this.cacheDAO.hexist(key, hash)) {
+      throw new ResponseIfNoneMatchException();
+    }
+  }
 
-	public void hset(String key, String hash, Object value) {
-		this.cacheDAO.hset(key, hash, value);
-	}
+  public void hset(String key, String hash, Object value) {
+    this.cacheDAO.hset(key, hash, value);
+  }
 }

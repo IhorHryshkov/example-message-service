@@ -20,25 +20,25 @@ import org.springframework.stereotype.Component;
 @WritingConverter
 public class RedisWritingStringConverter implements Converter<Object, String> {
 
-	private ObjectMapper objectMapper = new ObjectMapper();
+  private ObjectMapper objectMapper = new ObjectMapper();
 
-	@Override
-	public String convert(Object source) {
-		try {
-			return objectMapper.writeValueAsString(source);
-		} catch (JsonProcessingException e) {
-			log.warn("Error while converting Object to String.", e);
-			throw new IllegalArgumentException("Can not convert Object to String");
-		}
-	}
+  @Override
+  public String convert(Object source) {
+    try {
+      return objectMapper.writeValueAsString(source);
+    } catch (JsonProcessingException e) {
+      log.warn("Error while converting Object to String.", e);
+      throw new IllegalArgumentException("Can not convert Object to String");
+    }
+  }
 
-	@Override
-	public JavaType getInputType(TypeFactory typeFactory) {
-		return null;
-	}
+  @Override
+  public JavaType getInputType(TypeFactory typeFactory) {
+    return null;
+  }
 
-	@Override
-	public JavaType getOutputType(TypeFactory typeFactory) {
-		return null;
-	}
+  @Override
+  public JavaType getOutputType(TypeFactory typeFactory) {
+    return null;
+  }
 }

@@ -14,5 +14,5 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LuaResPath {
-	private String add;
+  private String add;
 }

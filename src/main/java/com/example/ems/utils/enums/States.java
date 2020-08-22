@@ -7,7 +7,7 @@
 package com.example.ems.utils.enums;
 
 public enum States {
-	INIT,
-	IN_PROGRESS,
-	RESOLVE
+  INIT,
+  IN_PROGRESS,
+  RESOLVE
 }

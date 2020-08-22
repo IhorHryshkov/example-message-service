@@ -8,11 +8,10 @@ package com.example.ems.database.dao.pg;
 
 import com.example.ems.dto.database.pg.Counters;
 import com.example.ems.dto.database.pg.ids.CountersIds;
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CountersDAO extends JpaRepository<Counters, CountersIds> {
-	List<Counters> findByKeysUserId(UUID userId);
+  List<Counters> findByKeysUserId(UUID userId);
 }

@@ -7,15 +7,14 @@
 package com.example.ems.dto.network.controller.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
+import java.util.UUID;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.apache.commons.codec.digest.DigestUtils;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
-import java.io.Serializable;
-import java.util.UUID;
 
 @Data
 @EqualsAndHashCode
@@ -23,30 +22,34 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdateIn implements Serializable {
 
-	@Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
-	         message = "User ID is not UUID")
-	private String  userId;
-	@Min(value = 1, message = "Status ID cannot be negative or 0")
-	private Integer statusId;
+  @Pattern(
+      regexp =
+          "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
+      message = "User ID is not UUID")
+  private String userId;
 
-	@Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
-	         message = "Response ID is not UUID")
-	private String resId;
+  @Min(value = 1, message = "Status ID cannot be negative or 0")
+  private Integer statusId;
 
-	public UUID getUserId() {
-		return this.userId != null ? UUID.fromString(userId) : null;
-	}
+  @Pattern(
+      regexp =
+          "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
+      message = "Response ID is not UUID")
+  private String resId;
 
-	public String toHashUserId() {
-		return DigestUtils.sha256Hex(userId);
-	}
+  public UUID getUserId() {
+    return this.userId != null ? UUID.fromString(userId) : null;
+  }
 
-	public String toHashKey() {
-		return DigestUtils.sha256Hex(toStringKey());
-	}
+  public String toHashUserId() {
+    return DigestUtils.sha256Hex(userId);
+  }
 
-	public String toStringKey() {
-		return String.format("%s::%s", userId, statusId);
-	}
+  public String toHashKey() {
+    return DigestUtils.sha256Hex(toStringKey());
+  }
 
+  public String toStringKey() {
+    return String.format("%s::%s", userId, statusId);
+  }
 }

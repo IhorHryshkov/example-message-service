@@ -16,6 +16,6 @@ import org.springframework.amqp.core.Queue;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QueueBind {
-	private Queue queue;
-	private Binding binding;
+  private Queue queue;
+  private Binding binding;
 }

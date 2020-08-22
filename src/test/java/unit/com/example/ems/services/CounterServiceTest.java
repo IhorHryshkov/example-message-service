@@ -1,20 +1,17 @@
 package unit.com.example.ems.services;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 class CounterServiceTest {
 
-	@Test
-	void getByUserId() {
-	}
+  @Test
+  void getByUserId() {}
 
-	@Test
-	void add() {
-	}
+  @Test
+  void add() {}
 
-	@Test
-	void listenCounterAdd() {
-	}
+  @Test
+  void listenCounterAdd() {}
 }

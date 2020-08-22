@@ -8,8 +8,7 @@ package com.example.ems.network.controllers.exceptions.global;
 
 public class ResponseEmptyException extends RuntimeException {
 
-    public ResponseEmptyException() {
-        super("Empty return data from resource");
-    }
-
+  public ResponseEmptyException() {
+    super("Empty return data from resource");
+  }
 }

@@ -14,5 +14,5 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HashName {
-	private String userCache;
+  private String userCache;
 }

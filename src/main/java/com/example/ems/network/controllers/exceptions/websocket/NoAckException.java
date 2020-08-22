@@ -7,7 +7,7 @@
 package com.example.ems.network.controllers.exceptions.websocket;
 
 public class NoAckException extends RuntimeException {
-	public NoAckException(String message) {
-		super(message, null, false, false);
-	}
+  public NoAckException(String message) {
+    super(message, null, false, false);
+  }
 }

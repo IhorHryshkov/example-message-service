@@ -8,9 +8,8 @@ package com.example.ems.dto.mq;
 
 import com.example.ems.dto.database.pg.Users;
 import com.example.ems.dto.network.controller.counter.AddIn;
-import lombok.*;
-
 import java.io.Serializable;
+import lombok.*;
 
 @Data
 @EqualsAndHashCode
@@ -18,7 +17,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CounterMQ implements Serializable {
-	private Users user;
-	private AddIn add;
-
+  private Users user;
+  private AddIn add;
 }

@@ -15,61 +15,55 @@ import com.example.ems.dto.database.pg.Users;
 import com.example.ems.dto.database.pg.ids.CountersIds;
 import com.example.ems.network.controllers.exceptions.status.UserIDNotFoundException;
 import com.example.ems.utils.enums.States;
+import java.math.BigInteger;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-
-import java.math.BigInteger;
-import java.util.UUID;
 
 @Slf4j
 @Component
 public class UserCounterComponent {
 
-	public final CountersDAO countersDAO;
-	public final UsersDAO    usersDAO;
-	public final StateDAO    stateDAO;
+  public final CountersDAO countersDAO;
+  public final UsersDAO usersDAO;
+  public final StateDAO stateDAO;
 
-	public UserCounterComponent(CountersDAO countersDAO, UsersDAO usersDAO, StateDAO stateDAO) {
-		this.countersDAO = countersDAO;
-		this.usersDAO    = usersDAO;
-		this.stateDAO    = stateDAO;
-	}
+  public UserCounterComponent(CountersDAO countersDAO, UsersDAO usersDAO, StateDAO stateDAO) {
+    this.countersDAO = countersDAO;
+    this.usersDAO = usersDAO;
+    this.stateDAO = stateDAO;
+  }
 
+  public void incCounter(Types type, Users user, Long count, String key, String hash) {
+    if (!this.stateDAO.exist(String.format(key, States.INIT), hash)
+        && this.stateDAO.add(String.format(key, States.INIT), hash, "") == null) {
+      Counters counter;
+      count = count == null ? 1L : count;
+      if (type == null) {
+        log.warn("Type name {} not found", user.getStatus().getName());
+      } else {
+        CountersIds countersIds = new CountersIds(user.getId(), type.getId());
+        counter = this.countersDAO.findById(countersIds).orElse(null);
+        if (counter == null) {
+          counter = new Counters(countersIds, BigInteger.valueOf(count));
+        } else {
+          counter.setCounts(counter.getCounts().add(BigInteger.valueOf(count)));
+        }
+        this.countersDAO.save(counter);
+      }
+    }
+  }
 
-	public void incCounter(Types type, Users user, Long count, String key, String hash) {
-		if (!this.stateDAO.exist(String.format(key, States.INIT), hash) &&
-		    this.stateDAO.add(String.format(key, States.INIT), hash, "") == null) {
-			Counters counter;
-			count = count == null ? 1L : count;
-			if (type == null) {
-				log.warn("Type name {} not found", user.getStatus().getName());
-			} else {
-				CountersIds countersIds = new CountersIds(user.getId(), type.getId());
-				counter = this.countersDAO.findById(countersIds).orElse(null);
-				if (counter == null) {
-					counter = new Counters(countersIds, BigInteger.valueOf(count));
-				} else {
-					counter.setCounts(counter.getCounts().add(BigInteger.valueOf(count)));
-				}
-				this.countersDAO.save(counter);
-			}
-		}
-	}
-
-	@Cacheable(value = "userCache",
-	           key = "#root.getMethodName() + \"::ifNoneMatch::\" + #hashUserId")
-	public Users getUserOrNotFound(UUID userId, String delStateKey, String hashKeyToDel, String hashUserId) {
-		Users user = this.usersDAO.findById(userId).orElse(null);
-		if (user == null) {
-			log.error("User ID {} not found", userId);
-			this.stateDAO.del(
-					String.format(delStateKey, States.IN_PROGRESS),
-					hashKeyToDel
-			);
-			throw new UserIDNotFoundException();
-		}
-		return user;
-	}
-
+  @Cacheable(value = "userCache", key = "#root.getMethodName() + \"::ifNoneMatch::\" + #hashUserId")
+  public Users getUserOrNotFound(
+      UUID userId, String delStateKey, String hashKeyToDel, String hashUserId) {
+    Users user = this.usersDAO.findById(userId).orElse(null);
+    if (user == null) {
+      log.error("User ID {} not found", userId);
+      this.stateDAO.del(String.format(delStateKey, States.IN_PROGRESS), hashKeyToDel);
+      throw new UserIDNotFoundException();
+    }
+    return user;
+  }
 }

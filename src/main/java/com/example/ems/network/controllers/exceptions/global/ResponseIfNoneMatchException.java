@@ -8,8 +8,7 @@ package com.example.ems.network.controllers.exceptions.global;
 
 public class ResponseIfNoneMatchException extends RuntimeException {
 
-    public ResponseIfNoneMatchException() {
-        super("Data is not change in resource");
-    }
-
+  public ResponseIfNoneMatchException() {
+    super("Data is not change in resource");
+  }
 }

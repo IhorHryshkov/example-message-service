@@ -1,12 +1,11 @@
 package unit.com.example.ems.network.controllers.filter;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 class EMSRequestLoggingFilterTest {
 
-	@Test
-	void doFilter() {
-	}
+  @Test
+  void doFilter() {}
 }

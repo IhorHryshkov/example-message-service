@@ -15,10 +15,13 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 public class Res<A> {
-    private String resId;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private A data;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private ResError error;
-    private Long timestamp;
+  private String resId;
+
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private A data;
+
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  private ResError error;
+
+  private Long timestamp;
 }

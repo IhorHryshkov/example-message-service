@@ -29,35 +29,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(path = "${parameters.controllers.status.rootPath}")
 public class StatusController {
 
-	private final StatusService    statusService;
-	private final Response<Object> response;
-	private final CacheService     cacheService;
+  private final StatusService statusService;
+  private final Response<Object> response;
+  private final CacheService cacheService;
 
-	StatusController(StatusService statusService, CacheService cacheService, Response<Object> response) {
-		this.statusService = statusService;
-		this.response      = response;
-		this.cacheService  = cacheService;
-	}
+  StatusController(
+      StatusService statusService, CacheService cacheService, Response<Object> response) {
+    this.statusService = statusService;
+    this.response = response;
+    this.cacheService = cacheService;
+  }
 
-	@GetMapping
-	@ResponseStatus(HttpStatus.OK)
-	ResponseEntity<Res<Object>> all(AllIn params) {
-		params.setResId(MDC.get("resId"));
-		params.setPath(MDC.get("fullPathQuery"));
-		this.cacheService.existOrIfNoneMatch(String.format("statusCache::all::forMatch::%s", MDC.get("ifNoneMatch")));
-		AllOut<Status> statuses = this.statusService.all(params);
-		if (statuses.getData() == null || statuses.getData().isEmpty()) {
-			throw new ResponseEmptyException();
-		}
-		this.cacheService.setKeyForCheckWithTtlDivider(String.format(
-				"statusCache::all::forMatch::%s",
-				statuses.getEtag()
-		), 2);
-		return response.formattedSuccess(
-				statuses.getData(),
-				MediaType.APPLICATION_JSON,
-				HttpStatus.OK.value(),
-				statuses.getEtag()
-		);
-	}
+  @GetMapping
+  @ResponseStatus(HttpStatus.OK)
+  ResponseEntity<Res<Object>> all(AllIn params) {
+    params.setResId(MDC.get("resId"));
+    params.setPath(MDC.get("fullPathQuery"));
+    this.cacheService.existOrIfNoneMatch(
+        String.format("statusCache::all::forMatch::%s", MDC.get("ifNoneMatch")));
+    AllOut<Status> statuses = this.statusService.all(params);
+    if (statuses.getData() == null || statuses.getData().isEmpty()) {
+      throw new ResponseEmptyException();
+    }
+    this.cacheService.setKeyForCheckWithTtlDivider(
+        String.format("statusCache::all::forMatch::%s", statuses.getEtag()), 2);
+    return response.formattedSuccess(
+        statuses.getData(), MediaType.APPLICATION_JSON, HttpStatus.OK.value(), statuses.getEtag());
+  }
 }

@@ -1,7 +1,7 @@
 package com.example.ems.config.messages;
 
-import com.example.ems.dto.network.controller.Message;
 import com.example.ems.config.redis.factory.YamlPropertySourceFactory;
+import com.example.ems.dto.network.controller.Message;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,12 +20,12 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "message")
 @PropertySource(value = "classpath:messages.yml", factory = YamlPropertySourceFactory.class)
 public class Messages {
-	private Message invalidData;
-	private Message requestBodyIncorrect;
-	private Message endpointNotFound;
-	private Message internalServerError;
-	private Message resultEmpty;
-	private Message notModified;
-	private Message usernameUsed;
-	private Message userIdNotFound;
+  private Message invalidData;
+  private Message requestBodyIncorrect;
+  private Message endpointNotFound;
+  private Message internalServerError;
+  private Message resultEmpty;
+  private Message notModified;
+  private Message usernameUsed;
+  private Message userIdNotFound;
 }

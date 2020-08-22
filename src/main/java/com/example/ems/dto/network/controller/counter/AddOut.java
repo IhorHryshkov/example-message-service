@@ -7,10 +7,9 @@
 package com.example.ems.dto.network.controller.counter;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import javax.validation.constraints.Pattern;
 import lombok.*;
 import org.apache.commons.codec.digest.DigestUtils;
-
-import javax.validation.constraints.Pattern;
 
 @Data
 @EqualsAndHashCode
@@ -20,20 +19,23 @@ import javax.validation.constraints.Pattern;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddOut {
 
-	@Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
-	         message = "User ID is not UUID")
-	private String userId;
+  @Pattern(
+      regexp =
+          "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
+      message = "User ID is not UUID")
+  private String userId;
 
-	@Pattern(regexp = "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
-	         message = "Response ID is not UUID")
-	private String resId;
+  @Pattern(
+      regexp =
+          "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
+      message = "Response ID is not UUID")
+  private String resId;
 
-	public String toHashKey() {
-		return DigestUtils.sha256Hex(toStringKey());
-	}
+  public String toHashKey() {
+    return DigestUtils.sha256Hex(toStringKey());
+  }
 
-	public String toStringKey() {
-		return String.format("%s", userId);
-	}
-
+  public String toStringKey() {
+    return String.format("%s", userId);
+  }
 }

@@ -17,6 +17,7 @@ import com.example.ems.services.CacheService;
 import com.example.ems.services.CounterService;
 import com.example.ems.utils.enums.States;
 import com.example.ems.utils.network.Response;
+import java.util.List;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,65 +25,54 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping(path = "${parameters.controllers.counter.rootPath}")
 @Validated
 public class CounterController {
 
-	private final CounterService   counterService;
-	private final CacheService     cacheService;
-	private final Response<Object> response;
+  private final CounterService counterService;
+  private final CacheService cacheService;
+  private final Response<Object> response;
 
-	CounterController(CounterService counterService, CacheService cacheService, Response<Object> response) {
-		this.counterService = counterService;
-		this.response       = response;
-		this.cacheService   = cacheService;
-	}
+  CounterController(
+      CounterService counterService, CacheService cacheService, Response<Object> response) {
+    this.counterService = counterService;
+    this.response = response;
+    this.cacheService = cacheService;
+  }
 
-	@GetMapping("${parameters.controllers.counter.getById}")
-	ResponseEntity<Res<Object>> getById(GetByIdIn params) {
-		params.setResId(MDC.get("resId"));
-		params.setPath(MDC.get("fullPathQuery"));
+  @GetMapping("${parameters.controllers.counter.getById}")
+  ResponseEntity<Res<Object>> getById(GetByIdIn params) {
+    params.setResId(MDC.get("resId"));
+    params.setPath(MDC.get("fullPathQuery"));
 
-		this.cacheService.hexistOrIfNoneMatch(
-				String.format("counterCache::getById::forMatch::%s", params.toHashKey()),
-				MDC.get("ifNoneMatch")
-		);
-		GetByIdOut<List<Counters>> counters = counterService.getByUserId(params);
-		if (counters.getData() == null || counters.getData().isEmpty()) {
-			throw new ResponseEmptyException();
-		}
-		this.cacheService.hset(
-				String.format("counterCache::getById::forMatch::%s", params.toHashKey()),
-				counters.getEtag(),
-				""
-		);
-		return response.formattedSuccess(
-				counters.getData(),
-				MediaType.APPLICATION_JSON,
-				HttpStatus.OK.value(),
-				counters.getEtag()
-		);
-	}
+    this.cacheService.hexistOrIfNoneMatch(
+        String.format("counterCache::getById::forMatch::%s", params.toHashKey()),
+        MDC.get("ifNoneMatch"));
+    GetByIdOut<List<Counters>> counters = counterService.getByUserId(params);
+    if (counters.getData() == null || counters.getData().isEmpty()) {
+      throw new ResponseEmptyException();
+    }
+    this.cacheService.hset(
+        String.format("counterCache::getById::forMatch::%s", params.toHashKey()),
+        counters.getEtag(),
+        "");
+    return response.formattedSuccess(
+        counters.getData(), MediaType.APPLICATION_JSON, HttpStatus.OK.value(), counters.getEtag());
+  }
 
-	@PostMapping
-	ResponseEntity<Res<Object>> add(@RequestBody AddIn params) {
-		params.setResId(MDC.get("resId"));
+  @PostMapping
+  ResponseEntity<Res<Object>> add(@RequestBody AddIn params) {
+    params.setResId(MDC.get("resId"));
 
-		States state = this.counterService.add(params);
-		if (state != States.RESOLVE) {
-			return response.formattedSuccess(
-					new State(state.toString()),
-					MediaType.APPLICATION_JSON,
-					HttpStatus.ACCEPTED.value(),
-					""
-			);
-		}
+    States state = this.counterService.add(params);
+    if (state != States.RESOLVE) {
+      return response.formattedSuccess(
+          new State(state.toString()), MediaType.APPLICATION_JSON, HttpStatus.ACCEPTED.value(), "");
+    }
 
-		params.setResId(null);
-		return response.formattedSuccess(params, MediaType.APPLICATION_JSON, HttpStatus.CREATED.value(), "");
-	}
-
+    params.setResId(null);
+    return response.formattedSuccess(
+        params, MediaType.APPLICATION_JSON, HttpStatus.CREATED.value(), "");
+  }
 }

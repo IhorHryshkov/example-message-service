@@ -16,6 +16,6 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class Message {
-	private Integer code;
-	private String message;
+  private Integer code;
+  private String message;
 }

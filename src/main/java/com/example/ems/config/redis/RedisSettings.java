@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "redis")
 public class RedisSettings {
-	private Integer cacheTtl;
-	private HashName hashName;
-	private LuaResPath luaResPath;
+  private Integer cacheTtl;
+  private HashName hashName;
+  private LuaResPath luaResPath;
 }

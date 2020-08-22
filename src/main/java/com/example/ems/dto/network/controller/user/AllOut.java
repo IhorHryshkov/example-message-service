@@ -6,10 +6,9 @@
  */
 package com.example.ems.dto.network.controller.user;
 
-import lombok.*;
-
 import java.io.Serializable;
 import java.util.List;
+import lombok.*;
 
 @Data
 @EqualsAndHashCode
@@ -17,6 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AllOut<A> implements Serializable {
-	private String etag;
-	private List<A> data;
+  private String etag;
+  private List<A> data;
 }

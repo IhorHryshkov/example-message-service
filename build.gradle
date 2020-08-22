@@ -2,12 +2,19 @@ plugins {
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'com.adarshr.test-logger' version '2.1.0'
+    id 'com.github.sherter.google-java-format' version '0.8'
     id 'java'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+
+build.mustRunAfter(tasks.clean)
+build.dependsOn(tasks.googleJavaFormat)
+verifyGoogleJavaFormat.mustRunAfter(tasks.googleJavaFormat)
+test.mustRunAfter(tasks.verifyGoogleJavaFormat)
+bootRun.mustRunAfter(tasks.test)
 
 configurations {
     compileOnly {
@@ -28,7 +35,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.liquibase:liquibase-core'
 
-    implementation 'com.greghaskins:spectrum:1.2.0'
     implementation 'com.vladmihalcea:hibernate-types-52:2.9.12'
     implementation 'org.apache.commons:commons-pool2:2.8.1'
     implementation 'commons-codec:commons-codec:1.14'
@@ -47,7 +53,7 @@ dependencies {
 }
 
 test {
-    useJUnit()
+    useJUnitPlatform()
     maxHeapSize = '1G'
     testlogger {
         theme 'mocha'
