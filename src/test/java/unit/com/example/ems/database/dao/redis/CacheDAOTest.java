@@ -1,7 +1,13 @@
 package unit.com.example.ems.database.dao.redis;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
+
 import com.example.ems.config.redis.RedisSettings;
 import com.example.ems.database.dao.redis.CacheDAO;
+import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -11,13 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import java.time.Duration;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CacheDAOTest {
@@ -99,21 +98,16 @@ class CacheDAOTest {
 
   @Test
   void hset() {
-    when(redisTemplate.opsForHash())
-            .thenReturn(hashOperations);
-    ArgumentCaptor<String> hashCapture = ArgumentCaptor
-            .forClass(String.class);
-    ArgumentCaptor<String> valueCapture = ArgumentCaptor
-            .forClass(String.class);
-    ArgumentCaptor<String> keyCapture = ArgumentCaptor
-            .forClass(String.class);
-    doNothing().when(hashOperations).put(keyCapture.capture(), hashCapture.capture(), valueCapture.capture());
+    when(redisTemplate.opsForHash()).thenReturn(hashOperations);
+    ArgumentCaptor<String> hashCapture = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<String> valueCapture = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<String> keyCapture = ArgumentCaptor.forClass(String.class);
+    doNothing()
+        .when(hashOperations)
+        .put(keyCapture.capture(), hashCapture.capture(), valueCapture.capture());
     cacheDAO.hset("key", "test", "data");
-    assertThat(keyCapture.getValue())
-            .as("Key value is correct").isEqualTo("key");
-    assertThat(hashCapture.getValue())
-            .as("Hash value is correct").isEqualTo("test");
-    assertThat(valueCapture.getValue())
-            .as("Data is correct").isEqualTo("data");
+    assertThat(keyCapture.getValue()).as("Key value is correct").isEqualTo("key");
+    assertThat(hashCapture.getValue()).as("Hash value is correct").isEqualTo("test");
+    assertThat(valueCapture.getValue()).as("Data is correct").isEqualTo("data");
   }
 }

@@ -37,13 +37,9 @@ class StateDAOTest {
         .as("Have some error")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
-    assertThat(stateDAO.add("test", "test", "test"))
-            .as("Result is null").isNull();
-    assertThat(stateDAO.add("test", "test", "test"))
-            .as("Result is empty").isNull();
-    assertThat(stateDAO.add("test", "test", "test"))
-            .as("Key is found").isEqualTo("data");
-
+    assertThat(stateDAO.add("test", "test", "test")).as("Result is null").isNull();
+    assertThat(stateDAO.add("test", "test", "test")).as("Result is empty").isNull();
+    assertThat(stateDAO.add("test", "test", "test")).as("Key is found").isEqualTo("data");
   }
 
   @Test
@@ -56,16 +52,13 @@ class StateDAOTest {
         .as("Have some error")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
-    assertThat(stateDAO.del("test", "test"))
-            .as("Result is less then or equal 0").isFalse();
-    assertThat(stateDAO.del("test", "test"))
-            .as("Result is more then 0").isTrue();
+    assertThat(stateDAO.del("test", "test")).as("Result is less then or equal 0").isFalse();
+    assertThat(stateDAO.del("test", "test")).as("Result is more then 0").isTrue();
   }
 
   @Test
   void exist() {
-    when(redisTemplate.opsForHash())
-            .thenReturn(hashOperations);
+    when(redisTemplate.opsForHash()).thenReturn(hashOperations);
     when(hashOperations.hasKey(anyString(), anyString()))
         .thenThrow(new RuntimeException("Test"))
         .thenReturn(null, false, true);
@@ -73,11 +66,8 @@ class StateDAOTest {
         .as("Check a key have error")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
-    assertThat(stateDAO.exist("test", "test"))
-            .as("Exist key is null").isNull();
-    assertThat(stateDAO.exist("test", "test"))
-            .as("Key is not found").isFalse();
-    assertThat(stateDAO.exist("test", "test"))
-            .as("Key is found").isTrue();
+    assertThat(stateDAO.exist("test", "test")).as("Exist key is null").isNull();
+    assertThat(stateDAO.exist("test", "test")).as("Key is not found").isFalse();
+    assertThat(stateDAO.exist("test", "test")).as("Key is found").isTrue();
   }
 }
