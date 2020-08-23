@@ -23,19 +23,13 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GlobalServiceErrorAdviceTest {
-  @Mock
-  private Response<Object> response;
-  @Mock
-  private Messages messages;
-  @Mock
-  private Message message;
-  @Mock
-  private HttpServletRequest req;
-  @Mock
-  private Exception ex;
+  @Mock private Response<Object> response;
+  @Mock private Messages messages;
+  @Mock private Message message;
+  @Mock private HttpServletRequest req;
+  @Mock private Exception ex;
 
-  @InjectMocks
-  private GlobalServiceErrorAdvice globalServiceErrorAdvice;
+  @InjectMocks private GlobalServiceErrorAdvice globalServiceErrorAdvice;
 
   @Test
   void handleAnyException() {
@@ -43,14 +37,19 @@ class GlobalServiceErrorAdviceTest {
     when(message.getCode()).thenReturn(500);
     when(messages.getInternalServerError()).thenReturn(message);
     when(ex.getMessage()).thenReturn("Some error");
-    when(response.formattedError(eq(req),eq("Error message"),eq(MediaType.APPLICATION_JSON),eq(500))).thenReturn(ResponseEntity.status(500).contentType(MediaType.APPLICATION_JSON).body(new Res<>(
-                null,
-                null,
-                new ResError(500, "Error message", "GET", null),
-                null)));
+    when(response.formattedError(
+            eq(req), eq("Error message"), eq(MediaType.APPLICATION_JSON), eq(500)))
+        .thenReturn(
+            ResponseEntity.status(500)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(
+                    new Res<>(null, null, new ResError(500, "Error message", "GET", null), null)));
 
-    ResponseEntity<Res<Object>> responseEntity = globalServiceErrorAdvice.handleAnyException(req, ex);
-    assertThat(responseEntity.getStatusCode()).as("Status code").isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+    ResponseEntity<Res<Object>> responseEntity =
+        globalServiceErrorAdvice.handleAnyException(req, ex);
+    assertThat(responseEntity.getStatusCode())
+        .as("Status code")
+        .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @Test

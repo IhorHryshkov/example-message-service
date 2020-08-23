@@ -18,13 +18,15 @@ if [ ! -d ".cache" ]; then
 	fi
 	cd ..
 fi
-#changed_java_files=\$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java\$" || true)
-changed_java_files=\$(find . -type f -name "*.java")
+changed_java_files=\$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java\$" || true)
 if [[ -n "\$changed_java_files" ]]
 then
     echo "Reformatting Java files: \$changed_java_files"
-    java -jar .cache/java-formatter.jar --replace --set-exit-if-changed \$changed_java_files
-    echo "Success reformatting Java files"
+    if ! java -jar .cache/java-formatter.jar --replace --set-exit-if-changed \$changed_java_files
+    then
+        echo "Some files were changed, aborting commit!" >&2
+        exit 1
+    fi
 else
     echo "No Java files changes found."
 fi
