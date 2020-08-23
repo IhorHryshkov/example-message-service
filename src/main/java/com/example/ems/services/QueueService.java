@@ -54,8 +54,7 @@ public class QueueService {
     if (xDeathHeader != null && !xDeathHeader.isEmpty()) {
       Long count =
           (Long)
-              xDeathHeader
-                  .stream()
+              xDeathHeader.stream()
                   .findFirst()
                   .filter(x -> x.containsKey("count"))
                   .map(x -> x.get("count"))

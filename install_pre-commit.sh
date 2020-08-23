@@ -6,7 +6,7 @@
 # Since 2020-08-23T04:55
 
 if [ ! -f .git/hooks/pre-commit ]; then
-	cat > .git/hooks/pre-commit <<EOF
+	cat >.git/hooks/pre-commit <<EOF
 #!/usr/bin/env sh
 if [ ! -d ".cache" ]; then
 	version=1.7
@@ -14,13 +14,21 @@ if [ ! -d ".cache" ]; then
 	cd .cache
 	if [ ! -f java-formatter.jar ]; then
 		curl -LJo java-formatter.jar "https://github.com/google/google-java-format/releases/download/google-java-format-\$version/google-java-format-\$version-all-deps.jar"
-		chmod 755 java-formatter.jar
+		chmod +x java-formatter.jar
 	fi
 	cd ..
 fi
-changed_java_files=\$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java\$")
-echo $changed_java_files
-java -jar .cache/java-formatter.jar --replace \$changed_java_files
+#changed_java_files=\$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java\$" || true)
+changed_java_files=\$(find . -type f -name "*.java")
+if [[ -n "\$changed_java_files" ]]
+then
+    echo "Reformatting Java files: \$changed_java_files"
+    java -jar .cache/java-formatter.jar --replace --set-exit-if-changed \$changed_java_files
+    echo "Success reformatting Java files"
+else
+    echo "No Java files changes found."
+fi
 EOF
 fi
+chmod +x .git/hooks/pre-commit
 sh .git/hooks/pre-commit

@@ -78,9 +78,7 @@ public class UserService {
       return States.IN_PROGRESS;
     }
     Users user =
-        usersDAO
-            .findByStatusNameIgnoreCaseAndUsername(defaultStatus, data.getUsername())
-            .stream()
+        usersDAO.findByStatusNameIgnoreCaseAndUsername(defaultStatus, data.getUsername()).stream()
             .findFirst()
             .orElse(null);
     if (user != null) {
@@ -174,9 +172,7 @@ public class UserService {
     if (queueService.isGoRetry(message)) {
       user = usersDAO.save(user);
       Types type =
-          typesDAO
-              .findByNameIgnoreCase(user.getStatus().getName())
-              .stream()
+          typesDAO.findByNameIgnoreCase(user.getStatus().getName()).stream()
               .findFirst()
               .orElse(null);
       userCounterComponent.incCounter(
