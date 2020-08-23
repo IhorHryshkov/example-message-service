@@ -12,8 +12,8 @@ sourceCompatibility = '1.8'
 
 
 build.mustRunAfter(tasks.clean)
-//build.dependsOn(tasks.googleJavaFormat)
-//verifyGoogleJavaFormat.mustRunAfter(tasks.googleJavaFormat)
+build.dependsOn(tasks.googleJavaFormat)
+verifyGoogleJavaFormat.mustRunAfter(tasks.googleJavaFormat)
 test.mustRunAfter(tasks.build)
 bootRun.mustRunAfter(tasks.test)
 
