@@ -73,24 +73,21 @@ public class GlobalServiceErrorAdvice {
   }
 
   @ExceptionHandler(ResponseEmptyException.class)
-  public ResponseEntity<Res<Object>> handleResultEmpty(
-      HttpServletRequest req, ResponseEmptyException e) {
+  public ResponseEntity<Res<Object>> handleResultEmpty(HttpServletRequest req, Exception e) {
     log.info("message: {}", e.getMessage());
     return response.formattedError(
         req, null, MediaType.APPLICATION_JSON, messages.getResultEmpty().getCode());
   }
 
   @ExceptionHandler(ResponseIfNoneMatchException.class)
-  public ResponseEntity<Res<Object>> handleNotModified(
-      HttpServletRequest req, ResponseIfNoneMatchException e) {
+  public ResponseEntity<Res<Object>> handleNotModified(HttpServletRequest req, Exception e) {
     log.info("message: {}", e.getMessage());
     return response.formattedError(
         req, null, MediaType.APPLICATION_JSON, messages.getNotModified().getCode());
   }
 
   @ExceptionHandler(ResponseUsernameUsedException.class)
-  public ResponseEntity<Res<Object>> handleUsernameUsed(
-      HttpServletRequest req, ResponseUsernameUsedException e) {
+  public ResponseEntity<Res<Object>> handleUsernameUsed(HttpServletRequest req, Exception e) {
     log.info("message: {}", e.getMessage());
     return response.formattedError(
         req,
@@ -100,8 +97,7 @@ public class GlobalServiceErrorAdvice {
   }
 
   @ExceptionHandler(UserIDNotFoundException.class)
-  public ResponseEntity<Res<Object>> handleUserIDNotfound(
-      HttpServletRequest req, UserIDNotFoundException e) {
+  public ResponseEntity<Res<Object>> handleUserIDNotfound(HttpServletRequest req, Exception e) {
     log.info("message: {}", e.getMessage());
     return response.formattedError(
         req,
