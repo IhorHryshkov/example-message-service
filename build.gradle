@@ -2,7 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'com.adarshr.test-logger' version '2.1.0'
-    id 'com.github.sherter.google-java-format' version '0.8'
+    id 'com.github.sherter.google-java-format' version '0.9'
     id 'java'
 }
 
@@ -11,10 +11,9 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 
-build.mustRunAfter(tasks.clean)
-build.dependsOn(tasks.googleJavaFormat)
+clean.dependsOn(tasks.googleJavaFormat)
 verifyGoogleJavaFormat.mustRunAfter(tasks.googleJavaFormat)
-test.mustRunAfter(tasks.build)
+test.mustRunAfter(tasks.clean)
 bootRun.mustRunAfter(tasks.test)
 
 configurations {
