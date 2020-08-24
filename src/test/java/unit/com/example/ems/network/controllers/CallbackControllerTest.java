@@ -1,6 +1,7 @@
 package unit.com.example.ems.network.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -43,11 +44,16 @@ class CallbackControllerTest {
     doNothing().when(callbackService).removeState(eq("88239958-fdb5-442a-9493-9797c3ab8736"));
     when(response.formattedSuccess(
             eq(params), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.OK.value()), eq("")))
+        .thenThrow(new RuntimeException("Test"))
         .thenReturn(
             ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("")
                 .body(new Res<>(uuid, params, null, timestamp)));
+    assertThat(catchThrowable(() -> callbackController.add(params)))
+        .as("Check a some error")
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageContaining("Test");
     ResponseEntity<Res<Object>> add = callbackController.add(params);
     assertThat(add.getStatusCode()).as("Status code").isEqualTo(HttpStatus.OK);
     assertThat(add.getBody()).as("Body not null").isNotNull();

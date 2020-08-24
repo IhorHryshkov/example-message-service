@@ -31,6 +31,7 @@ public class AddIn implements Serializable {
   @Min(value = 1, message = "Type ID cannot be negative or 0")
   private Integer typeId;
 
+  @Min(value = 1, message = "Count cannot be negative or 0")
   private Long count;
 
   @Pattern(

@@ -23,7 +23,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "${parameters.controllers.counter.rootPath}")
@@ -42,7 +46,7 @@ public class CounterController {
   }
 
   @GetMapping("${parameters.controllers.counter.getById}")
-  ResponseEntity<Res<Object>> getById(GetByIdIn params) {
+  public ResponseEntity<Res<Object>> getById(GetByIdIn params) {
     params.setResId(MDC.get("resId"));
     params.setPath(MDC.get("fullPathQuery"));
 
@@ -62,7 +66,7 @@ public class CounterController {
   }
 
   @PostMapping
-  ResponseEntity<Res<Object>> add(@RequestBody AddIn params) {
+  public ResponseEntity<Res<Object>> add(@RequestBody AddIn params) {
     params.setResId(MDC.get("resId"));
 
     States state = this.counterService.add(params);
