@@ -58,8 +58,8 @@ class CounterControllerTest {
     MDC.put("fullPathQuery", "/v1/test");
     MDC.put("ifNoneMatch", "testHash");
 
-    GetByIdIn getByIdIn = new GetByIdIn();
-    getByIdIn.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
+    GetByIdIn in = new GetByIdIn();
+    in.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
 
     String key =
         "counterCache::getById::forMatch::3496fdbcd7ecef849bec992d9441d86fe8cba183882421327c37a9ed45e70b7d";
@@ -68,12 +68,10 @@ class CounterControllerTest {
         .when(cacheService)
         .hexistOrIfNoneMatch(eq(key), eq("testHash"));
     List<Counters> counter = Collections.singletonList(new Counters());
-    GetByIdOut<List<Counters>> counters = new GetByIdOut<>();
-    counters.setData(counter);
-    counters.setEtag("testEtag");
-    when(counterService.getByUserId(eq(getByIdIn)))
-        .thenReturn(new GetByIdOut<>())
-        .thenReturn(counters);
+    GetByIdOut<List<Counters>> out = new GetByIdOut<>();
+    out.setData(counter);
+    out.setEtag("testEtag");
+    when(counterService.getByUserId(eq(in))).thenReturn(new GetByIdOut<>()).thenReturn(out);
     doNothing().when(cacheService).hset(eq(key), eq("testEtag"), eq(""));
     when(response.formattedSuccess(
             eq(counter), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.OK.value()), eq("testEtag")))
@@ -82,13 +80,13 @@ class CounterControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("testEtag")
                 .body(new Res<>(uuid, counter, null, timestamp)));
-    assertThat(catchThrowable(() -> counterController.getById(getByIdIn)))
-        .as("Check a if none match")
+    assertThat(catchThrowable(() -> counterController.getById(in)))
+        .as("Check if none match")
         .isInstanceOf(ResponseIfNoneMatchException.class);
-    assertThat(catchThrowable(() -> counterController.getById(getByIdIn)))
-        .as("Check a if response empty")
+    assertThat(catchThrowable(() -> counterController.getById(in)))
+        .as("Check if response empty")
         .isInstanceOf(ResponseEmptyException.class);
-    ResponseEntity<Res<Object>> getById = counterController.getById(getByIdIn);
+    ResponseEntity<Res<Object>> getById = counterController.getById(in);
     assertThat(getById.getStatusCode()).as("Status code").isEqualTo(HttpStatus.OK);
     assertThat(getById.getBody()).as("Body not null").isNotNull();
     Res<Object> res = getById.getBody();

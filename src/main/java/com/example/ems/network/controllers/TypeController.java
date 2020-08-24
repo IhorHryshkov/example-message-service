@@ -39,7 +39,7 @@ public class TypeController {
   }
 
   @GetMapping
-  ResponseEntity<Res<Object>> all(AllIn params) {
+  public ResponseEntity<Res<Object>> all(AllIn params) {
     params.setResId(MDC.get("resId"));
     params.setPath(MDC.get("fullPathQuery"));
     this.cacheService.existOrIfNoneMatch(

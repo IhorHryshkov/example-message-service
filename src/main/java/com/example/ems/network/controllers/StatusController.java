@@ -21,7 +21,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -41,8 +40,7 @@ public class StatusController {
   }
 
   @GetMapping
-  @ResponseStatus(HttpStatus.OK)
-  ResponseEntity<Res<Object>> all(AllIn params) {
+  public ResponseEntity<Res<Object>> all(AllIn params) {
     params.setResId(MDC.get("resId"));
     params.setPath(MDC.get("fullPathQuery"));
     this.cacheService.existOrIfNoneMatch(
