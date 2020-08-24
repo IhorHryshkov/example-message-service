@@ -35,7 +35,7 @@ public class CallbackController {
   }
 
   @PostMapping
-  ResponseEntity<Res<Object>> add(@RequestBody Callback params) {
+  public ResponseEntity<Res<Object>> add(@RequestBody Callback params) {
     log.debug("Request callback: {}", params);
 
     this.callbackService.removeState(params.getResId());
