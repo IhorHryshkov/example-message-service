@@ -19,7 +19,7 @@ if [ ! -d ".cache" ]; then
 	cd ..
 fi
 changed_java_files=\$(git diff --cached --name-only --diff-filter=ACMR | grep ".*java\$" || true)
-if [[ -n "\$changed_java_files" ]]
+if [ -n "\$changed_java_files" ]
 then
     echo "Reformatting Java files: \$changed_java_files"
     if ! java -jar .cache/java-formatter.jar --replace --set-exit-if-changed \$changed_java_files
