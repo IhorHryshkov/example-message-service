@@ -24,10 +24,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class UserCounterComponent {
-
-  public final CountersDAO countersDAO;
-  public final UsersDAO usersDAO;
-  public final StateDAO stateDAO;
+  private final CountersDAO countersDAO;
+  private final UsersDAO usersDAO;
+  private final StateDAO stateDAO;
 
   public UserCounterComponent(CountersDAO countersDAO, UsersDAO usersDAO, StateDAO stateDAO) {
     this.countersDAO = countersDAO;
@@ -39,7 +38,7 @@ public class UserCounterComponent {
     if (!this.stateDAO.exist(String.format(key, States.INIT), hash)
         && this.stateDAO.add(String.format(key, States.INIT), hash, "") == null) {
       Counters counter;
-      count = count == null ? 1L : count;
+      count = count == null || count <= 0 ? 1L : count;
       if (type == null) {
         log.warn("Type name {} not found", user.getStatus().getName());
       } else {
