@@ -39,30 +39,25 @@ public class CallbackService {
     MDC.put("resId", in.getResId());
     log.debug("Message: {}", message);
     log.debug("Data: {}", in);
-    this.sendDataToClient(message, in);
-  }
-
-  private void sendDataToClient(Message message, CallbackMQ<Object> data) {
     String resolveKey = String.format("state::callback::%s", States.RESOLVE);
     String inProgressKey = String.format("state::callback::%s", States.IN_PROGRESS);
-    MDC.put("resId", data.getResId());
-    log.debug("Get data resId: {}", data.getResId());
+    log.debug("Get data resId: {}", in.getResId());
     if (this.queueService.isGoRetry(message)) {
-      if (this.stateDAO.exist(resolveKey, data.getResId())) {
-        this.stateDAO.del(resolveKey, data.getResId());
+      if (this.stateDAO.exist(resolveKey, in.getResId())) {
+        this.stateDAO.del(resolveKey, in.getResId());
         return;
       }
-      if (this.stateDAO.add(inProgressKey, data.getResId(), data) == null) {
+      if (this.stateDAO.add(inProgressKey, in.getResId(), in) == null) {
         this.simpMessagingTemplate.convertAndSend(
-            String.format("/queue/%s", data.getQueueName()), data.getData());
+            String.format("/queue/%s", in.getQueueName()), in.getData());
       }
-      throw new NoAckException(String.format("Waiting RESOLVE by res ID: %s", data.getResId()));
+      throw new NoAckException(String.format("Waiting RESOLVE by res ID: %s", in.getResId()));
     } else {
       this.queueService.sendMessage(
-          String.format("websocket.%s", data.getQueueName()),
-          data,
+          String.format("websocket.%s", in.getQueueName()),
+          in,
           this.queueService.getRabbitMQSettings().getWebsocket());
-      this.stateDAO.del(inProgressKey, data.getResId());
+      this.stateDAO.del(inProgressKey, in.getResId());
     }
   }
 

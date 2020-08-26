@@ -1,3 +1,9 @@
+/**
+ * @project ems
+ * @author Ihor Hryshkov
+ * @version 1.0.0
+ * @since 2020-08-13T09:35
+ */
 package unit.com.example.ems.network.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,19 +68,22 @@ class UserControllerTest {
     AllIn in = new AllIn();
     in.setUserId("99d4160b-d8e4-4425-a856-b4f2285f9ad5");
     in.setUsername("tester123");
+    AllIn inExpected = new AllIn();
+    in.setUserId("99d4160b-d8e4-4425-a856-b4f2285f9ad5");
+    in.setUsername("tester123");
 
-    String noneMatchKey = "userCache::all::forMatch::testHash";
-    String etagKey = "userCache::all::forMatch::testEtag";
+    String noneMatchKeyExpected = "userCache::all::forMatch::testHash";
+    String etagKeyExpected = "userCache::all::forMatch::testEtag";
     doThrow(new ResponseIfNoneMatchException())
         .doNothing()
         .when(cacheService)
-        .existOrIfNoneMatch(eq(noneMatchKey));
+        .existOrIfNoneMatch(eq(noneMatchKeyExpected));
     List<Users> typesList = Collections.singletonList(new Users());
     AllOut<Users> out = new AllOut<>();
     out.setData(typesList);
     out.setEtag("testEtag");
-    when(userService.all(eq(in))).thenReturn(new AllOut<>()).thenReturn(out);
-    doNothing().when(cacheService).setKeyForCheckWithTtlDivider(eq(etagKey), eq(2));
+    when(userService.all(eq(inExpected))).thenReturn(new AllOut<>()).thenReturn(out);
+    doNothing().when(cacheService).setKeyForCheckWithTtlDivider(eq(etagKeyExpected), eq(2));
     when(response.formattedSuccess(
             eq(typesList),
             eq(MediaType.APPLICATION_JSON),
@@ -105,13 +114,14 @@ class UserControllerTest {
   @Test
   void update() {
     String userId = "88239958-fdb5-442a-9493-9797c3ab8736";
+    String userIdExpected = "88239958-fdb5-442a-9493-9797c3ab8736";
     UpdateIn bodyIn = new UpdateIn();
     bodyIn.setStatusId(1);
     UpdateIn bodyResolve = new UpdateIn();
     bodyResolve.setStatusId(1);
-    bodyResolve.setUserId(userId);
+    bodyResolve.setUserId(userIdExpected);
     UpdateIn fullBodyInit = new UpdateIn();
-    fullBodyInit.setUserId(userId);
+    fullBodyInit.setUserId(userIdExpected);
     fullBodyInit.setStatusId(1);
     fullBodyInit.setResId(uuid);
     State state = new State(States.IN_PROGRESS.toString());

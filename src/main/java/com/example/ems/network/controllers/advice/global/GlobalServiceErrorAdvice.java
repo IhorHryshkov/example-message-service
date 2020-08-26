@@ -13,6 +13,10 @@ import com.example.ems.network.controllers.exceptions.global.ResponseIfNoneMatch
 import com.example.ems.network.controllers.exceptions.status.UserIDNotFoundException;
 import com.example.ems.network.controllers.exceptions.user.ResponseUsernameUsedException;
 import com.example.ems.utils.network.Response;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +25,6 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 @Slf4j

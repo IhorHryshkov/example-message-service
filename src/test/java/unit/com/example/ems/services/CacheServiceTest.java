@@ -1,3 +1,9 @@
+/**
+ * @project ems
+ * @author Ihor Hryshkov
+ * @version 1.0.0
+ * @since 2020-08-13T09:35
+ */
 package unit.com.example.ems.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +31,8 @@ class CacheServiceTest {
   @Test
   void existOrIfNoneMatch() {
     String key = "testKey";
-    when(cacheDAO.exist(eq(key))).thenReturn(true, false);
+    String keyExpected = "testKey";
+    when(cacheDAO.exist(eq(keyExpected))).thenReturn(true, false);
     assertThat(catchThrowable(() -> cacheService.existOrIfNoneMatch(key)))
         .as("Key not found exception")
         .isInstanceOf(ResponseIfNoneMatchException.class);
@@ -36,21 +43,27 @@ class CacheServiceTest {
   void setKeyForCheckWithTtlDivider() {
     String key = "testKey";
     Integer divider = 2;
-    doThrow(new RuntimeException("Test")).when(cacheDAO).setTtl(eq(key), eq(""), eq(divider));
-    assertThat(catchThrowable(() -> cacheService.setKeyForCheckWithTtlDivider(key, 2)))
+    String keyExpected = "testKey";
+    Integer dividerExpected = 2;
+    doThrow(new RuntimeException("Test"))
+        .when(cacheDAO)
+        .setTtl(eq(keyExpected), eq(""), eq(dividerExpected));
+    assertThat(catchThrowable(() -> cacheService.setKeyForCheckWithTtlDivider(key, divider)))
         .as("Some exception")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
 
-    doNothing().when(cacheDAO).setTtl(eq(key), eq(""), eq(divider));
-    cacheService.setKeyForCheckWithTtlDivider(key, 2);
+    doNothing().when(cacheDAO).setTtl(eq(keyExpected), eq(""), eq(dividerExpected));
+    cacheService.setKeyForCheckWithTtlDivider(key, divider);
   }
 
   @Test
   void hexistOrIfNoneMatch() {
     String key = "testKey";
     String hash = "testHash";
-    when(cacheDAO.hexist(eq(key), eq(hash))).thenReturn(true, false);
+    String keyExpected = "testKey";
+    String hashExpected = "testHash";
+    when(cacheDAO.hexist(eq(keyExpected), eq(hashExpected))).thenReturn(true, false);
     assertThat(catchThrowable(() -> cacheService.hexistOrIfNoneMatch(key, hash)))
         .as("Key not found exception")
         .isInstanceOf(ResponseIfNoneMatchException.class);
@@ -62,13 +75,18 @@ class CacheServiceTest {
     String key = "testKey";
     String hash = "testHash";
     String value = "testJSON";
-    doThrow(new RuntimeException("Test")).when(cacheDAO).hset(eq(key), eq(hash), eq(value));
+    String keyExpected = "testKey";
+    String hashExpected = "testHash";
+    String valueExpected = "testJSON";
+    doThrow(new RuntimeException("Test"))
+        .when(cacheDAO)
+        .hset(eq(keyExpected), eq(hashExpected), eq(valueExpected));
     assertThat(catchThrowable(() -> cacheService.hset(key, hash, value)))
         .as("Some exception")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
 
-    doNothing().when(cacheDAO).hset(eq(key), eq(hash), eq(value));
+    doNothing().when(cacheDAO).hset(eq(keyExpected), eq(hashExpected), eq(valueExpected));
     cacheService.hset(key, hash, value);
   }
 }

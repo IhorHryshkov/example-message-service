@@ -1,3 +1,9 @@
+/**
+ * @project ems
+ * @author Ihor Hryshkov
+ * @version 1.0.0
+ * @since 2020-08-13T09:35
+ */
 package unit.com.example.ems.services.components;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,6 +41,7 @@ class UserCounterComponentTest {
   @Test
   void incCounter() {
     String hash = "testHash";
+    String hashExpected = "testHash";
     String key = "testKey::%s";
     String keyExpect = "testKey::INIT";
     Types type = new Types();
@@ -43,13 +50,14 @@ class UserCounterComponentTest {
     user.setId(UUID.fromString("99d4160b-d8e4-4425-a856-b4f2285f9ad5"));
     user.setStatus(new Status("Online"));
     CountersIds countersIds = new CountersIds(user.getId(), type.getId());
+    CountersIds countersIdsExpected = new CountersIds(user.getId(), type.getId());
     Counters counterFind = new Counters(countersIds, BigInteger.valueOf(10));
     Counters counterNewExpect = new Counters(countersIds, BigInteger.valueOf(1));
     Counters counterFindAndAddExpect = new Counters(countersIds, BigInteger.valueOf(15));
 
-    when(stateDAO.exist(eq(keyExpect), eq(hash))).thenReturn(true, false);
-    when(stateDAO.add(eq(keyExpect), eq(hash), eq(""))).thenReturn("object", (Object) null);
-    when(countersDAO.findById(eq(countersIds)))
+    when(stateDAO.exist(eq(keyExpect), eq(hashExpected))).thenReturn(true, false);
+    when(stateDAO.add(eq(keyExpect), eq(hashExpected), eq(""))).thenReturn("object", (Object) null);
+    when(countersDAO.findById(eq(countersIdsExpected)))
         .thenReturn(Optional.empty())
         .thenReturn(Optional.of(counterFind));
     when(countersDAO.save(eq(counterNewExpect))).thenReturn(counterNewExpect);
@@ -72,18 +80,23 @@ class UserCounterComponentTest {
   @Test
   void getUserOrNotFound() {
     String hash = "testHash";
+    String hashExpected = "testHash";
     String hashUserId = "userIdHash";
     String key = "testKey::%s";
     String keyExpect = "testKey::IN_PROGRESS";
     UUID userId = UUID.fromString("99d4160b-d8e4-4425-a856-b4f2285f9ad5");
+    UUID userIdExpected = UUID.fromString("99d4160b-d8e4-4425-a856-b4f2285f9ad5");
     Users userFind = new Users();
     userFind.setId(userId);
     userFind.setStatus(new Status("Online"));
-    when(usersDAO.findById(eq(userId)))
+    Users userExpected = new Users();
+    userExpected.setId(userId);
+    userExpected.setStatus(new Status("Online"));
+    when(usersDAO.findById(eq(userIdExpected)))
         .thenReturn(Optional.empty())
         .thenReturn(Optional.empty())
         .thenReturn(Optional.of(userFind));
-    when(stateDAO.del(eq(keyExpect), eq(hash)))
+    when(stateDAO.del(eq(keyExpect), eq(hashExpected)))
         .thenThrow(new RuntimeException("Test"))
         .thenReturn(true);
     assertThat(
@@ -99,6 +112,6 @@ class UserCounterComponentTest {
         .isInstanceOf(UserIDNotFoundException.class);
     assertThat(userCounterComponent.getUserOrNotFound(userId, key, hash, hashUserId))
         .as("User ID found")
-        .isEqualTo(userFind);
+        .isEqualTo(userExpected);
   }
 }

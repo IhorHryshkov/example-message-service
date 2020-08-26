@@ -1,3 +1,9 @@
+/**
+ * @project ems
+ * @author Ihor Hryshkov
+ * @version 1.0.0
+ * @since 2020-08-13T09:35
+ */
 package unit.com.example.ems.config.redis;
 
 import static org.assertj.core.api.Assertions.assertThat;
