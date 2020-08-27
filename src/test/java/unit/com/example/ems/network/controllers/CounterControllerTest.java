@@ -66,21 +66,27 @@ class CounterControllerTest {
 
     GetByIdIn in = new GetByIdIn();
     in.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
+    GetByIdIn inExpected = new GetByIdIn();
+    inExpected.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
 
-    String key =
+    String keyExpected =
         "counterCache::getById::forMatch::3496fdbcd7ecef849bec992d9441d86fe8cba183882421327c37a9ed45e70b7d";
     doThrow(new ResponseIfNoneMatchException())
         .doNothing()
         .when(cacheService)
-        .hexistOrIfNoneMatch(eq(key), eq("testHash"));
+        .hexistOrIfNoneMatch(eq(keyExpected), eq("testHash"));
     List<Counters> counter = Collections.singletonList(new Counters());
+    List<Counters> counterExpected = Collections.singletonList(new Counters());
     GetByIdOut<List<Counters>> out = new GetByIdOut<>();
     out.setData(counter);
     out.setEtag("testEtag");
-    when(counterService.getByUserId(eq(in))).thenReturn(new GetByIdOut<>()).thenReturn(out);
-    doNothing().when(cacheService).hset(eq(key), eq("testEtag"), eq(""));
+    when(counterService.getByUserId(eq(inExpected))).thenReturn(new GetByIdOut<>()).thenReturn(out);
+    doNothing().when(cacheService).hset(eq(keyExpected), eq("testEtag"), eq(""));
     when(response.formattedSuccess(
-            eq(counter), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.OK.value()), eq("testEtag")))
+            eq(counterExpected),
+            eq(MediaType.APPLICATION_JSON),
+            eq(HttpStatus.OK.value()),
+            eq("testEtag")))
         .thenReturn(
             ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -109,6 +115,10 @@ class CounterControllerTest {
     params.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
     params.setTypeId(1);
     params.setCount(1L);
+    AddIn paramsExpected = new AddIn();
+    paramsExpected.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
+    paramsExpected.setTypeId(1);
+    paramsExpected.setCount(1L);
     AddIn addSer = new AddIn();
     addSer.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
     addSer.setTypeId(1);
@@ -124,7 +134,10 @@ class CounterControllerTest {
                 .eTag("")
                 .body(new Res<>(uuid, state, null, timestamp)));
     when(response.formattedSuccess(
-            eq(params), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.CREATED.value()), eq("")))
+            eq(paramsExpected),
+            eq(MediaType.APPLICATION_JSON),
+            eq(HttpStatus.CREATED.value()),
+            eq("")))
         .thenReturn(
             ResponseEntity.status(HttpStatus.CREATED.value())
                 .contentType(MediaType.APPLICATION_JSON)

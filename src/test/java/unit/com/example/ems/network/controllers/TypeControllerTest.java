@@ -64,6 +64,9 @@ class TypeControllerTest {
     AllIn in = new AllIn();
     in.setId(1);
     in.setName("online");
+    AllIn inExpected = new AllIn();
+    in.setId(1);
+    in.setName("online");
 
     String noneMatchKey = "typeCache::all::forMatch::testHash";
     String etagKey = "typeCache::all::forMatch::testEtag";
@@ -72,13 +75,14 @@ class TypeControllerTest {
         .when(cacheService)
         .existOrIfNoneMatch(eq(noneMatchKey));
     List<Types> typesList = Collections.singletonList(new Types());
+    List<Types> typesListExpected = Collections.singletonList(new Types());
     AllOut<Types> out = new AllOut<>();
     out.setData(typesList);
     out.setEtag("testEtag");
-    when(typeService.all(eq(in))).thenReturn(new AllOut<>()).thenReturn(out);
+    when(typeService.all(eq(inExpected))).thenReturn(new AllOut<>()).thenReturn(out);
     doNothing().when(cacheService).setKeyForCheckWithTtlDivider(eq(etagKey), eq(2));
     when(response.formattedSuccess(
-            eq(typesList),
+            eq(typesListExpected),
             eq(MediaType.APPLICATION_JSON),
             eq(HttpStatus.OK.value()),
             eq("testEtag")))

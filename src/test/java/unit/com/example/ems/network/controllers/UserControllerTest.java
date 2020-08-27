@@ -79,13 +79,14 @@ class UserControllerTest {
         .when(cacheService)
         .existOrIfNoneMatch(eq(noneMatchKeyExpected));
     List<Users> typesList = Collections.singletonList(new Users());
+    List<Users> typesListExpected = Collections.singletonList(new Users());
     AllOut<Users> out = new AllOut<>();
     out.setData(typesList);
     out.setEtag("testEtag");
     when(userService.all(eq(inExpected))).thenReturn(new AllOut<>()).thenReturn(out);
     doNothing().when(cacheService).setKeyForCheckWithTtlDivider(eq(etagKeyExpected), eq(2));
     when(response.formattedSuccess(
-            eq(typesList),
+            eq(typesListExpected),
             eq(MediaType.APPLICATION_JSON),
             eq(HttpStatus.OK.value()),
             eq("testEtag")))
@@ -125,10 +126,14 @@ class UserControllerTest {
     fullBodyInit.setStatusId(1);
     fullBodyInit.setResId(uuid);
     State state = new State(States.IN_PROGRESS.toString());
+    State stateExpected = new State(States.IN_PROGRESS.toString());
     when(userService.updateCounterAndStatus(eq(fullBodyInit)))
         .thenReturn(States.IN_PROGRESS, States.RESOLVE);
     when(response.formattedSuccess(
-            eq(state), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.ACCEPTED.value()), eq("")))
+            eq(stateExpected),
+            eq(MediaType.APPLICATION_JSON),
+            eq(HttpStatus.ACCEPTED.value()),
+            eq("")))
         .thenReturn(
             ResponseEntity.status(HttpStatus.ACCEPTED.value())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -167,20 +172,32 @@ class UserControllerTest {
   void add() {
     AddIn params = new AddIn();
     params.setUsername("tester");
+    AddIn paramsExpected = new AddIn();
+    paramsExpected.setUsername("tester");
     AddIn fullParams = new AddIn();
     fullParams.setUsername("tester");
     fullParams.setResId(uuid);
+    AddIn fullParamsExpected = new AddIn();
+    fullParamsExpected.setUsername("tester");
+    fullParamsExpected.setResId(uuid);
     State state = new State(States.IN_PROGRESS.toString());
-    when(userService.add(eq(fullParams))).thenReturn(States.IN_PROGRESS, States.RESOLVE);
+    State stateExpected = new State(States.IN_PROGRESS.toString());
+    when(userService.add(eq(fullParamsExpected))).thenReturn(States.IN_PROGRESS, States.RESOLVE);
     when(response.formattedSuccess(
-            eq(state), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.ACCEPTED.value()), eq("")))
+            eq(stateExpected),
+            eq(MediaType.APPLICATION_JSON),
+            eq(HttpStatus.ACCEPTED.value()),
+            eq("")))
         .thenReturn(
             ResponseEntity.status(HttpStatus.ACCEPTED.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("")
                 .body(new Res<>(uuid, state, null, timestamp)));
     when(response.formattedSuccess(
-            eq(params), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.CREATED.value()), eq("")))
+            eq(paramsExpected),
+            eq(MediaType.APPLICATION_JSON),
+            eq(HttpStatus.CREATED.value()),
+            eq("")))
         .thenReturn(
             ResponseEntity.status(HttpStatus.CREATED.value())
                 .contentType(MediaType.APPLICATION_JSON)

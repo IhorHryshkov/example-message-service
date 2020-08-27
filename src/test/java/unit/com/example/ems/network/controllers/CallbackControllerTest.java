@@ -47,9 +47,10 @@ class CallbackControllerTest {
   @Test
   void add() {
     Callback params = new Callback("88239958-fdb5-442a-9493-9797c3ab8736");
+    Callback paramsExpected = new Callback("88239958-fdb5-442a-9493-9797c3ab8736");
     doNothing().when(callbackService).removeState(eq("88239958-fdb5-442a-9493-9797c3ab8736"));
     when(response.formattedSuccess(
-            eq(params), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.OK.value()), eq("")))
+            eq(paramsExpected), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.OK.value()), eq("")))
         .thenThrow(new RuntimeException("Test"))
         .thenReturn(
             ResponseEntity.status(HttpStatus.OK.value())

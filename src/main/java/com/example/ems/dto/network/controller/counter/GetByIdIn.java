@@ -9,8 +9,10 @@ package com.example.ems.dto.network.controller.counter;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.UUID;
 import javax.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -18,6 +20,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@NoArgsConstructor
 public class GetByIdIn {
   @Pattern(
       regexp =

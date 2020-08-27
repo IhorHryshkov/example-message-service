@@ -64,6 +64,9 @@ class StatusControllerTest {
     AllIn in = new AllIn();
     in.setId(1);
     in.setName("online");
+    AllIn inExpected = new AllIn();
+    in.setId(1);
+    in.setName("online");
 
     String noneMatchKey = "statusCache::all::forMatch::testHash";
     String etagKey = "statusCache::all::forMatch::testEtag";
@@ -72,13 +75,14 @@ class StatusControllerTest {
         .when(cacheService)
         .existOrIfNoneMatch(eq(noneMatchKey));
     List<Status> statusList = Collections.singletonList(new Status());
+    List<Status> statusListExpected = Collections.singletonList(new Status());
     AllOut<Status> out = new AllOut<>();
     out.setData(statusList);
     out.setEtag("testEtag");
-    when(statusService.all(eq(in))).thenReturn(new AllOut<>()).thenReturn(out);
+    when(statusService.all(eq(inExpected))).thenReturn(new AllOut<>()).thenReturn(out);
     doNothing().when(cacheService).setKeyForCheckWithTtlDivider(eq(etagKey), eq(2));
     when(response.formattedSuccess(
-            eq(statusList),
+            eq(statusListExpected),
             eq(MediaType.APPLICATION_JSON),
             eq(HttpStatus.OK.value()),
             eq("testEtag")))
