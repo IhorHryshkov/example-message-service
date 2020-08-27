@@ -12,7 +12,15 @@ import com.example.ems.dto.mq.QueueConf;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.AmqpAdmin;
+import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.ExchangeBuilder;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.stereotype.Service;
@@ -77,7 +85,6 @@ public class QueueService {
     if (conf.getAutoDelete()) {
       queueBuilder.autoDelete();
     }
-    ;
     Queue queue =
         queueBuilder.deadLetterExchange(conf.getExchange()).deadLetterRoutingKey(queueName).build();
     log.debug("getQueueProperties1: {}", amqpAdmin.getQueueProperties(queueName));
