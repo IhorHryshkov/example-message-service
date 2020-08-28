@@ -82,24 +82,14 @@ public class QueueService {
   }
 
   public void removeDeclares(String queueName, String id) {
-    removeQueueListener(queueName, id);
+    SimpleMessageListenerContainer listener =
+        (SimpleMessageListenerContainer) listenerMQRegistry.getListenerContainer(id);
+    listener.removeQueueNames(queueName);
   }
 
   public void initQueueListener(String queueName, String id) {
     SimpleMessageListenerContainer listener =
         (SimpleMessageListenerContainer) listenerMQRegistry.getListenerContainer(id);
     listener.addQueueNames(queueName);
-  }
-
-  public void removeQueueListener(String queueName, String id) {
-    SimpleMessageListenerContainer listener =
-        (SimpleMessageListenerContainer) listenerMQRegistry.getListenerContainer(id);
-    listener.removeQueueNames(queueName);
-  }
-
-  public void initQueuesListeners(String[] queuesNames, String id) {
-    for (String queueName : queuesNames) {
-      initQueueListener(queueName, id);
-    }
   }
 }
