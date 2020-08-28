@@ -11,8 +11,10 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -20,6 +22,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@AllArgsConstructor
+@NoArgsConstructor
 public class AllIn {
   @Size(min = 3, max = 64, message = "Type name have incorrect size")
   @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "Type name have incorrect symbols")
