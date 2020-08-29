@@ -65,8 +65,10 @@ class TypeControllerTest {
     in.setId(1);
     in.setName("online");
     AllIn inExpected = new AllIn();
-    in.setId(1);
-    in.setName("online");
+    inExpected.setId(1);
+    inExpected.setName("online");
+    inExpected.setPath("/v1/test");
+    inExpected.setResId(uuid);
 
     String noneMatchKey = "typeCache::all::forMatch::testHash";
     String etagKey = "typeCache::all::forMatch::testEtag";

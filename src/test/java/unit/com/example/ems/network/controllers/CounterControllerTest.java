@@ -68,6 +68,8 @@ class CounterControllerTest {
     in.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
     GetByIdIn inExpected = new GetByIdIn();
     inExpected.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
+    inExpected.setPath("/v1/test");
+    inExpected.setResId(uuid);
 
     String keyExpected =
         "counterCache::getById::forMatch::3496fdbcd7ecef849bec992d9441d86fe8cba183882421327c37a9ed45e70b7d";

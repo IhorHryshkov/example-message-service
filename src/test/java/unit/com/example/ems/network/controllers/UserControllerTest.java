@@ -69,8 +69,10 @@ class UserControllerTest {
     in.setUserId("99d4160b-d8e4-4425-a856-b4f2285f9ad5");
     in.setUsername("tester123");
     AllIn inExpected = new AllIn();
-    in.setUserId("99d4160b-d8e4-4425-a856-b4f2285f9ad5");
-    in.setUsername("tester123");
+    inExpected.setUserId("99d4160b-d8e4-4425-a856-b4f2285f9ad5");
+    inExpected.setUsername("tester123");
+    inExpected.setPath("/v1/test");
+    inExpected.setResId(uuid);
 
     String noneMatchKeyExpected = "userCache::all::forMatch::testHash";
     String etagKeyExpected = "userCache::all::forMatch::testEtag";
