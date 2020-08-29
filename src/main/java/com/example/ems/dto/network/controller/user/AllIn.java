@@ -10,14 +10,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.UUID;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.apache.commons.codec.digest.DigestUtils;
 
 @Data
 @EqualsAndHashCode
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AllIn {
   @Size(min = 3, max = 64, message = "Username have incorrect size")

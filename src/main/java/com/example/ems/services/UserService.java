@@ -119,6 +119,7 @@ public class UserService {
         }
         user = usersDAO.save(user);
         AddOut addOut = new AddOut(user.getId().toString(), data.getResId());
+        log.debug("addOut: {}", addOut);
         queueService.sendMessage(
             String.format("websocket.%s", in.getQueueName()),
             new CallbackMQ<>(in.getQueueName(), in.getResId(), addOut),
@@ -139,7 +140,6 @@ public class UserService {
         @CacheEvict(value = "userCache::all::ifNoneMatch", allEntries = true)
       })
   public States updateCounterAndStatus(UpdateIn data) {
-    log.debug("Start stateDAO.add: {}", Instant.now());
     if (stateDAO.add(
             String.format("userState::updateCounterAndStatus::%s", States.IN_PROGRESS),
             data.toHashKey(),
@@ -148,16 +148,13 @@ public class UserService {
       log.info("Status ID {} by User ID {} is in progress", data.getStatusId(), data.getUserId());
       return States.IN_PROGRESS;
     }
-    log.debug("End stateDAO.add: {}", Instant.now());
 
-    log.debug("Start getUserOrNotFound: {}", Instant.now());
     Users user =
         userCounterComponent.getUserOrNotFound(
             data.getUserId(),
             "userState::updateCounterAndStatus::%s",
             data.toHashKey(),
             data.toHashUserId());
-    log.debug("End getUserOrNotFound: {}", Instant.now());
 
     user.getStatus().setId(data.getStatusId());
     queueService.sendMessage(

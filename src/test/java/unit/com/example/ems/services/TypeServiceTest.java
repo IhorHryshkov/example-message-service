@@ -1,3 +1,9 @@
+/**
+ * @project ems
+ * @author Ihor Hryshkov
+ * @version 1.0.0
+ * @since 2020-08-28T20:45
+ */
 package unit.com.example.ems.services;
 
 import static org.assertj.core.api.Assertions.assertThat;
