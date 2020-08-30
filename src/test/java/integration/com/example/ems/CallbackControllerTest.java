@@ -8,6 +8,8 @@ import com.example.ems.dto.network.controller.Callback;
 import com.example.ems.dto.network.controller.Res;
 import com.example.ems.dto.network.controller.ResError;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,80 +42,70 @@ public class CallbackControllerTest {
   @Test
   public void add() {
     String endpointExpected = "/v1/callback/approve";
-    Callback callbackEmpty = new Callback();
     Callback callbackSuccess = new Callback("b8b8794d-e4a4-4614-9d2a-541835ce4ce9");
+    Map<Integer, Map<String, Object>> errorsMap =
+        new HashMap<>() {
+          {
+            put(
+                500,
+                new HashMap<>() {
+                  {
+                    put("message", "Internal server error, please try again later.");
+                    put("body", null);
+                  }
+                });
+            put(
+                422,
+                new HashMap<>() {
+                  {
+                    put("message", "Request body or query or path params data is incorrect");
+                    put("body", new Callback());
+                  }
+                });
+          }
+        };
+    errorsMap.forEach(
+        (k, v) -> {
+          ResponseEntity<Res> responseEntity =
+              this.restTemplate.postForEntity(
+                  createURLWithPort(endpointExpected), v.get("body"), Res.class);
+          assertThat(responseEntity.getStatusCodeValue())
+              .as("Status code is incorrect")
+              .isEqualTo(k);
+          assertThat(responseEntity.getHeaders().getETag()).as("Etag is null").isNull();
+          assertThat(responseEntity.getHeaders().getContentType())
+              .as("Content type is JSON")
+              .isEqualTo(MediaType.APPLICATION_JSON);
+          assertThat(responseEntity.getBody())
+              .as("Body is not null and is Res class")
+              .isNotNull()
+              .isInstanceOf(Res.class);
+          Res<?> resBody = (Res<?>) responseEntity.getBody();
+          assertThat(resBody.getTimestamp())
+              .as("Timestamp is not null and is Long class")
+              .isNotNull()
+              .isInstanceOf(Long.class);
+          assertThat(resBody.getResId())
+              .as("Res ID is not null and is String class")
+              .isNotNull()
+              .isInstanceOf(String.class);
+          assertThat(resBody.getData()).as("Data is null").isNull();
+          assertThat(resBody.getError())
+              .as("Error data is not null and ResError class")
+              .isNotNull()
+              .isInstanceOf(ResError.class);
+          ResError resError = resBody.getError();
+          assertThat(resError.getCode()).as("Error data code is incorrect").isEqualTo(k);
+          assertThat(resError.getMethod()).as("Error data method is incorrect").isEqualTo("POST");
+          assertThat(resError.getEndpoint())
+              .as("Error data endpoint is incorrect")
+              .isEqualTo(endpointExpected);
+          assertThat(resError.getMessage())
+              .as("Error data message is incorrect")
+              .isEqualTo(v.get("message"));
+        });
+
     ResponseEntity<Res> responseEntity =
-        this.restTemplate.postForEntity(createURLWithPort(endpointExpected), null, Res.class);
-    assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(500);
-    assertThat(responseEntity.getHeaders().getETag()).as("Etag is null").isNull();
-    assertThat(responseEntity.getHeaders().getContentType())
-        .as("Content type is JSON")
-        .isEqualTo(MediaType.APPLICATION_JSON);
-    assertThat(responseEntity.getBody())
-        .as("Body is not null and is Res class")
-        .isNotNull()
-        .isInstanceOf(Res.class);
-    Res<?> resBody = (Res<?>) responseEntity.getBody();
-    assertThat(resBody.getTimestamp())
-        .as("Timestamp is not null and is Long class")
-        .isNotNull()
-        .isInstanceOf(Long.class);
-    assertThat(resBody.getResId())
-        .as("Res ID is not null and is String class")
-        .isNotNull()
-        .isInstanceOf(String.class);
-    assertThat(resBody.getData()).as("Data is null").isNull();
-    assertThat(resBody.getError())
-        .as("Error data is not null and ResError class")
-        .isNotNull()
-        .isInstanceOf(ResError.class);
-    ResError resError = resBody.getError();
-    assertThat(resError.getCode()).as("Error data code is incorrect").isEqualTo(500);
-    assertThat(resError.getMethod()).as("Error data method is incorrect").isEqualTo("POST");
-    assertThat(resError.getEndpoint())
-        .as("Error data endpoint is incorrect")
-        .isEqualTo(endpointExpected);
-    assertThat(resError.getMessage())
-        .as("Error data message is incorrect")
-        .isEqualTo("Internal server error, please try again later.");
-
-    responseEntity =
-        this.restTemplate.postForEntity(
-            createURLWithPort(endpointExpected), callbackEmpty, Res.class);
-    assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(422);
-    assertThat(responseEntity.getHeaders().getETag()).as("Etag is null").isNull();
-    assertThat(responseEntity.getHeaders().getContentType())
-        .as("Content type is JSON")
-        .isEqualTo(MediaType.APPLICATION_JSON);
-    assertThat(responseEntity.getBody())
-        .as("Body is not null and is Res class")
-        .isNotNull()
-        .isInstanceOf(Res.class);
-    resBody = (Res<?>) responseEntity.getBody();
-    assertThat(resBody.getTimestamp())
-        .as("Timestamp is not null and is Long class")
-        .isNotNull()
-        .isInstanceOf(Long.class);
-    assertThat(resBody.getResId())
-        .as("Res ID is not null and is String class")
-        .isNotNull()
-        .isInstanceOf(String.class);
-    assertThat(resBody.getData()).as("Data is null").isNull();
-    assertThat(resBody.getError())
-        .as("Error data is not null and ResError class")
-        .isNotNull()
-        .isInstanceOf(ResError.class);
-    resError = resBody.getError();
-    assertThat(resError.getCode()).as("Error data code is incorrect").isEqualTo(422);
-    assertThat(resError.getMethod()).as("Error data method is incorrect").isEqualTo("POST");
-    assertThat(resError.getEndpoint())
-        .as("Error data endpoint is incorrect")
-        .isEqualTo(endpointExpected);
-    assertThat(resError.getMessage())
-        .as("Error data message is incorrect")
-        .isEqualTo("Request body or query or path params data is incorrect");
-
-    responseEntity =
         this.restTemplate.postForEntity(
             createURLWithPort(endpointExpected), callbackSuccess, Res.class);
     assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(200);
@@ -128,7 +120,7 @@ public class CallbackControllerTest {
         .as("Body is not null and is Res class")
         .isNotNull()
         .isInstanceOf(Res.class);
-    resBody = (Res<?>) responseEntity.getBody();
+    Res<?> resBody = (Res<?>) responseEntity.getBody();
     assertThat(resBody.getTimestamp())
         .as("Timestamp is not null and is Long class")
         .isNotNull()
