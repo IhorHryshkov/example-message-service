@@ -28,7 +28,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -96,13 +95,11 @@ public class RedisConfig {
   @ConditionalOnMissingBean(name = "redisTemplate")
   @Primary
   public RedisTemplate<Object, Object> redisTemplate(
-      RedisConnectionFactory redisConnectionFactory) {
+      @Qualifier("connectionFactory") RedisConnectionFactory connectionFactory) {
     RedisTemplate<Object, Object> template = new RedisTemplate<>();
     template.setKeySerializer(new StringRedisSerializer());
     template.setHashKeySerializer(new StringRedisSerializer());
-    template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
-    template.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
-    template.setConnectionFactory(redisConnectionFactory);
+    template.setConnectionFactory(connectionFactory);
     return template;
   }
 

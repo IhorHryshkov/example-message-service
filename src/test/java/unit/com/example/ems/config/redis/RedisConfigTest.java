@@ -30,7 +30,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @ExtendWith(MockitoExtension.class)
@@ -134,12 +133,6 @@ class RedisConfigTest {
     assertThat(redisTemplate.getHashKeySerializer())
         .as("HashKeySerializer classname")
         .isOfAnyClassIn(StringRedisSerializer.class);
-    assertThat(redisTemplate.getValueSerializer())
-        .as("ValueSerializer classname")
-        .isOfAnyClassIn(GenericJackson2JsonRedisSerializer.class);
-    assertThat(redisTemplate.getHashValueSerializer())
-        .as("HashValueSerializer classname")
-        .isOfAnyClassIn(GenericJackson2JsonRedisSerializer.class);
     assertThat(redisTemplate.getConnectionFactory())
         .as("ConnectionFactory object")
         .isEqualTo(redisConnectionFactory);
