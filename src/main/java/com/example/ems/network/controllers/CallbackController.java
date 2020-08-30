@@ -10,18 +10,17 @@ import com.example.ems.dto.network.controller.Callback;
 import com.example.ems.dto.network.controller.Res;
 import com.example.ems.services.CallbackService;
 import com.example.ems.utils.network.Response;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
-@Validated
 @RestController
 @RequestMapping(path = "${parameters.controllers.callback.rootPath}")
 public class CallbackController {
@@ -35,7 +34,7 @@ public class CallbackController {
   }
 
   @PostMapping
-  public ResponseEntity<Res<Object>> add(@RequestBody Callback params) {
+  public ResponseEntity<Res<Object>> add(@Valid @RequestBody Callback params) {
     log.debug("Request callback: {}", params);
 
     this.callbackService.removeState(params.getResId());
