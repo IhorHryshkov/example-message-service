@@ -1,4 +1,4 @@
-package com.example.ems.config.redis.factory;
+package com.example.ems.config.factory;
 
 import java.io.IOException;
 import java.util.Properties;

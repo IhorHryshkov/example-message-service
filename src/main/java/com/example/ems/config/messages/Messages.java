@@ -1,6 +1,6 @@
 package com.example.ems.config.messages;
 
-import com.example.ems.config.redis.factory.YamlPropertySourceFactory;
+import com.example.ems.config.factory.YamlPropertySourceFactory;
 import com.example.ems.dto.network.controller.Message;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

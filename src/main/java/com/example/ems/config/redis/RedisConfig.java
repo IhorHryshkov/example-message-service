@@ -1,6 +1,6 @@
 package com.example.ems.config.redis;
 
-import com.example.ems.config.redis.factory.YamlPropertySourceFactory;
+import com.example.ems.config.factory.YamlPropertySourceFactory;
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.resource.ClientResources;
 import io.lettuce.core.resource.DefaultClientResources;

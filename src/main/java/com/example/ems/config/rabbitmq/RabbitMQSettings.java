@@ -1,6 +1,6 @@
 package com.example.ems.config.rabbitmq;
 
-import com.example.ems.config.redis.factory.YamlPropertySourceFactory;
+import com.example.ems.config.factory.YamlPropertySourceFactory;
 import com.example.ems.dto.mq.QueueConf;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
