@@ -8,6 +8,7 @@ package com.example.ems.dto.database.pg;
 
 import com.example.ems.dto.database.pg.ids.CountersIds;
 import com.example.ems.utils.converters.pg.LongTimestampConverter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigInteger;
 import javax.persistence.Column;
@@ -26,8 +27,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Counters implements Serializable {
-  //	@JsonIgnore
-  @EmbeddedId private CountersIds keys;
+  @JsonIgnore @EmbeddedId private CountersIds keys;
 
   @MapsId("userId")
   @ManyToOne

@@ -2,35 +2,23 @@ package integration.com.example.ems;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.example.ems.EmsApplication;
 import com.example.ems.database.dao.redis.StateDAO;
 import com.example.ems.dto.network.controller.Callback;
 import com.example.ems.dto.network.controller.Res;
 import com.example.ems.dto.network.controller.ResError;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@SpringBootTest(classes = EmsApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
-public class CallbackControllerTest {
-  @LocalServerPort private int port;
-
-  @Autowired private TestRestTemplate restTemplate;
+public class CallbackControllerTest extends RootControllerTest {
   @Autowired private RedisTemplate<Object, Object> redisTemplate;
   @Autowired private StateDAO stateDAO;
-
-  private final ObjectMapper mapper = new ObjectMapper();
 
   @BeforeEach
   void setUp() {
@@ -131,7 +119,7 @@ public class CallbackControllerTest {
         .isInstanceOf(String.class);
     assertThat(resBody.getError()).as("Error data is null").isNull();
     assertThat(resBody.getData())
-        .as("Data is not null and Callback class")
+        .as("Data is not null and Object class")
         .isNotNull()
         .isInstanceOf(Object.class);
     Callback resData = mapper.convertValue(resBody.getData(), Callback.class);
@@ -156,9 +144,5 @@ public class CallbackControllerTest {
                 .hasKey("state::callback::IN_PROGRESS", "b8b8794d-e4a4-4614-9d2a-541835ce4ce9"))
         .as("State IN_PROGRESS is not del")
         .isFalse();
-  }
-
-  private String createURLWithPort(String uri) {
-    return String.format("http://localhost:%d%s", port, uri);
   }
 }

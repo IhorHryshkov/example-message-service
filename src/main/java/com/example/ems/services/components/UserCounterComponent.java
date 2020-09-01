@@ -46,6 +46,8 @@ public class UserCounterComponent {
         counter = this.countersDAO.findById(countersIds).orElse(null);
         if (counter == null) {
           counter = new Counters(countersIds, BigInteger.valueOf(count));
+          counter.setType(type);
+          counter.setUser(user);
         } else {
           counter.setCounts(counter.getCounts().add(BigInteger.valueOf(count)));
         }
