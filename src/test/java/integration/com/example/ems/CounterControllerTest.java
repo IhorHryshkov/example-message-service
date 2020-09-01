@@ -20,6 +20,7 @@ import com.example.ems.dto.database.pg.ids.CountersIds;
 import com.example.ems.dto.network.controller.Res;
 import com.example.ems.dto.network.controller.ResError;
 import com.example.ems.dto.network.controller.counter.GetByIdIn;
+import com.example.ems.dto.network.controller.counter.GetByIdOut;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,7 @@ public class CounterControllerTest extends RootControllerTest {
   private String userId;
   private Integer typeId;
   private Integer statusId;
+  private CountersIds countersIds;
 
   @BeforeEach
   void setUp() {
@@ -63,9 +65,7 @@ public class CounterControllerTest extends RootControllerTest {
     typeId = type.getId();
     userId = user.getId().toString();
     statusId = status.getId();
-    CountersIds countersIds = new CountersIds();
-    countersIds.setTypeId(type.getId());
-    countersIds.setUserId(user.getId());
+    countersIds = new CountersIds(user.getId(), type.getId());
     Counters counters = new Counters();
     counters.setKeys(countersIds);
     counters.setCounts(BigInteger.valueOf(10L));
@@ -79,8 +79,13 @@ public class CounterControllerTest extends RootControllerTest {
     String endpointExpected = "/v1/counter";
     String notFound = "319d5c19-1187-457e-8080-b36f28fdccb0";
     String ifNoneMatch;
+    String ifNoneMatchWithoutQuotes;
     GetByIdIn successReq = new GetByIdIn();
     successReq.setUserId(userId);
+    String ifNoneMatchCacheKey =
+        String.format("counterCache::getByUserId::ifNoneMatch::%s", successReq.toHashKey());
+    String ifMatchCacheKey =
+        String.format("counterCache::getById::forMatch::%s", successReq.toHashKey());
     Map<Integer, Map<String, Object>> errorsMap =
         new HashMap<>() {
           {
@@ -153,6 +158,7 @@ public class CounterControllerTest extends RootControllerTest {
         .as("Content type is JSON")
         .isEqualTo(MediaType.APPLICATION_JSON);
     assertThat(responseEntity.getBody()).as("Body is null").isNull();
+    assertThat(redisTemplate.hasKey(ifNoneMatchCacheKey)).as("Data in cache not found").isFalse();
 
     // Test if counter found by user ID
     responseEntity =
@@ -163,6 +169,7 @@ public class CounterControllerTest extends RootControllerTest {
         .isNotNull()
         .isInstanceOf(String.class);
     ifNoneMatch = responseEntity.getHeaders().getETag();
+    ifNoneMatchWithoutQuotes = ifNoneMatch.substring(1, ifNoneMatch.length() - 1);
     assertThat(responseEntity.getHeaders().getContentType())
         .as("Content type is JSON")
         .isEqualTo(MediaType.APPLICATION_JSON);
@@ -207,6 +214,39 @@ public class CounterControllerTest extends RootControllerTest {
         .isInstanceOf(Status.class);
     assertThat(counter.getUser().getStatus().getName()).as("Status name").isEqualTo("testName");
     assertThat(counter.getUser().getStatus().getId()).as("Status ID").isEqualTo(statusId);
+    assertThat(redisTemplate.hasKey(ifNoneMatchCacheKey)).as("Check data in cache").isTrue();
+    GetByIdOut<?> cache = (GetByIdOut<?>) redisTemplate.boundValueOps(ifNoneMatchCacheKey).get();
+    assertThat(cache).as("Cache is not null").isNotNull();
+    assertThat(cache.getEtag()).as("Cache etag").isEqualTo(ifNoneMatchWithoutQuotes);
+    List<?> cacheData = (List<?>) cache.getData();
+    assertThat(cacheData).as("Cache data is not null and not is empty").isNotNull().isNotEmpty();
+    counter = (Counters) cacheData.get(0);
+    assertThat(counter.getCounts()).as("").isEqualTo(10);
+    assertThat(counter.getKeys()).as("Keys is not null cache").isNotNull();
+    assertThat(counter.getKeys().getTypeId()).as("Keys type ID cache").isEqualTo(typeId);
+    assertThat(counter.getKeys().getUserId())
+        .as("Keys user ID cache")
+        .isEqualTo(UUID.fromString(userId));
+    assertThat(counter.getType())
+        .as("Type is not null and Types class cache")
+        .isNotNull()
+        .isInstanceOf(Types.class);
+    assertThat(counter.getUser())
+        .as("User is not null and Users class cache")
+        .isNotNull()
+        .isInstanceOf(Users.class);
+    assertThat(counter.getType().getName()).as("Type name cache").isEqualTo("testName");
+    assertThat(counter.getType().getId()).as("Type ID cache").isEqualTo(typeId);
+    assertThat(counter.getUser().getUsername()).as("Username cache").isEqualTo("testUser");
+    assertThat(counter.getUser().getId()).as("User ID cache").isEqualTo(UUID.fromString(userId));
+    assertThat(counter.getUser().getStatus())
+        .as("Status is not null and Status class cache")
+        .isNotNull()
+        .isInstanceOf(Status.class);
+    assertThat(counter.getUser().getStatus().getName())
+        .as("Status name cache")
+        .isEqualTo("testName");
+    assertThat(counter.getUser().getStatus().getId()).as("Status ID cache").isEqualTo(statusId);
 
     headers.setIfNoneMatch(ifNoneMatch);
     HttpEntity<Res> entity = new HttpEntity<>(null, headers);
@@ -217,5 +257,35 @@ public class CounterControllerTest extends RootControllerTest {
     assertThat(responseEntity.getHeaders().getETag()).as("Etag is null").isNull();
     assertThat(responseEntity.getHeaders().getContentType()).as("Content type is null").isNull();
     assertThat(responseEntity.getBody()).as("Body is null").isNull();
+
+    assertThat(redisTemplate.opsForHash().hasKey(ifMatchCacheKey, ifNoneMatchWithoutQuotes))
+        .as("Check match etag")
+        .isTrue();
+    counter = countersDAO.findById(countersIds).orElse(null);
+    assertThat(counter).as("DB counter is not null by user and type ID").isNotNull();
+    assertThat(counter.getCounts()).as("").isEqualTo(10);
+    assertThat(counter.getKeys()).as("Keys is not null DB").isNotNull();
+    assertThat(counter.getKeys().getTypeId()).as("Keys type ID DB").isEqualTo(typeId);
+    assertThat(counter.getKeys().getUserId())
+        .as("Keys user ID DB")
+        .isEqualTo(UUID.fromString(userId));
+    assertThat(counter.getType())
+        .as("Type is not null and Types class DB")
+        .isNotNull()
+        .isInstanceOf(Types.class);
+    assertThat(counter.getUser())
+        .as("User is not null and Users class DB")
+        .isNotNull()
+        .isInstanceOf(Users.class);
+    assertThat(counter.getType().getName()).as("Type name DB").isEqualTo("testName");
+    assertThat(counter.getType().getId()).as("Type ID DB").isEqualTo(typeId);
+    assertThat(counter.getUser().getUsername()).as("Username DB").isEqualTo("testUser");
+    assertThat(counter.getUser().getId()).as("User ID DB").isEqualTo(UUID.fromString(userId));
+    assertThat(counter.getUser().getStatus())
+        .as("Status is not null and Status class DB")
+        .isNotNull()
+        .isInstanceOf(Status.class);
+    assertThat(counter.getUser().getStatus().getName()).as("Status name DB").isEqualTo("testName");
+    assertThat(counter.getUser().getStatus().getId()).as("Status ID DB").isEqualTo(statusId);
   }
 }
