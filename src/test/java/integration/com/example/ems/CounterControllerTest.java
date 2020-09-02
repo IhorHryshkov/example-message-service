@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
+import org.springframework.web.socket.sockjs.client.SockJsClient;
 
 public class CounterControllerTest extends RootControllerTest {
   @Autowired private RedisTemplate<Object, Object> redisTemplate;
@@ -287,5 +293,16 @@ public class CounterControllerTest extends RootControllerTest {
         .isInstanceOf(Status.class);
     assertThat(counter.getUser().getStatus().getName()).as("Status name DB").isEqualTo("testName");
     assertThat(counter.getUser().getStatus().getId()).as("Status ID DB").isEqualTo(statusId);
+  }
+
+  @Test
+  void add() throws InterruptedException, ExecutionException, TimeoutException {
+    WebSocketStompClient stompClient =
+        new WebSocketStompClient(new SockJsClient(createTransportClient()));
+    stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+    StompSession stompSession =
+        stompClient
+            .connect("http://localhost:31111/v1/callback", new CustomStompSessionHandler())
+            .get();
   }
 }

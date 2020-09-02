@@ -56,6 +56,11 @@ redis:
 parameters:
   default:
     status: online
+  sockets:
+    callback:
+      appPrefix: "/v1"
+      destPrefixes: "/queue/"
+      endpointsSocks: "/v1/callback"
   controllers:
     counter:
       rootPath: "/v1/counter"
@@ -68,5 +73,6 @@ parameters:
       rootPath: "/v1/user"
       update: "/{userId}"
     callback:
-      rootPath: "/v1/callback/approve"
+      rootPath: "/v1/callback"
+      approve: "/approve"
 
