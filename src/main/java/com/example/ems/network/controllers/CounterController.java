@@ -65,7 +65,7 @@ public class CounterController {
   }
 
   @PostMapping
-  public ResponseEntity<Res<Object>> add(@Valid @RequestBody AddIn params) {
+  public ResponseEntity<Res<Object>> add(@RequestBody @Valid AddIn params) {
     params.setResId(MDC.get("resId"));
 
     States state = this.counterService.add(params);

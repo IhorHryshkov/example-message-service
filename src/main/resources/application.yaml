@@ -73,6 +73,5 @@ parameters:
       rootPath: "/v1/user"
       update: "/{userId}"
     callback:
-      rootPath: "/v1/callback"
-      approve: "/approve"
+      rootPath: "/v1/callback/approve"
 

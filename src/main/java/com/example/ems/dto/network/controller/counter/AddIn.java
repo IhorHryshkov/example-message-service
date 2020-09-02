@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,12 +23,14 @@ import org.apache.commons.codec.digest.DigestUtils;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class AddIn implements Serializable {
 
+  @NotNull(message = "User ID is not null")
   @Pattern(
       regexp =
           "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
       message = "User ID is not UUID")
   private String userId;
 
+  @NotNull(message = "Type ID is not null")
   @Min(value = 1, message = "Type ID cannot be negative or 0")
   private Integer typeId;
 

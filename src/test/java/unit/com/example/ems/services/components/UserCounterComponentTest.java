@@ -53,6 +53,8 @@ class UserCounterComponentTest {
     CountersIds countersIdsExpected = new CountersIds(user.getId(), type.getId());
     Counters counterFind = new Counters(countersIds, BigInteger.valueOf(10));
     Counters counterNewExpect = new Counters(countersIds, BigInteger.valueOf(1));
+    counterNewExpect.setType(type);
+    counterNewExpect.setUser(user);
     Counters counterFindAndAddExpect = new Counters(countersIds, BigInteger.valueOf(15));
 
     when(stateDAO.exist(eq(keyExpect), eq(hashExpected))).thenReturn(true, false);
