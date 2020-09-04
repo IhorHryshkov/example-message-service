@@ -54,7 +54,7 @@ public class TypeControllerTest extends RootControllerTest {
     AllIn successReq = new AllIn();
     successReq.setName("testName");
     successReq.setId(typeId);
-    successReq.setPath(String.format("/v1/type?name=%s&id=%s", "testName", typeId));
+    successReq.setPath(String.format("%s?name=%s&id=%s", rootPath, "testName", typeId));
     String ifNoneMatchCacheKey =
         String.format("typeCache::all::ifNoneMatch::%s", successReq.toHashKey());
     Map<Integer, Map<String, Object>> errorsMap =

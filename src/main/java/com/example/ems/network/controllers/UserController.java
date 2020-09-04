@@ -18,6 +18,7 @@ import com.example.ems.services.CacheService;
 import com.example.ems.services.UserService;
 import com.example.ems.utils.enums.States;
 import com.example.ems.utils.network.Response;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +26,17 @@ import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
 @RequestMapping(path = "${parameters.controllers.user.rootPath}")
-@Validated
 public class UserController {
 
   private final UserService userService;
@@ -45,7 +50,7 @@ public class UserController {
   }
 
   @GetMapping
-  public ResponseEntity<Res<Object>> all(AllIn params) {
+  public ResponseEntity<Res<Object>> all(@Valid AllIn params) {
     params.setResId(MDC.get("resId"));
     params.setPath(MDC.get("fullPathQuery"));
     this.cacheService.existOrIfNoneMatch(
@@ -63,13 +68,14 @@ public class UserController {
   @PutMapping({"${parameters.controllers.user.update}"})
   public ResponseEntity<Res<Object>> update(
       @PathVariable("userId")
+          @Valid
           @NotNull
           @Pattern(
               regexp =
                   "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$",
               message = "User ID is not UUID")
           String userId,
-      @RequestBody UpdateIn body) {
+      @RequestBody @Valid UpdateIn body) {
     body.setResId(MDC.get("resId"));
     body.setUserId(userId);
     States state = this.userService.updateCounterAndStatus(body);
@@ -83,7 +89,7 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<Res<Object>> add(@RequestBody AddIn params) {
+  public ResponseEntity<Res<Object>> add(@RequestBody @Valid AddIn params) {
     params.setResId(MDC.get("resId"));
 
     States state = this.userService.add(params);
