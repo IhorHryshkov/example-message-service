@@ -266,6 +266,7 @@ public class CounterControllerTest extends RootControllerTest {
         .isEqualTo("testName");
     assertThat(counter.getUser().getStatus().getId()).as("Status ID cache").isEqualTo(statusId);
 
+    // If data is not change
     headers.setIfNoneMatch(ifNoneMatch);
     HttpEntity<Res> entity = new HttpEntity<>(null, headers);
     responseEntity =
@@ -279,6 +280,7 @@ public class CounterControllerTest extends RootControllerTest {
     assertThat(redisTemplate.opsForHash().hasKey(ifMatchCacheKey, ifNoneMatchWithoutQuotes))
         .as("Check match etag")
         .isTrue();
+
     counter = countersDAO.findById(countersIds).orElse(null);
     assertThat(counter).as("DB counter is not null by user and type ID").isNotNull();
     assertThat(counter.getCounts()).as("DB count").isEqualTo(10);

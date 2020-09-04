@@ -14,17 +14,16 @@ import com.example.ems.network.controllers.exceptions.global.ResponseEmptyExcept
 import com.example.ems.services.CacheService;
 import com.example.ems.services.StatusService;
 import com.example.ems.utils.network.Response;
+import javax.validation.Valid;
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Validated
 @RequestMapping(path = "${parameters.controllers.status.rootPath}")
 public class StatusController {
 
@@ -40,7 +39,7 @@ public class StatusController {
   }
 
   @GetMapping
-  public ResponseEntity<Res<Object>> all(AllIn params) {
+  public ResponseEntity<Res<Object>> all(@Valid AllIn params) {
     params.setResId(MDC.get("resId"));
     params.setPath(MDC.get("fullPathQuery"));
     this.cacheService.existOrIfNoneMatch(
