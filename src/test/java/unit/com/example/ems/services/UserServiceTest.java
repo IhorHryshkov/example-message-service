@@ -261,15 +261,15 @@ class UserServiceTest {
         .when(queueService)
         .sendMessage(eq(queueNameExpected), eq(callbackMQExpected), eq(queueConfExpected));
     assertThat(catchThrowable(() -> userService.updateCounterAndStatus(updateIn)))
+        .as("user ID not found exception")
+        .isInstanceOf(UserIDNotFoundException.class);
+    assertThat(catchThrowable(() -> userService.updateCounterAndStatus(updateIn)))
         .as("add some exception")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
     assertThat(userService.updateCounterAndStatus(updateIn))
         .as("update user state is in progress")
         .isEqualTo(States.IN_PROGRESS);
-    assertThat(catchThrowable(() -> userService.updateCounterAndStatus(updateIn)))
-        .as("user ID not found exception")
-        .isInstanceOf(UserIDNotFoundException.class);
     assertThat(catchThrowable(() -> userService.updateCounterAndStatus(updateIn)))
         .as("sendMessage some exception")
         .isInstanceOf(RuntimeException.class)

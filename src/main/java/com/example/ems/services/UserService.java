@@ -140,6 +140,15 @@ public class UserService {
         @CacheEvict(value = "userCache::all::ifNoneMatch", allEntries = true)
       })
   public States updateCounterAndStatus(UpdateIn data) {
+    Users user =
+        userCounterComponent.getUserOrNotFound(
+            data.getUserId(),
+            "userState::updateCounterAndStatus::%s",
+            data.toHashKey(),
+            data.toHashUserId());
+
+    user.getStatus().setId(data.getStatusId());
+
     if (stateDAO.add(
             String.format("userState::updateCounterAndStatus::%s", States.IN_PROGRESS),
             data.toHashKey(),
@@ -149,14 +158,6 @@ public class UserService {
       return States.IN_PROGRESS;
     }
 
-    Users user =
-        userCounterComponent.getUserOrNotFound(
-            data.getUserId(),
-            "userState::updateCounterAndStatus::%s",
-            data.toHashKey(),
-            data.toHashUserId());
-
-    user.getStatus().setId(data.getStatusId());
     queueService.sendMessage(
         String.format("user.update.%s", user.getUsername()),
         new CallbackMQ<>(user.getUsername(), data.getResId(), new StatusMQ(user, data)),

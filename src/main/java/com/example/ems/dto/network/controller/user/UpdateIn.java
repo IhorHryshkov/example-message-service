@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,6 +29,7 @@ public class UpdateIn implements Serializable {
       message = "User ID is not UUID")
   private String userId;
 
+  @NotNull(message = "Status ID is not null")
   @Min(value = 1, message = "Status ID cannot be negative or 0")
   private Integer statusId;
 

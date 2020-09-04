@@ -45,6 +45,7 @@ public class CallbackService {
     if (this.queueService.isGoRetry(message)) {
       if (this.stateDAO.exist(resolveKey, in.getResId())) {
         this.stateDAO.del(resolveKey, in.getResId());
+        log.debug("Websocket send successful: {}", in.getResId());
         return;
       }
       if (this.stateDAO.add(inProgressKey, in.getResId(), in) == null) {

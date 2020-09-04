@@ -66,13 +66,17 @@ public class CounterControllerTest extends RootControllerTest {
 
   @BeforeEach
   void setUp() {
+    String[] queues = {"counter.add.testUser", "websocket.testUser"};
+    for (String queueName : queues) {
+      if (amqpAdmin.getQueueInfo(queueName) != null) {
+        amqpAdmin.purgeQueue(queueName);
+      }
+    }
     Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().flushAll();
     countersDAO.deleteAll();
     usersDAO.deleteAll();
     typeDAO.deleteAll();
     statusDAO.deleteAll();
-    amqpAdmin.deleteQueue("counter.add.testUser");
-    amqpAdmin.deleteQueue("websocket.testUser");
     Status status = new Status();
     status.setName("testName");
     status = statusDAO.save(status);
@@ -474,7 +478,7 @@ public class CounterControllerTest extends RootControllerTest {
     assertThat(resDataSuccess.getTypeId()).as("Type ID").isEqualTo(typeId);
     assertThat(resDataSuccess.getResId()).as("Res ID is null").isNull();
 
-    Object callback = completableFuture.get(5, TimeUnit.SECONDS);
+    Object callback = completableFuture.get(10, TimeUnit.SECONDS);
     assertThat(callback).as("Callback is not null").isNotNull();
     AddOut addOut = mapper.convertValue(callback, AddOut.class);
     assertThat(addOut.getResId()).as("Out Res ID").isEqualTo(resIdSuccess);
