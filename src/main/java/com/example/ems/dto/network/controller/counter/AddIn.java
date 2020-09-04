@@ -7,6 +7,7 @@
 package com.example.ems.dto.network.controller.counter;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import java.io.Serializable;
 import java.util.UUID;
 import javax.validation.constraints.Min;
@@ -20,7 +21,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 @Data
 @EqualsAndHashCode
 @ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(Include.NON_NULL)
 public class AddIn implements Serializable {
 
   @NotNull(message = "User ID is not null")

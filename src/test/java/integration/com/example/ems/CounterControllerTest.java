@@ -23,6 +23,7 @@ import com.example.ems.dto.network.controller.Res;
 import com.example.ems.dto.network.controller.ResError;
 import com.example.ems.dto.network.controller.State;
 import com.example.ems.dto.network.controller.counter.AddIn;
+import com.example.ems.dto.network.controller.counter.AddOut;
 import com.example.ems.dto.network.controller.counter.GetByIdIn;
 import com.example.ems.dto.network.controller.counter.GetByIdOut;
 import com.example.ems.utils.enums.States;
@@ -312,7 +313,8 @@ public class CounterControllerTest extends RootControllerTest {
   @Test
   void add() throws InterruptedException, ExecutionException, TimeoutException {
     String endpointExpected = "/v1/counter";
-    String endpointCallbackApprove = "/v1/callback/approve";
+    String callbackExpected = "/v1/callback";
+    String endpointCallbackApprove = String.format("%s%s", callbackExpected, "/approve");
     AddIn params201 = new AddIn();
     params201.setUserId(userId);
     params201.setTypeId(typeId);
@@ -433,9 +435,9 @@ public class CounterControllerTest extends RootControllerTest {
     stompClient.setMessageConverter(new MappingJackson2MessageConverter());
     StompSession stompSession =
         stompClient
-            .connect("http://localhost:31111/v1/callback", new StompSessionHandlerAdapter() {})
+            .connect(createURLWithPort(callbackExpected), new StompSessionHandlerAdapter() {})
             .get();
-    stompSession.subscribe("/queue/testUser", new CustomStompFrameHandler());
+    stompSession.subscribe(String.format("/queue/%s", "testUser"), new CustomStompFrameHandler());
     responseEntity =
         this.restTemplate.postForEntity(createURLWithPort(endpointExpected), params201, Res.class);
     assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(201);
@@ -472,9 +474,11 @@ public class CounterControllerTest extends RootControllerTest {
     assertThat(resDataSuccess.getTypeId()).as("Type ID").isEqualTo(typeId);
     assertThat(resDataSuccess.getResId()).as("Res ID is null").isNull();
 
-    Callback callback = completableFuture.get(5, TimeUnit.SECONDS);
+    Object callback = completableFuture.get(5, TimeUnit.SECONDS);
     assertThat(callback).as("Callback is not null").isNotNull();
-    assertThat(callback.getResId()).as("Callback Res ID").isEqualTo(resIdSuccess);
+    AddOut addOut = mapper.convertValue(callback, AddOut.class);
+    assertThat(addOut.getResId()).as("Out Res ID").isEqualTo(resIdSuccess);
+    assertThat(addOut.getUserId()).as("Out User ID").isEqualTo(userId);
 
     responseEntity =
         this.restTemplate.postForEntity(

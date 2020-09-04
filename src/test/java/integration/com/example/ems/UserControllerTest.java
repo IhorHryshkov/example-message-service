@@ -15,14 +15,22 @@ import com.example.ems.database.dao.redis.StateDAO;
 import com.example.ems.dto.database.pg.Status;
 import com.example.ems.dto.database.pg.Types;
 import com.example.ems.dto.database.pg.Users;
+import com.example.ems.dto.network.controller.Callback;
 import com.example.ems.dto.network.controller.Res;
 import com.example.ems.dto.network.controller.ResError;
+import com.example.ems.dto.network.controller.State;
+import com.example.ems.dto.network.controller.user.AddIn;
+import com.example.ems.dto.network.controller.user.AddOut;
 import com.example.ems.dto.network.controller.user.AllIn;
 import com.example.ems.dto.network.controller.user.AllOut;
+import com.example.ems.utils.enums.States;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.amqp.core.AmqpAdmin;
@@ -32,6 +40,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
+import org.springframework.web.socket.sockjs.client.SockJsClient;
 
 public class UserControllerTest extends RootControllerTest {
   @Autowired private RedisTemplate<Object, Object> redisTemplate;
@@ -43,6 +56,8 @@ public class UserControllerTest extends RootControllerTest {
   private String userId;
   private Integer typeId;
   private Integer statusId;
+  private Integer statusIdOnline;
+  private String userIdOnline;
 
   @BeforeEach
   void setUp() {
@@ -50,20 +65,27 @@ public class UserControllerTest extends RootControllerTest {
     usersDAO.deleteAll();
     typeDAO.deleteAll();
     statusDAO.deleteAll();
-    amqpAdmin.deleteQueue("user.add.testUser");
-    amqpAdmin.deleteQueue("user.update.testUser");
-    amqpAdmin.deleteQueue("websocket.testUser");
+    amqpAdmin.deleteQueue("user.add.testUser2");
+    amqpAdmin.deleteQueue("user.update.testUser2");
+    amqpAdmin.deleteQueue("websocket.testUser2");
     Status status = new Status();
     status.setName("testName");
     status = statusDAO.save(status);
+    statusId = status.getId();
+    Status statusOnline = new Status();
+    statusOnline.setName("online");
+    statusOnline = statusDAO.save(statusOnline);
+    statusIdOnline = statusOnline.getId();
     Types type = new Types();
     type.setName("testName");
     type = typeDAO.save(type);
     Users user = new Users("testUser", status);
     user = usersDAO.save(user);
-    typeId = type.getId();
     userId = user.getId().toString();
-    statusId = status.getId();
+    Users userOnline = new Users("testUserOnline", statusOnline);
+    userOnline = usersDAO.save(userOnline);
+    userIdOnline = userOnline.getId().toString();
+    typeId = type.getId();
   }
 
   @Test
@@ -225,5 +247,232 @@ public class UserControllerTest extends RootControllerTest {
     String ifMatchCacheKey =
         String.format("userCache::all::forMatch::%s", ifNoneMatchWithoutQuotes);
     assertThat(redisTemplate.hasKey(ifMatchCacheKey)).as("Check match etag").isTrue();
+  }
+
+  @Test
+  void add() throws InterruptedException, ExecutionException, TimeoutException {
+    String endpointExpected = "/v1/user";
+    String callbackExpected = "/v1/callback";
+    String endpointCallbackApprove = String.format("%s%s", callbackExpected, "/approve");
+    AddIn params201 = new AddIn();
+    params201.setUsername("testUser2");
+    AddIn params202 = new AddIn();
+    params202.setUsername("testUserInProgress");
+    AddIn params202InDb = new AddIn();
+    params202InDb.setUsername("testUserOnline");
+    Callback callbackSuccess = new Callback();
+
+    Map<Integer, Map<String, Object>> errorsMap =
+        new HashMap<>() {
+          {
+            put(
+                500,
+                new HashMap<>() {
+                  {
+                    put("message", "Internal server error, please try again later.");
+                    put("body", null);
+                  }
+                });
+            put(
+                422,
+                new HashMap<>() {
+                  {
+                    put("message", "Request body or query or path params data is incorrect");
+                    put("body", new AddIn());
+                  }
+                });
+          }
+        };
+    errorsMap.forEach(
+        (k, v) -> {
+          ResponseEntity<Res> responseEntity =
+              this.restTemplate.postForEntity(
+                  createURLWithPort(endpointExpected), v.get("body"), Res.class);
+          assertThat(responseEntity.getStatusCodeValue())
+              .as("Status code is incorrect")
+              .isEqualTo(k);
+          assertThat(responseEntity.getHeaders().getETag()).as("Etag is null").isNull();
+          assertThat(responseEntity.getHeaders().getContentType())
+              .as("Content type is JSON")
+              .isEqualTo(MediaType.APPLICATION_JSON);
+          assertThat(responseEntity.getBody())
+              .as("Body is not null and is Res class")
+              .isNotNull()
+              .isInstanceOf(Res.class);
+          Res<?> resBody = (Res<?>) responseEntity.getBody();
+          assertThat(resBody.getTimestamp())
+              .as("Timestamp is not null and is Long class")
+              .isNotNull()
+              .isInstanceOf(Long.class);
+          assertThat(resBody.getResId())
+              .as("Res ID is not null and is String class")
+              .isNotNull()
+              .isInstanceOf(String.class);
+          assertThat(resBody.getData()).as("Data is null").isNull();
+          assertThat(resBody.getError())
+              .as("Error data is not null and ResError class")
+              .isNotNull()
+              .isInstanceOf(ResError.class);
+          ResError resError = resBody.getError();
+          assertThat(resError.getCode()).as("Error data code is incorrect").isEqualTo(k);
+          assertThat(resError.getMethod()).as("Error data method is incorrect").isEqualTo("POST");
+          assertThat(resError.getEndpoint())
+              .as("Error data endpoint is incorrect")
+              .isEqualTo(endpointExpected);
+          assertThat(resError.getMessage())
+              .as("Error data message is incorrect")
+              .isEqualTo(v.get("message"));
+        });
+    // Test if user have in DB
+    ResponseEntity<Res> responseEntity =
+        this.restTemplate.postForEntity(
+            createURLWithPort(endpointExpected), params202InDb, Res.class);
+    assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(202);
+    assertThat(responseEntity.getHeaders().getETag())
+        .as("Etag is not null")
+        .isNotNull()
+        .isInstanceOf(String.class);
+    assertThat(responseEntity.getHeaders().getContentType())
+        .as("Content type is JSON")
+        .isEqualTo(MediaType.APPLICATION_JSON);
+    assertThat(responseEntity.getBody())
+        .as("Body is not null and is Res class")
+        .isNotNull()
+        .isInstanceOf(Res.class);
+    Res<?> resBody = (Res<?>) responseEntity.getBody();
+    assertThat(resBody.getTimestamp())
+        .as("Timestamp is not null and is Long class")
+        .isNotNull()
+        .isInstanceOf(Long.class);
+    assertThat(resBody.getResId())
+        .as("Res ID is not null and is String class")
+        .isNotNull()
+        .isInstanceOf(String.class);
+    assertThat(resBody.getError()).as("Error data is null").isNull();
+    assertThat(resBody.getData())
+        .as("Data is not null and Object class")
+        .isNotNull()
+        .isInstanceOf(Object.class);
+    State resData = mapper.convertValue(resBody.getData(), State.class);
+    assertThat(resData.getState())
+        .as("Data state is in progress")
+        .isEqualTo(States.IN_PROGRESS.toString());
+
+    // Test if add user state in progress
+    stateDAO.add(
+        "userState::add::IN_PROGRESS",
+        "7d62e84109b0ca8224325127b1d4786a05f284bc6565c0e0820017678f2ef569",
+        "testData");
+    responseEntity =
+        this.restTemplate.postForEntity(createURLWithPort(endpointExpected), params202, Res.class);
+    assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(202);
+    assertThat(responseEntity.getHeaders().getETag())
+        .as("Etag is not null")
+        .isNotNull()
+        .isInstanceOf(String.class);
+    assertThat(responseEntity.getHeaders().getContentType())
+        .as("Content type is JSON")
+        .isEqualTo(MediaType.APPLICATION_JSON);
+    assertThat(responseEntity.getBody())
+        .as("Body is not null and is Res class")
+        .isNotNull()
+        .isInstanceOf(Res.class);
+    resBody = (Res<?>) responseEntity.getBody();
+    assertThat(resBody.getTimestamp())
+        .as("Timestamp is not null and is Long class")
+        .isNotNull()
+        .isInstanceOf(Long.class);
+    assertThat(resBody.getResId())
+        .as("Res ID is not null and is String class")
+        .isNotNull()
+        .isInstanceOf(String.class);
+    assertThat(resBody.getError()).as("Error data is null").isNull();
+    assertThat(resBody.getData())
+        .as("Data is not null and Object class")
+        .isNotNull()
+        .isInstanceOf(Object.class);
+    resData = mapper.convertValue(resBody.getData(), State.class);
+    assertThat(resData.getState())
+        .as("Data state is in progress")
+        .isEqualTo(States.IN_PROGRESS.toString());
+    Users user = usersDAO.findByUsername(params202.getUsername()).stream().findFirst().orElse(null);
+    assertThat(user).as("DB user do not add by username").isNull();
+
+    // Test if add user resolve
+    WebSocketStompClient stompClient =
+        new WebSocketStompClient(new SockJsClient(createTransportClient()));
+    stompClient.setMessageConverter(new MappingJackson2MessageConverter());
+    StompSession stompSession =
+        stompClient
+            .connect(createURLWithPort(callbackExpected), new StompSessionHandlerAdapter() {})
+            .get();
+    stompSession.subscribe(
+        String.format("/queue/%s", params201.getUsername()), new CustomStompFrameHandler());
+    responseEntity =
+        this.restTemplate.postForEntity(createURLWithPort(endpointExpected), params201, Res.class);
+    assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(201);
+    assertThat(responseEntity.getHeaders().getETag())
+        .as("Etag is not null")
+        .isNotNull()
+        .isInstanceOf(String.class);
+    assertThat(responseEntity.getHeaders().getContentType())
+        .as("Content type is JSON")
+        .isEqualTo(MediaType.APPLICATION_JSON);
+    assertThat(responseEntity.getBody())
+        .as("Body is not null and is Res class")
+        .isNotNull()
+        .isInstanceOf(Res.class);
+    resBody = (Res<?>) responseEntity.getBody();
+    assertThat(resBody.getTimestamp())
+        .as("Timestamp is not null and is Long class")
+        .isNotNull()
+        .isInstanceOf(Long.class);
+    assertThat(resBody.getResId())
+        .as("Res ID is not null and is String class")
+        .isNotNull()
+        .isInstanceOf(String.class);
+    String resIdSuccess = resBody.getResId();
+    callbackSuccess.setResId(resIdSuccess);
+    assertThat(resBody.getError()).as("Error data is null").isNull();
+    assertThat(resBody.getData())
+        .as("Data is not null and Object class")
+        .isNotNull()
+        .isInstanceOf(Object.class);
+    AddIn resDataSuccess = mapper.convertValue(resBody.getData(), AddIn.class);
+    assertThat(resDataSuccess.getUsername()).as("Username").isEqualTo("testUser2");
+    assertThat(resDataSuccess.getResId()).as("Res ID is null").isNull();
+
+    Object callback = completableFuture.get(5, TimeUnit.SECONDS);
+    assertThat(callback).as("Callback is not null").isNotNull();
+    AddOut addOut = mapper.convertValue(callback, AddOut.class);
+    assertThat(addOut.getResId()).as("Out Res ID").isEqualTo(resIdSuccess);
+    assertThat(addOut.getUserId()).as("Out User ID is not null").isNotNull();
+
+    String newUserId = addOut.getUserId();
+
+    responseEntity =
+        this.restTemplate.postForEntity(
+            createURLWithPort(endpointCallbackApprove), callbackSuccess, Res.class);
+    assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(200);
+    assertThat(
+            redisTemplate.opsForHash().hasKey("userState::add::IN_PROGRESS", params201.toHashKey()))
+        .as("Counter add in progress is not found")
+        .isFalse();
+    assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE", resIdSuccess))
+        .as("State RESOLVE is add")
+        .isTrue();
+    assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE::expire", resIdSuccess))
+        .as("State RESOLVE expire is add")
+        .isTrue();
+    assertThat(redisTemplate.opsForHash().hasKey("state::callback::IN_PROGRESS", resIdSuccess))
+        .as("State IN_PROGRESS is not del")
+        .isFalse();
+    user = usersDAO.findByUsername(params201.getUsername()).stream().findFirst().orElse(null);
+    assertThat(user).as("Users is not null DB").isNotNull();
+    assertThat(user.getId().toString()).as("User ID DB").isEqualTo(newUserId);
+    assertThat(user.getUsername()).as("User username DB").isEqualTo("testUser2");
+    assertThat(user.getStatus()).as("User status is not null DB").isNotNull();
+    assertThat(user.getStatus().getId()).as("User status ID DB").isEqualTo(statusIdOnline);
+    assertThat(user.getStatus().getName()).as("User status name DB").isEqualTo("online");
   }
 }

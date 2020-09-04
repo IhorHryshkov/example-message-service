@@ -7,7 +7,6 @@
 package integration.com.example.ems;
 
 import com.example.ems.EmsApplication;
-import com.example.ems.dto.network.controller.Callback;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -31,7 +30,7 @@ public class RootControllerTest {
   @Autowired TestRestTemplate restTemplate;
   final ObjectMapper mapper = new ObjectMapper();
   final HttpHeaders headers = new HttpHeaders();
-  final CompletableFuture<Callback> completableFuture = new CompletableFuture<>();
+  final CompletableFuture<Object> completableFuture = new CompletableFuture<>();
 
   String createURLWithPort(String uri) {
     return String.format("http://localhost:%d%s", port, uri);
@@ -48,12 +47,12 @@ public class RootControllerTest {
   class CustomStompFrameHandler implements StompFrameHandler {
     @Override
     public Type getPayloadType(StompHeaders stompHeaders) {
-      return Callback.class;
+      return Object.class;
     }
 
     @Override
     public void handleFrame(StompHeaders stompHeaders, Object o) {
-      completableFuture.complete((Callback) o);
+      completableFuture.complete(o);
     }
   }
 }

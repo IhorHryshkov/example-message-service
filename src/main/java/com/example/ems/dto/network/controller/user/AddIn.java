@@ -7,6 +7,8 @@
 package com.example.ems.dto.network.controller.user;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.*;
@@ -18,7 +20,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AddIn {
+public class AddIn implements Serializable {
+  @NotNull(message = "Username is not null")
   @Size(min = 6, max = 64, message = "Username have incorrect size")
   @Pattern(regexp = "^[A-Za-z0-9_-]+$", message = "Username name have incorrect symbols")
   private String username;
