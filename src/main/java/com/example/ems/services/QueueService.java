@@ -24,6 +24,7 @@ import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.stereotype.Service;
 
+/** Processing service of AMQP queues */
 @Slf4j
 @Service
 public class QueueService {

@@ -18,6 +18,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+/** Processing service of callback data from client side */
 @Slf4j
 @Service
 public class CallbackService {

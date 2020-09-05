@@ -33,6 +33,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+/** Processing service of counter {@link Counters} data */
 @Slf4j
 @Service
 public class CounterService {
@@ -111,8 +112,8 @@ public class CounterService {
 
   // id - still the same as a id name
   /**
-   * Listener of AMQP messages and increment counter. If has an error then it will retry send
-   * message to web socket queue
+   * Listener of AMQP messages, increment counter and send message to web socket. If has an error
+   * then it will retry send message to web socket queue
    *
    * @param message AMQP message {@link Message} with data
    * @param in Body {@link CallbackMQ} of AMQP message after serialization and data {@link

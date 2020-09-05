@@ -21,6 +21,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+/** Processing service of type {@link Types} data */
 @Slf4j
 @Service
 public class TypeService
@@ -32,21 +33,46 @@ public class TypeService
     this.typesDAO = typesDAO;
   }
 
+  /**
+   * Method is not implemented
+   *
+   * @param data New type data {@link Types}
+   * @return id of type data
+   */
   @Override
   public Integer add(Types data) {
     throw new RuntimeException("Method is not implemented");
   }
 
+  /**
+   * Method is not implemented
+   *
+   * @param data Update type data {@link Types}
+   * @param id ID of old type data
+   * @return object with update type data {@link Types}
+   */
   @Override
-  public Types update(Types data, Integer integer) {
+  public Types update(Types data, Integer id) {
     throw new RuntimeException("Method is not implemented");
   }
 
+  /**
+   * Method is not implemented
+   *
+   * @param id ID of type data
+   * @return object with type data {@link Types}
+   */
   @Override
-  public Types getById(Integer integer) {
+  public Types getById(Integer id) {
     throw new RuntimeException("Method is not implemented");
   }
 
+  /**
+   * Load all types {@link Types} by query params and add result to cache
+   *
+   * @param params Object of query params for search {@link AllIn}
+   * @return result object with list of types and etag value {@link AllOut}
+   */
   @Override
   @Cacheable(
       value = "typeCache::all::ifNoneMatch",

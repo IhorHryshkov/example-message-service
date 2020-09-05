@@ -40,6 +40,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
+/** Processing service of user {@link Users} data */
 @Slf4j
 @Service
 public class UserService {
@@ -70,6 +71,12 @@ public class UserService {
     this.userCounterComponent = userCounterComponent;
   }
 
+  /**
+   * Add new user to DB and clean from cache. Return state process.
+   *
+   * @param data Object {@link AddIn} with username and other support data
+   * @return result state value {@link States}
+   */
   @Caching(
       evict = {
         @CacheEvict(value = "userCache::all::forMatch", allEntries = true),
@@ -99,6 +106,15 @@ public class UserService {
   }
 
   // id - still the same as a id name
+  /**
+   * Listener of AMQP messages, add new user and send message to web socket. If has an error then it
+   * will retry send message to web socket queue
+   *
+   * @param message AMQP message {@link Message} with data
+   * @param in Body {@link CallbackMQ} of AMQP message after serialization and data {@link AddIn}
+   * @throws NullPointerException If some values is null
+   * @throws IllegalArgumentException If some wrong in values
+   */
   @RabbitListener(id = "userAdd")
   public void listenUserAdd(Message message, CallbackMQ<AddIn> in) {
     MDC.put("resId", in.getResId());
@@ -132,6 +148,12 @@ public class UserService {
         queueService.getRabbitMQSettings().getUserAdd().getExchange());
   }
 
+  /**
+   * Update user status in DB and clean from cache. Return state process.
+   *
+   * @param data Object {@link UpdateIn} with user ID, status ID and other support data
+   * @return result state value {@link States}
+   */
   @Caching(
       evict = {
         @CacheEvict(value = "counterCache::getById::forMatch", key = "#data.toHashUserId()"),
@@ -166,6 +188,15 @@ public class UserService {
   }
 
   // id - still the same as a exchange name
+  /**
+   * Listener of AMQP messages, update user status, increment counter and send message to web
+   * socket. If has an error then it will retry send message to web socket queue
+   *
+   * @param message AMQP message {@link Message} with data
+   * @param in Body {@link CallbackMQ} of AMQP message after serialization and data {@link StatusMQ}
+   * @throws NullPointerException If some values is null
+   * @throws IllegalArgumentException If some wrong in values
+   */
   @RabbitListener(id = "userUpdate")
   public void listenUserUpdate(Message message, CallbackMQ<StatusMQ> in) {
     MDC.put("resId", in.getResId());
@@ -197,6 +228,12 @@ public class UserService {
         queueService.getRabbitMQSettings().getUserUpdate().getExchange());
   }
 
+  /**
+   * Load all users {@link Users} by query params and add result to cache
+   *
+   * @param params Object of query params for search {@link AllIn}
+   * @return result object with list of users and etag value {@link AllOut}
+   */
   @Cacheable(
       value = "userCache::all::ifNoneMatch",
       key = "#params.toHashKey()",

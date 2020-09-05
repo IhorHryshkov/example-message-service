@@ -21,6 +21,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+/** Processing service of status {@link Status} data */
 @Slf4j
 @Service
 public class StatusService
@@ -33,21 +34,46 @@ public class StatusService
     this.statusDAO = statusDAO;
   }
 
+  /**
+   * Method is not implemented
+   *
+   * @param data New status data {@link Status}
+   * @return id of status data
+   */
   @Override
   public Integer add(Status data) {
     throw new RuntimeException("Method is not implemented");
   }
 
+  /**
+   * Method is not implemented
+   *
+   * @param data Update status data {@link Status}
+   * @param id ID of old status data
+   * @return object with update status data {@link Status}
+   */
   @Override
-  public Status update(Status data, Integer integer) {
+  public Status update(Status data, Integer id) {
     throw new RuntimeException("Method is not implemented");
   }
 
+  /**
+   * Method is not implemented
+   *
+   * @param id ID of status data
+   * @return object with status data {@link Status}
+   */
   @Override
-  public Status getById(Integer integer) {
+  public Status getById(Integer id) {
     throw new RuntimeException("Method is not implemented");
   }
 
+  /**
+   * Load all statuses {@link Status} by query params and add result to cache
+   *
+   * @param params Object of query params for search {@link AllIn}
+   * @return result object with list of statuses and etag value {@link AllOut}
+   */
   @Override
   @Cacheable(
       value = "statusCache::all::ifNoneMatch",

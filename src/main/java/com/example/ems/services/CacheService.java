@@ -3,7 +3,6 @@
  * @author Ihor Hryshkov
  * @version 1.0.1
  * @since 2020-07-13T09:35
- *     <p>Service for work with cache data in redis DB
  */
 package com.example.ems.services;
 
@@ -12,6 +11,7 @@ import com.example.ems.network.controllers.exceptions.global.ResponseIfNoneMatch
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/** Processing service of cache data in redis DB */
 @Slf4j
 @Service
 public class CacheService {
