@@ -34,6 +34,16 @@ public class CallbackService {
   }
 
   // id - still the same as a exchange name
+  /**
+   * Listener of AMQP messages and sender to client web socket and if has an error then it will
+   * retry send message to client side again until client side is approve that it received this
+   * message
+   *
+   * @param message AMQP message with data
+   * @param in Body of AMQP message after serialization
+   * @throws NoAckException If client do not get message
+   * @throws NullPointerException If some values is null
+   */
   @RabbitListener(id = "websocket")
   public void listen(Message message, CallbackMQ<Object> in) {
     MDC.put("resId", in.getResId());
@@ -62,6 +72,13 @@ public class CallbackService {
     }
   }
 
+  /**
+   * Resolve web socket message if client successful get on its side and change state of this web
+   * socket message from in progress to resolve
+   *
+   * @param resId Response ID from web socket message
+   * @throws NullPointerException If some values is null
+   */
   public void removeState(String resId) {
     if (this.stateDAO.exist(String.format("state::callback::%s", States.IN_PROGRESS), resId)) {
       this.stateDAO.add(
