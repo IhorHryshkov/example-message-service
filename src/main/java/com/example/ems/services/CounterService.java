@@ -56,6 +56,13 @@ public class CounterService {
     this.userCounterComponent = userCounterComponent;
   }
 
+  /**
+   * Get counters {@link Counters} by user ID from DB also generation ETag value for response and
+   * add result to cache
+   *
+   * @param params Object {@link GetByIdIn} with user ID ant other support data
+   * @return result object with list of counters and etag value {@link GetByIdOut}
+   */
   @Cacheable(
       value = "counterCache::getByUserId::ifNoneMatch",
       key = "#params.toHashKey()",

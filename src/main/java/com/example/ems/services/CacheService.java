@@ -3,6 +3,7 @@
  * @author Ihor Hryshkov
  * @version 1.0.0
  * @since 2020-07-13T09:35
+ *     <p>Service for work with cache data in redis DB
  */
 package com.example.ems.services;
 
