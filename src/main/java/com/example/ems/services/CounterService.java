@@ -57,10 +57,10 @@ public class CounterService {
   }
 
   /**
-   * Get counters {@link Counters} by user ID from DB also generation ETag value for response and
-   * add result to cache
+   * Get counters {@link Counters} by user ID from DB or from cache also generation ETag value for
+   * response and add result to cache
    *
-   * @param params Object {@link GetByIdIn} with user ID ant other support data
+   * @param params Object {@link GetByIdIn} with user ID and other support data
    * @return result object with list of counters and etag value {@link GetByIdOut}
    */
   @Cacheable(
@@ -78,6 +78,12 @@ public class CounterService {
     return new GetByIdOut<>(etag, counters);
   }
 
+  /**
+   * Add new counter to DB and clean from cache. Return state process.
+   *
+   * @param data Object {@link AddIn} with user ID, status ID, count and other support data
+   * @return result state value {@link States}
+   */
   @Caching(
       evict = {
         @CacheEvict(value = "counterCache::getById::forMatch", key = "#data.toHashUserId()"),
@@ -104,6 +110,16 @@ public class CounterService {
   }
 
   // id - still the same as a id name
+  /**
+   * Listener of AMQP messages and increment counter. If has an error then it will retry send
+   * message to web socket queue
+   *
+   * @param message AMQP message {@link Message} with data
+   * @param in Body {@link CallbackMQ} of AMQP message after serialization and data {@link
+   *     CounterMQ}
+   * @throws NullPointerException If some values is null
+   * @throws IllegalArgumentException If some wrong in values
+   */
   @RabbitListener(id = "counterAdd")
   public void listenCounterAdd(Message message, CallbackMQ<CounterMQ> in) {
     MDC.put("resId", in.getResId());

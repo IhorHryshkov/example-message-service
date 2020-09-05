@@ -1,7 +1,7 @@
 /**
  * @project ems
  * @author Ihor Hryshkov
- * @version 1.0.0
+ * @version 1.0.1
  * @since 2020-08-09T17:08
  */
 package com.example.ems.services;
@@ -39,8 +39,8 @@ public class CallbackService {
    * retry send message to client side again until client side is approve that it received this
    * message
    *
-   * @param message AMQP message with data
-   * @param in Body of AMQP message after serialization
+   * @param message AMQP message {@link Message} with data
+   * @param in Body {@link CallbackMQ} of AMQP message after serialization
    * @throws NoAckException If client do not get message
    * @throws NullPointerException If some values is null
    */

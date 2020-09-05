@@ -43,10 +43,23 @@ public class QueueService {
     this.rabbitMQSettings = rabbitMQSettings;
   }
 
+  /**
+   * Get rabbit MQ settings
+   *
+   * @return result object {@link RabbitMQSettings} with settings
+   */
   public RabbitMQSettings getRabbitMQSettings() {
     return this.rabbitMQSettings;
   }
 
+  /**
+   * Add new queue if not exist. Add new exchange if not exist. Bind queue to exchange and send
+   * message to queue.
+   *
+   * @param queueName Queue name
+   * @param data Data for send to queue
+   * @param conf Configuration data for new queue {@link QueueConf}
+   */
   public void sendMessage(String queueName, Object data, QueueConf conf) {
     QueueBuilder queueBuilder =
         conf.getDurable() ? QueueBuilder.durable(queueName) : QueueBuilder.nonDurable(queueName);
@@ -66,6 +79,14 @@ public class QueueService {
     initQueueListener(queueName, conf.getExchange());
   }
 
+  /**
+   * Check counts retry to send and return true if retry count is less than count AMQP sending error
+   * or error header not found. Return false if retry count from setting greater than or equals
+   * count AMQP sending error.
+   *
+   * @param message AMQP message {@link Message} with data
+   * @return result is check counts of error
+   */
   public boolean isGoRetry(Message message) {
     List<Map<String, ?>> xDeathHeader = message.getMessageProperties().getXDeathHeader();
     if (xDeathHeader != null && !xDeathHeader.isEmpty()) {
@@ -81,12 +102,24 @@ public class QueueService {
     return true;
   }
 
+  /**
+   * Remove listener queue by ID
+   *
+   * @param queueName Name of queue
+   * @param id ID of listener container
+   */
   public void removeDeclares(String queueName, String id) {
     SimpleMessageListenerContainer listener =
         (SimpleMessageListenerContainer) listenerMQRegistry.getListenerContainer(id);
     listener.removeQueueNames(queueName);
   }
 
+  /**
+   * Add listener queue by ID
+   *
+   * @param queueName Name of queue
+   * @param id ID of listener container
+   */
   public void initQueueListener(String queueName, String id) {
     SimpleMessageListenerContainer listener =
         (SimpleMessageListenerContainer) listenerMQRegistry.getListenerContainer(id);
