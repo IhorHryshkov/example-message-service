@@ -12,8 +12,22 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+/** JPA interface for work with Users entity ${@link Users} */
 public interface UsersDAO extends JpaRepository<Users, UUID>, JpaSpecificationExecutor<Users> {
+  /**
+   * Find users by status name with ignore case and username
+   *
+   * @param name Name of status
+   * @param username Username of user
+   * @return result is list of users
+   */
   List<Users> findByStatusNameIgnoreCaseAndUsername(String name, String username);
 
+  /**
+   * Find users by username
+   *
+   * @param username Username of user
+   * @return result is list of users
+   */
   List<Users> findByUsername(String username);
 }

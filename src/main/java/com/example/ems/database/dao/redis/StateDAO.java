@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Component;
 
+/** Component for work with redis DB state data */
 @Slf4j
 @Component
 public class StateDAO {
@@ -28,6 +29,15 @@ public class StateDAO {
     this.luaScripts = luaScripts;
   }
 
+  /**
+   * Get value by key from hash state or add key with value to hash state use atomic transaction in
+   * redis DB
+   *
+   * @param hashName Name of hash
+   * @param key Key of hash
+   * @param value Value of key
+   * @return if hash name with key have in state than return value or if not than return null
+   */
   public Object add(String hashName, String key, Object value) {
     List result =
         (List)
@@ -40,6 +50,13 @@ public class StateDAO {
     return result == null || result.isEmpty() ? null : result.get(0);
   }
 
+  /**
+   * State delete key from hash and key from hash "expire" in redis DB
+   *
+   * @param hashName Name of hash
+   * @param key Key of hash
+   * @return return true if delete keys is successful or false if not
+   */
   public boolean del(String hashName, String key) {
     Long resultHash = redisTemplate.opsForHash().delete(hashName, key);
     Long resultTime =
@@ -47,6 +64,13 @@ public class StateDAO {
     return resultHash > 0 && resultTime > 0;
   }
 
+  /**
+   * State check if exist this hash and key in redis DB
+   *
+   * @param hashName Name of hash for check
+   * @param key Key of hash for check
+   * @return return true if this hash and key exist or false if not exist
+   */
   public Boolean exist(String hashName, String key) {
     return redisTemplate.opsForHash().hasKey(hashName, key);
   }

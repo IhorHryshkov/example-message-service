@@ -12,6 +12,7 @@ import java.time.ZoneId;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
+/** Converter time in milliseconds for JPA */
 @Converter(autoApply = true)
 public class LongTimestampConverter implements AttributeConverter<Long, Timestamp> {
 

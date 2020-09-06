@@ -11,6 +11,13 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+/** JPA interface for work with Types entity ${@link Types} */
 public interface TypesDAO extends JpaRepository<Types, Integer>, JpaSpecificationExecutor<Types> {
+  /**
+   * Find types by name and ignore case
+   *
+   * @param name Name of type
+   * @return result is list of types
+   */
   List<Types> findByNameIgnoreCase(String name);
 }

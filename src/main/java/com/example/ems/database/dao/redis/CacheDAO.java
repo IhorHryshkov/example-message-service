@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+/** Component for work with redis DB cache data */
 @Slf4j
 @Component
 public class CacheDAO {
@@ -23,30 +24,63 @@ public class CacheDAO {
     this.redisSettings = redisSettings;
   }
 
+  /**
+   * Check if exist this key in redis DB
+   *
+   * @param key This is key for check
+   * @return return true if this key exist or false if not exist
+   */
   public Boolean exist(String key) {
     log.debug("exist key: {}", key);
     return this.redisTemplate.hasKey(key);
   }
 
-  public Boolean hexist(String key, String hash) {
+  /**
+   * Cache check if exist this hash and key in redis DB
+   *
+   * @param hash This is hash for check
+   * @param key This is key for check
+   * @return return true if this hash and key exist or false if not exist
+   */
+  public Boolean hexist(String hash, String key) {
     log.debug("hexist hash: {} and key: {}", hash, key);
-    if (hash == null) {
+    if (key == null) {
       return false;
     }
-    return this.redisTemplate.opsForHash().hasKey(key, hash);
+    return this.redisTemplate.opsForHash().hasKey(hash, key);
   }
 
+  /**
+   * Cache add key with TTL and value to redis DB
+   *
+   * @param key This is key
+   * @param value This is value for key
+   * @param divider TThis is divider for divide default value getting from settings
+   */
   public void setTtl(String key, Object value, Integer divider) {
     this.redisTemplate
         .boundValueOps(key)
         .set(value, Duration.ofSeconds(this.redisSettings.getCacheTtl() / divider));
   }
 
+  /**
+   * Cache add key and value to redis DB
+   *
+   * @param key This is key
+   * @param value This is value for key
+   */
   public void set(String key, Object value) {
     this.redisTemplate.boundValueOps(key).set(value);
   }
 
-  public void hset(String key, String hash, Object value) {
-    this.redisTemplate.opsForHash().put(key, hash, value);
+  /**
+   * Cache add hash with key and value to redis DB
+   *
+   * @param hash This is hash for key
+   * @param key This is key
+   * @param value This is value for hash and key
+   */
+  public void hset(String hash, String key, Object value) {
+    this.redisTemplate.opsForHash().put(hash, key, value);
   }
 }
