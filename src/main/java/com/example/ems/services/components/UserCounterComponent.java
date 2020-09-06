@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+/** Component with utils for user and counter services */
 @Slf4j
 @Component
 public class UserCounterComponent {
@@ -34,6 +35,15 @@ public class UserCounterComponent {
     this.stateDAO = stateDAO;
   }
 
+  /**
+   * This is method for increment count for counter DB object {@link Counters}
+   *
+   * @param type Object with type data {@link Types}
+   * @param user Object with user data {@link Users}
+   * @param count count for add to current count in DB
+   * @param key This is key to check that state have or not INIT state {@link States}
+   * @param hash This is the hash value to check increment count is running or not
+   */
   public void incCounter(Types type, Users user, Long count, String key, String hash) {
     if (!this.stateDAO.exist(String.format(key, States.INIT), hash)
         && this.stateDAO.add(String.format(key, States.INIT), hash, "") == null) {
@@ -56,6 +66,16 @@ public class UserCounterComponent {
     }
   }
 
+  /**
+   * Try to get from DB user by user ID or if user not found than throw exception
+   *
+   * @param userId UUID user ID
+   * @param delStateKey This is key for remove state IN PROGRESS from redis DB
+   * @param hashKeyToDel This hash value for search state IN PROGRESS in redis DB
+   * @param hashUserId This is hash value for add result in cache
+   * @return return user object {@link Users}
+   * @throws UserIDNotFoundException if user not found in DB
+   */
   @Cacheable(value = "userCache", key = "#root.getMethodName() + \"::ifNoneMatch::\" + #hashUserId")
   public Users getUserOrNotFound(
       UUID userId, String delStateKey, String hashKeyToDel, String hashUserId) {
