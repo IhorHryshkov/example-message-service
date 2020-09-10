@@ -45,15 +45,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-  @Value("${parameters.default.status}")
-  private String defaultStatus;
-
   private final UsersDAO usersDAO;
   private final StatusDAO statusDAO;
   private final StateDAO stateDAO;
   private final TypesDAO typesDAO;
   private final QueueService queueService;
   private final UserCounterComponent userCounterComponent;
+
+  @Value("${parameters.default.status}")
+  private String defaultStatus;
 
   public UserService(
       UsersDAO usersDAO,

@@ -39,7 +39,7 @@ public class GlobalServiceErrorAdvice {
   }
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<Res<Object>> handleAnyException(HttpServletRequest req, Exception e) {
+  public ResponseEntity<Res> handleAnyException(HttpServletRequest req, Exception e) {
     log.error("message: {}", e.getMessage());
     e.printStackTrace();
     return response.formattedError(
@@ -50,8 +50,7 @@ public class GlobalServiceErrorAdvice {
   }
 
   @ExceptionHandler({MethodArgumentNotValidException.class, ConstraintViolationException.class})
-  public ResponseEntity<Res<Object>> handleValidationException(
-      HttpServletRequest req, Exception e) {
+  public ResponseEntity<Res> handleValidationException(HttpServletRequest req, Exception e) {
     log.error("message: {}", e.getMessage());
     return response.formattedError(
         req,
@@ -61,8 +60,7 @@ public class GlobalServiceErrorAdvice {
   }
 
   @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-  public ResponseEntity<Res<Object>> handleResourceNotFoundException(
-      HttpServletRequest req, Exception e) {
+  public ResponseEntity<Res> handleResourceNotFoundException(HttpServletRequest req, Exception e) {
     log.error("message: {}", e.getMessage());
     return response.formattedError(
         req,
@@ -72,21 +70,21 @@ public class GlobalServiceErrorAdvice {
   }
 
   @ExceptionHandler(ResponseEmptyException.class)
-  public ResponseEntity<Res<Object>> handleResultEmpty(HttpServletRequest req, Exception e) {
+  public ResponseEntity<Res> handleResultEmpty(HttpServletRequest req, Exception e) {
     log.info("message: {}", e.getMessage());
     return response.formattedError(
         req, null, MediaType.APPLICATION_JSON, messages.getResultEmpty().getCode());
   }
 
   @ExceptionHandler(ResponseIfNoneMatchException.class)
-  public ResponseEntity<Res<Object>> handleNotModified(HttpServletRequest req, Exception e) {
+  public ResponseEntity<Res> handleNotModified(HttpServletRequest req, Exception e) {
     log.info("message: {}", e.getMessage());
     return response.formattedError(
         req, null, MediaType.APPLICATION_JSON, messages.getNotModified().getCode());
   }
 
   @ExceptionHandler(ResponseUsernameUsedException.class)
-  public ResponseEntity<Res<Object>> handleUsernameUsed(HttpServletRequest req, Exception e) {
+  public ResponseEntity<Res> handleUsernameUsed(HttpServletRequest req, Exception e) {
     log.info("message: {}", e.getMessage());
     return response.formattedError(
         req,
@@ -96,7 +94,7 @@ public class GlobalServiceErrorAdvice {
   }
 
   @ExceptionHandler(UserIDNotFoundException.class)
-  public ResponseEntity<Res<Object>> handleUserIDNotfound(HttpServletRequest req, Exception e) {
+  public ResponseEntity<Res> handleUserIDNotfound(HttpServletRequest req, Exception e) {
     log.info("message: {}", e.getMessage());
     return response.formattedError(
         req,
@@ -106,7 +104,7 @@ public class GlobalServiceErrorAdvice {
   }
 
   @ExceptionHandler(BindException.class)
-  public ResponseEntity<Res<Object>> handleBindException(HttpServletRequest req, BindException e) {
+  public ResponseEntity<Res> handleBindException(HttpServletRequest req, BindException e) {
     List<String> errors =
         e.getAllErrors().stream().map(x -> x.getDefaultMessage()).collect(Collectors.toList());
     log.error("errors: {},\nmessage: {}", errors, e.getMessage());

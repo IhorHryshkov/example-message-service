@@ -44,8 +44,7 @@ class ResponseTest {
     Integer statusExpected = 200;
     String etag = "testEtag";
     String etagExpected = "\"testEtag\"";
-    ResponseEntity<Res<String>> responseEntity =
-        response.formattedSuccess(data, type, status, etag);
+    ResponseEntity<Res> responseEntity = response.formattedSuccess(data, type, status, etag);
     assertThat(responseEntity.getStatusCodeValue()).as("Status code").isEqualTo(statusExpected);
     assertThat(responseEntity.getBody()).as("Body is not null").isNotNull();
     assertThat(responseEntity.getBody()).as("Body is Res class").isInstanceOf(Res.class);
@@ -53,7 +52,7 @@ class ResponseTest {
         .as("Content type")
         .isEqualTo(typeExpected);
     assertThat(responseEntity.getHeaders().getETag()).as("Etag").isEqualTo(etagExpected);
-    Res<String> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getError()).as("Error is null").isNull();
     assertThat(res.getResId()).as("Res ID").isEqualTo("testResId");
     assertThat(res.getTimestamp()).as("Timestamp is not null").isNotNull();
@@ -70,15 +69,14 @@ class ResponseTest {
     Integer status = 400;
     Integer statusExpected = 400;
     when(req.getMethod()).thenReturn("GET");
-    ResponseEntity<Res<String>> responseEntity =
-        response.formattedError(req, message, type, status);
+    ResponseEntity<Res> responseEntity = response.formattedError(req, message, type, status);
     assertThat(responseEntity.getStatusCodeValue()).as("Status code").isEqualTo(statusExpected);
     assertThat(responseEntity.getBody()).as("Body is not null").isNotNull();
     assertThat(responseEntity.getBody()).as("Body is Res class").isInstanceOf(Res.class);
     assertThat(responseEntity.getHeaders().getContentType())
         .as("Content type")
         .isEqualTo(typeExpected);
-    Res<String> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getError()).as("Error is not null").isNotNull();
     assertThat(res.getResId()).as("Res ID").isEqualTo("testResId");
     assertThat(res.getTimestamp()).as("Timestamp is not null").isNotNull();

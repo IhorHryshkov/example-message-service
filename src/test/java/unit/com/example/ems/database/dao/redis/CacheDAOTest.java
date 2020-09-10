@@ -9,7 +9,9 @@ package unit.com.example.ems.database.dao.redis;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.isNull;
+import static org.mockito.Mockito.when;
 
 import com.example.ems.config.redis.RedisSettings;
 import com.example.ems.database.dao.redis.CacheDAO;

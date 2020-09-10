@@ -9,7 +9,7 @@ if [ ! -f .git/hooks/pre-commit ]; then
 	cat >.git/hooks/pre-commit <<EOF
 #!/usr/bin/env sh
 if [ ! -d ".cache" ]; then
-	version=1.8
+	version=1.9
 	mkdir .cache
 	cd .cache
 	if [ ! -f java-formatter.jar ]; then

@@ -26,11 +26,11 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 @SpringBootTest(classes = EmsApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class RootControllerTest {
-  @LocalServerPort private int port;
-  @Autowired TestRestTemplate restTemplate;
   final ObjectMapper mapper = new ObjectMapper();
   final HttpHeaders headers = new HttpHeaders();
   final CompletableFuture<Object> completableFuture = new CompletableFuture<>();
+  @Autowired TestRestTemplate restTemplate;
+  @LocalServerPort private int port;
 
   String createURLWithPort(String uri) {
     return String.format("http://localhost:%d%s", port, uri);

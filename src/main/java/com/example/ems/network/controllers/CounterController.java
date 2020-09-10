@@ -45,7 +45,7 @@ public class CounterController {
   }
 
   @GetMapping("${parameters.controllers.counter.getById}")
-  public ResponseEntity<Res<Object>> getById(@Valid GetByIdIn params) {
+  public ResponseEntity<Res> getById(@Valid GetByIdIn params) {
     params.setResId(MDC.get("resId"));
     params.setPath(MDC.get("fullPathQuery"));
 
@@ -65,7 +65,7 @@ public class CounterController {
   }
 
   @PostMapping
-  public ResponseEntity<Res<Object>> add(@RequestBody @Valid AddIn params) {
+  public ResponseEntity<Res> add(@RequestBody @Valid AddIn params) {
     params.setResId(MDC.get("resId"));
 
     States state = this.counterService.add(params);

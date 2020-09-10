@@ -50,7 +50,7 @@ public class UserController {
   }
 
   @GetMapping
-  public ResponseEntity<Res<Object>> all(@Valid AllIn params) {
+  public ResponseEntity<Res> all(@Valid AllIn params) {
     params.setResId(MDC.get("resId"));
     params.setPath(MDC.get("fullPathQuery"));
     this.cacheService.existOrIfNoneMatch(
@@ -66,7 +66,7 @@ public class UserController {
   }
 
   @PutMapping({"${parameters.controllers.user.update}"})
-  public ResponseEntity<Res<Object>> update(
+  public ResponseEntity<Res> update(
       @PathVariable("userId")
           @Valid
           @NotNull
@@ -89,7 +89,7 @@ public class UserController {
   }
 
   @PostMapping
-  public ResponseEntity<Res<Object>> add(@RequestBody @Valid AddIn params) {
+  public ResponseEntity<Res> add(@RequestBody @Valid AddIn params) {
     params.setResId(MDC.get("resId"));
 
     States state = this.userService.add(params);

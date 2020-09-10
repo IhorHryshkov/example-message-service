@@ -6,7 +6,11 @@
  */
 package com.example.ems.dto.mq;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.Queue;
 

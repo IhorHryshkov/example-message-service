@@ -9,7 +9,11 @@ package com.example.ems.dto.mq;
 import com.example.ems.dto.database.pg.Users;
 import com.example.ems.dto.network.controller.counter.AddIn;
 import java.io.Serializable;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode

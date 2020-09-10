@@ -96,17 +96,17 @@ class UserControllerTest {
             ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("testEtag")
-                .body(new Res<>(uuid, typesList, null, timestamp)));
+                .body(new Res(uuid, typesList, null, timestamp)));
     assertThat(catchThrowable(() -> userController.all(in)))
         .as("Check if none match")
         .isInstanceOf(ResponseIfNoneMatchException.class);
     assertThat(catchThrowable(() -> userController.all(in)))
         .as("Check if response empty")
         .isInstanceOf(ResponseEmptyException.class);
-    ResponseEntity<Res<Object>> all = userController.all(in);
+    ResponseEntity<Res> all = userController.all(in);
     assertThat(all.getStatusCode()).as("Status code").isEqualTo(HttpStatus.OK);
     assertThat(all.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = all.getBody();
+    Res res = all.getBody();
     assertThat(res.getError()).as("Error is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);
@@ -140,18 +140,18 @@ class UserControllerTest {
             ResponseEntity.status(HttpStatus.ACCEPTED.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("")
-                .body(new Res<>(uuid, state, null, timestamp)));
+                .body(new Res(uuid, state, null, timestamp)));
     when(response.formattedSuccess(
             eq(bodyResolve), eq(MediaType.APPLICATION_JSON), eq(HttpStatus.OK.value()), eq("")))
         .thenReturn(
             ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("")
-                .body(new Res<>(uuid, bodyResolve, null, timestamp)));
-    ResponseEntity<Res<Object>> update = userController.update(userId, bodyIn);
+                .body(new Res(uuid, bodyResolve, null, timestamp)));
+    ResponseEntity<Res> update = userController.update(userId, bodyIn);
     assertThat(update.getStatusCode()).as("Status code state").isEqualTo(HttpStatus.ACCEPTED);
     assertThat(update.getBody()).as("Body not null state").isNotNull();
-    Res<Object> res = update.getBody();
+    Res res = update.getBody();
     assertThat(res.getError()).as("Error is null state").isNull();
     assertThat(res.getTimestamp()).as("Timestamp state").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID state").isEqualTo(uuid);
@@ -194,7 +194,7 @@ class UserControllerTest {
             ResponseEntity.status(HttpStatus.ACCEPTED.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("")
-                .body(new Res<>(uuid, state, null, timestamp)));
+                .body(new Res(uuid, state, null, timestamp)));
     when(response.formattedSuccess(
             eq(paramsExpected),
             eq(MediaType.APPLICATION_JSON),
@@ -204,11 +204,11 @@ class UserControllerTest {
             ResponseEntity.status(HttpStatus.CREATED.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("")
-                .body(new Res<>(uuid, params, null, timestamp)));
-    ResponseEntity<Res<Object>> add = userController.add(params);
+                .body(new Res(uuid, params, null, timestamp)));
+    ResponseEntity<Res> add = userController.add(params);
     assertThat(add.getStatusCode()).as("Status code state").isEqualTo(HttpStatus.ACCEPTED);
     assertThat(add.getBody()).as("Body not null state").isNotNull();
-    Res<Object> res = add.getBody();
+    Res res = add.getBody();
     assertThat(res.getError()).as("Error is null state").isNull();
     assertThat(res.getTimestamp()).as("Timestamp state").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID state").isEqualTo(uuid);

@@ -7,35 +7,35 @@ databaseChangeLog:
         - insert:
             columns:
               - column:
-                  name:  name
-                  value:  Online
-            schemaName:  public
-            tableName:  status
+                  name: name
+                  value: Online
+            schemaName: public
+            tableName: status
         - insert:
             columns:
               - column:
-                  name:  name
-                  value:  Offline
-            schemaName:  public
-            tableName:  status
+                  name: name
+                  value: Offline
+            schemaName: public
+            tableName: status
         - insert:
             columns:
               - column:
-                  name:  name
-                  value:  Online
-            schemaName:  public
-            tableName:  types
+                  name: name
+                  value: Online
+            schemaName: public
+            tableName: types
         - insert:
             columns:
               - column:
-                  name:  name
-                  value:  Offline
-            schemaName:  public
-            tableName:  types
+                  name: name
+                  value: Offline
+            schemaName: public
+            tableName: types
         - insert:
             columns:
               - column:
-                  name:  name
-                  value:  Message
-            schemaName:  public
-            tableName:  types
+                  name: name
+                  value: Message
+            schemaName: public
+            tableName: types

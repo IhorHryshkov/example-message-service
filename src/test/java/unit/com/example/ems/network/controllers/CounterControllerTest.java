@@ -93,17 +93,17 @@ class CounterControllerTest {
             ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("testEtag")
-                .body(new Res<>(uuid, counter, null, timestamp)));
+                .body(new Res(uuid, counter, null, timestamp)));
     assertThat(catchThrowable(() -> counterController.getById(in)))
         .as("Check if none match")
         .isInstanceOf(ResponseIfNoneMatchException.class);
     assertThat(catchThrowable(() -> counterController.getById(in)))
         .as("Check if response empty")
         .isInstanceOf(ResponseEmptyException.class);
-    ResponseEntity<Res<Object>> getById = counterController.getById(in);
+    ResponseEntity<Res> getById = counterController.getById(in);
     assertThat(getById.getStatusCode()).as("Status code").isEqualTo(HttpStatus.OK);
     assertThat(getById.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = getById.getBody();
+    Res res = getById.getBody();
     assertThat(res.getError()).as("Error is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);
@@ -134,7 +134,7 @@ class CounterControllerTest {
             ResponseEntity.status(HttpStatus.ACCEPTED.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("")
-                .body(new Res<>(uuid, state, null, timestamp)));
+                .body(new Res(uuid, state, null, timestamp)));
     when(response.formattedSuccess(
             eq(paramsExpected),
             eq(MediaType.APPLICATION_JSON),
@@ -144,11 +144,11 @@ class CounterControllerTest {
             ResponseEntity.status(HttpStatus.CREATED.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("")
-                .body(new Res<>(uuid, params, null, timestamp)));
-    ResponseEntity<Res<Object>> add = counterController.add(params);
+                .body(new Res(uuid, params, null, timestamp)));
+    ResponseEntity<Res> add = counterController.add(params);
     assertThat(add.getStatusCode()).as("Status code state").isEqualTo(HttpStatus.ACCEPTED);
     assertThat(add.getBody()).as("Body not null state").isNotNull();
-    Res<Object> res = add.getBody();
+    Res res = add.getBody();
     assertThat(res.getError()).as("Error is null state").isNull();
     assertThat(res.getTimestamp()).as("Timestamp state").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID state").isEqualTo(uuid);

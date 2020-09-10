@@ -56,15 +56,15 @@ class CallbackControllerTest {
             ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("")
-                .body(new Res<>(uuid, params, null, timestamp)));
+                .body(new Res(uuid, params, null, timestamp)));
     assertThat(catchThrowable(() -> callbackController.add(params)))
         .as("Check a some error")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
-    ResponseEntity<Res<Object>> add = callbackController.add(params);
+    ResponseEntity<Res> add = callbackController.add(params);
     assertThat(add.getStatusCode()).as("Status code").isEqualTo(HttpStatus.OK);
     assertThat(add.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = add.getBody();
+    Res res = add.getBody();
     assertThat(res.getError()).as("Error is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);

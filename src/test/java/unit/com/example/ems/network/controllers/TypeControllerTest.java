@@ -92,17 +92,17 @@ class TypeControllerTest {
             ResponseEntity.status(HttpStatus.OK.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .eTag("testEtag")
-                .body(new Res<>(uuid, typesList, null, timestamp)));
+                .body(new Res(uuid, typesList, null, timestamp)));
     assertThat(catchThrowable(() -> typeController.all(in)))
         .as("Check if none match")
         .isInstanceOf(ResponseIfNoneMatchException.class);
     assertThat(catchThrowable(() -> typeController.all(in)))
         .as("Check if response empty")
         .isInstanceOf(ResponseEmptyException.class);
-    ResponseEntity<Res<Object>> all = typeController.all(in);
+    ResponseEntity<Res> all = typeController.all(in);
     assertThat(all.getStatusCode()).as("Status code").isEqualTo(HttpStatus.OK);
     assertThat(all.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = all.getBody();
+    Res res = all.getBody();
     assertThat(res.getError()).as("Error is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);

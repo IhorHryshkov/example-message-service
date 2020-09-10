@@ -16,19 +16,18 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class Response<A> {
 
-  public ResponseEntity<Res<A>> formattedSuccess(
-      A data, MediaType type, Integer status, String etag) {
-    Res<A> result = new Res<A>(MDC.get("resId"), data, null, Instant.now().toEpochMilli());
+  public ResponseEntity<Res> formattedSuccess(A data, MediaType type, Integer status, String etag) {
+    Res result = new Res(MDC.get("resId"), data, null, Instant.now().toEpochMilli());
     log.trace("response: {}", result);
     return ResponseEntity.status(status).contentType(type).eTag(etag).body(result);
   }
 
-  public ResponseEntity<Res<A>> formattedError(
+  public ResponseEntity<Res> formattedError(
       HttpServletRequest req, String message, MediaType type, Integer status) {
     int newStatus = status != null && status > 0 ? status : 500;
     String requestURI = MDC.get("fullPathQuery");
-    Res<A> result =
-        new Res<A>(
+    Res result =
+        new Res(
             MDC.get("resId"),
             null,
             new ResError(newStatus, message, req.getMethod(), requestURI),

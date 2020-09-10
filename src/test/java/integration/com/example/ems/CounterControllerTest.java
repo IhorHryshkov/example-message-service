@@ -148,7 +148,7 @@ public class CounterControllerTest extends RootControllerTest {
               .as("Body is not null and is Res class")
               .isNotNull()
               .isInstanceOf(Res.class);
-          Res<?> resBody = (Res<?>) responseEntity.getBody();
+          Res resBody = responseEntity.getBody();
           assertThat(resBody.getTimestamp())
               .as("Timestamp is not null and is Long class")
               .isNotNull()
@@ -200,7 +200,7 @@ public class CounterControllerTest extends RootControllerTest {
         .as("Body is not null and is Res class")
         .isNotNull()
         .isInstanceOf(Res.class);
-    Res<?> resBody = (Res<?>) responseEntity.getBody();
+    Res resBody = responseEntity.getBody();
     assertThat(resBody.getTimestamp())
         .as("Timestamp is not null and is Long class")
         .isNotNull()
@@ -366,7 +366,7 @@ public class CounterControllerTest extends RootControllerTest {
               .as("Body is not null and is Res class")
               .isNotNull()
               .isInstanceOf(Res.class);
-          Res<?> resBody = (Res<?>) responseEntity.getBody();
+          Res resBody = responseEntity.getBody();
           assertThat(resBody.getTimestamp())
               .as("Timestamp is not null and is Long class")
               .isNotNull()
@@ -409,7 +409,7 @@ public class CounterControllerTest extends RootControllerTest {
         .as("Body is not null and is Res class")
         .isNotNull()
         .isInstanceOf(Res.class);
-    Res<?> resBody = (Res<?>) responseEntity.getBody();
+    Res resBody = responseEntity.getBody();
     assertThat(resBody.getTimestamp())
         .as("Timestamp is not null and is Long class")
         .isNotNull()
@@ -456,7 +456,7 @@ public class CounterControllerTest extends RootControllerTest {
         .as("Body is not null and is Res class")
         .isNotNull()
         .isInstanceOf(Res.class);
-    resBody = (Res<?>) responseEntity.getBody();
+    resBody = responseEntity.getBody();
     assertThat(resBody.getTimestamp())
         .as("Timestamp is not null and is Long class")
         .isNotNull()

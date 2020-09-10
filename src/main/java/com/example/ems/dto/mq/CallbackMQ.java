@@ -9,7 +9,11 @@ package com.example.ems.dto.mq;
 import java.io.Serializable;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode

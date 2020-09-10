@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 @AllArgsConstructor
 public class RabbitMQConfig {
 
-  private RabbitMQSettings rabbitMQSettings;
+  private final RabbitMQSettings rabbitMQSettings;
 
   @Bean
   public MessageConverter jsonMessageConverter() {

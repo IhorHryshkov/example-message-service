@@ -1,4 +1,16 @@
 spring:
+  resources:
+    cache:
+      period: 31536000
+      cachecontrol:
+        max-age: 31536000
+    chain:
+      html-application-cache: true
+      enabled: true
+      strategy:
+        content:
+          enabled: true
+          paths: /webjars/swagger-ui/**.*
   rabbitmq:
     host: ${MQ_HOST}
     port: ${MQ_PORT}
@@ -43,10 +55,13 @@ logging:
     org.hibernate.type: ${LOG_LEVEL}
 ---
 server:
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  http2:
+    enabled: true
   port: ${PORT}
-  tomcat:
-    threads:
-      max: 10000
 ---
 redis:
   cacheTtl: 600
@@ -74,4 +89,22 @@ parameters:
       update: "/{userId}"
     callback:
       rootPath: "/v1/callback/approve"
-
+apiDocs:
+  paths: "/v1/**"
+  apiInfo:
+    title: "EMS REST API"
+    description: "Example message service so-called REST API."
+    urlTermsOfService: "https://en.wikipedia.org/wiki/Terms_of_service"
+    license: "MIT License"
+    licenseUrl: "https://opensource.org/licenses/MIT"
+    contact:
+      name: "Ihor Hryshkov"
+      url: "https://www.linkedin.com/in/ihor-hryshkov-87539724/"
+      email: "igor.grishkov.olegovich@gmail.com"
+springfox:
+  documentation:
+    swaggerUi:
+      baseUrl: /v1/apidocs
+    openApi:
+      v3:
+        path: /v1/apidocs/json

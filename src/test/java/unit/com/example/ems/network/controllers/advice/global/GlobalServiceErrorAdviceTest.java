@@ -72,20 +72,19 @@ class GlobalServiceErrorAdviceTest {
             ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                    new Res<>(
+                    new Res(
                         uuid,
                         null,
                         new ResError(
                             HttpStatus.INTERNAL_SERVER_ERROR.value(), errMessage, method, endpoint),
                         timestamp)));
 
-    ResponseEntity<Res<Object>> responseEntity =
-        globalServiceErrorAdvice.handleAnyException(req, ex);
+    ResponseEntity<Res> responseEntity = globalServiceErrorAdvice.handleAnyException(req, ex);
     assertThat(responseEntity.getStatusCode())
         .as("Status code")
         .isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     assertThat(responseEntity.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getData()).as("Data is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);
@@ -114,20 +113,20 @@ class GlobalServiceErrorAdviceTest {
             ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                    new Res<>(
+                    new Res(
                         uuid,
                         null,
                         new ResError(
                             HttpStatus.UNPROCESSABLE_ENTITY.value(), errMessage, method, endpoint),
                         timestamp)));
 
-    ResponseEntity<Res<Object>> responseEntity =
+    ResponseEntity<Res> responseEntity =
         globalServiceErrorAdvice.handleValidationException(req, ex);
     assertThat(responseEntity.getStatusCode())
         .as("Status code")
         .isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
     assertThat(responseEntity.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getData()).as("Data is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);
@@ -156,17 +155,17 @@ class GlobalServiceErrorAdviceTest {
             ResponseEntity.status(HttpStatus.NOT_FOUND.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                    new Res<>(
+                    new Res(
                         uuid,
                         null,
                         new ResError(HttpStatus.NOT_FOUND.value(), errMessage, method, endpoint),
                         timestamp)));
 
-    ResponseEntity<Res<Object>> responseEntity =
+    ResponseEntity<Res> responseEntity =
         globalServiceErrorAdvice.handleResourceNotFoundException(req, ex);
     assertThat(responseEntity.getStatusCode()).as("Status code").isEqualTo(HttpStatus.NOT_FOUND);
     assertThat(responseEntity.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getData()).as("Data is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);
@@ -189,17 +188,16 @@ class GlobalServiceErrorAdviceTest {
             ResponseEntity.status(HttpStatus.NO_CONTENT.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                    new Res<>(
+                    new Res(
                         uuid,
                         null,
                         new ResError(HttpStatus.NO_CONTENT.value(), errMessage, method, endpoint),
                         timestamp)));
 
-    ResponseEntity<Res<Object>> responseEntity =
-        globalServiceErrorAdvice.handleResultEmpty(req, ex);
+    ResponseEntity<Res> responseEntity = globalServiceErrorAdvice.handleResultEmpty(req, ex);
     assertThat(responseEntity.getStatusCode()).as("Status code").isEqualTo(HttpStatus.NO_CONTENT);
     assertThat(responseEntity.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getData()).as("Data is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);
@@ -222,17 +220,16 @@ class GlobalServiceErrorAdviceTest {
             ResponseEntity.status(HttpStatus.NOT_MODIFIED.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                    new Res<>(
+                    new Res(
                         uuid,
                         null,
                         new ResError(HttpStatus.NOT_MODIFIED.value(), errMessage, method, endpoint),
                         timestamp)));
 
-    ResponseEntity<Res<Object>> responseEntity =
-        globalServiceErrorAdvice.handleNotModified(req, ex);
+    ResponseEntity<Res> responseEntity = globalServiceErrorAdvice.handleNotModified(req, ex);
     assertThat(responseEntity.getStatusCode()).as("Status code").isEqualTo(HttpStatus.NOT_MODIFIED);
     assertThat(responseEntity.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getData()).as("Data is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);
@@ -259,17 +256,16 @@ class GlobalServiceErrorAdviceTest {
             ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                    new Res<>(
+                    new Res(
                         uuid,
                         null,
                         new ResError(HttpStatus.BAD_REQUEST.value(), errMessage, method, endpoint),
                         timestamp)));
 
-    ResponseEntity<Res<Object>> responseEntity =
-        globalServiceErrorAdvice.handleUsernameUsed(req, ex);
+    ResponseEntity<Res> responseEntity = globalServiceErrorAdvice.handleUsernameUsed(req, ex);
     assertThat(responseEntity.getStatusCode()).as("Status code").isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(responseEntity.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getData()).as("Data is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);
@@ -296,17 +292,16 @@ class GlobalServiceErrorAdviceTest {
             ResponseEntity.status(HttpStatus.BAD_REQUEST.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                    new Res<>(
+                    new Res(
                         uuid,
                         null,
                         new ResError(HttpStatus.BAD_REQUEST.value(), errMessage, method, endpoint),
                         timestamp)));
 
-    ResponseEntity<Res<Object>> responseEntity =
-        globalServiceErrorAdvice.handleUserIDNotfound(req, ex);
+    ResponseEntity<Res> responseEntity = globalServiceErrorAdvice.handleUserIDNotfound(req, ex);
     assertThat(responseEntity.getStatusCode()).as("Status code").isEqualTo(HttpStatus.BAD_REQUEST);
     assertThat(responseEntity.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getData()).as("Data is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);
@@ -333,20 +328,20 @@ class GlobalServiceErrorAdviceTest {
             ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY.value())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(
-                    new Res<>(
+                    new Res(
                         uuid,
                         null,
                         new ResError(
                             HttpStatus.UNPROCESSABLE_ENTITY.value(), errMessage, method, endpoint),
                         timestamp)));
 
-    ResponseEntity<Res<Object>> responseEntity =
+    ResponseEntity<Res> responseEntity =
         globalServiceErrorAdvice.handleValidationException(req, bEx);
     assertThat(responseEntity.getStatusCode())
         .as("Status code")
         .isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
     assertThat(responseEntity.getBody()).as("Body not null").isNotNull();
-    Res<Object> res = responseEntity.getBody();
+    Res res = responseEntity.getBody();
     assertThat(res.getData()).as("Data is null").isNull();
     assertThat(res.getTimestamp()).as("Timestamp").isEqualTo(timestamp);
     assertThat(res.getResId()).as("Res ID").isEqualTo(uuid);

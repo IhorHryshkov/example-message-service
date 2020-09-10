@@ -41,12 +41,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class RedisConfig {
 
+  private final RedisSettings redisSettings;
   private String password;
   private String host;
   private Integer port;
   private Integer database;
-
-  private final RedisSettings redisSettings;
 
   RedisConfig(RedisSettings redisSettings) {
     this.redisSettings = redisSettings;
