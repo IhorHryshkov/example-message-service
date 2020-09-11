@@ -24,7 +24,7 @@ import lombok.ToString;
     type = "object",
     name = "Callback",
     title = "Callback",
-    description = "A consistent response object.")
+    description = "A consistent body object.")
 public class Callback {
 
   @Schema(

@@ -6,23 +6,16 @@
  */
 package com.example.ems.config.openapi;
 
-import java.util.Collections;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.oas.annotations.EnableOpenApi;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.plugins.Docket;
 
 @Configuration
-@EnableOpenApi
-@Import(BeanValidatorPluginsConfiguration.class)
 public class OpenAPIConfig {
 
   private final BuildProperties buildProperties;
@@ -51,32 +44,20 @@ public class OpenAPIConfig {
   @Value("${apiDocs.apiInfo.licenseUrl}")
   private String licenseUrl;
 
-  @Value("${apiDocs.paths}")
-  private String paths;
-
   OpenAPIConfig(BuildProperties buildProperties) {
     this.buildProperties = buildProperties;
   }
 
   @Bean
-  public Docket api() {
-    return new Docket(DocumentationType.OAS_30)
-        .select()
-        .paths(PathSelectors.ant(paths))
-        .build()
-        .apiInfo(apiInfo())
-        .useDefaultResponseMessages(false);
-  }
-
-  private ApiInfo apiInfo() {
-    return new ApiInfo(
-        title,
-        description,
-        buildProperties.getVersion(),
-        urlTermsOfService,
-        new Contact(contactName, contactUrl, contactEmail),
-        license,
-        licenseUrl,
-        Collections.emptyList());
+  public OpenAPI springShopOpenAPI() {
+    return new OpenAPI()
+        .info(
+            new Info()
+                .title(title)
+                .description(description)
+                .version(buildProperties.getVersion())
+                .termsOfService(urlTermsOfService)
+                .contact(new Contact().email(contactEmail).name(contactName).url(contactUrl))
+                .license(new License().name(license).url(licenseUrl)));
   }
 }

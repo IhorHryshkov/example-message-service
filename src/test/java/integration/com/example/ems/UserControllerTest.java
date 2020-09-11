@@ -457,6 +457,13 @@ public class UserControllerTest extends RootControllerTest {
         this.restTemplate.postForEntity(
             createURLWithPort(endpointCallbackApprove), callbackSuccess, Res.class);
     assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(200);
+    user = usersDAO.findByUsername(params201.getUsername()).stream().findFirst().orElse(null);
+    assertThat(user).as("Users is not null DB").isNotNull();
+    assertThat(user.getId().toString()).as("User ID DB").isEqualTo(newUserId);
+    assertThat(user.getUsername()).as("User username DB").isEqualTo("testUser2");
+    assertThat(user.getStatus()).as("User status is not null DB").isNotNull();
+    assertThat(user.getStatus().getId()).as("User status ID DB").isEqualTo(statusIdOnline);
+    assertThat(user.getStatus().getName()).as("User status name DB").isEqualTo("online");
     assertThat(
             redisTemplate.opsForHash().hasKey("userState::add::IN_PROGRESS", params201.toHashKey()))
         .as("Counter add in progress is not found")
@@ -470,13 +477,6 @@ public class UserControllerTest extends RootControllerTest {
     assertThat(redisTemplate.opsForHash().hasKey("state::callback::IN_PROGRESS", resIdSuccess))
         .as("State IN_PROGRESS is not del")
         .isFalse();
-    user = usersDAO.findByUsername(params201.getUsername()).stream().findFirst().orElse(null);
-    assertThat(user).as("Users is not null DB").isNotNull();
-    assertThat(user.getId().toString()).as("User ID DB").isEqualTo(newUserId);
-    assertThat(user.getUsername()).as("User username DB").isEqualTo("testUser2");
-    assertThat(user.getStatus()).as("User status is not null DB").isNotNull();
-    assertThat(user.getStatus().getId()).as("User status ID DB").isEqualTo(statusIdOnline);
-    assertThat(user.getStatus().getName()).as("User status name DB").isEqualTo("online");
   }
 
   @Test

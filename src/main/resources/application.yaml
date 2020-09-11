@@ -89,8 +89,17 @@ parameters:
       update: "/{userId}"
     callback:
       rootPath: "/v1/callback/approve"
+springdoc:
+  show-actuator: true
+  api-docs:
+    path: /v1/apidocs/json
+  swagger-ui:
+    disable-swagger-default-url: true
+    display-request-duration: true
+    path: /v1/apidocs
+    operationsSorter: method
+  paths-to-match: /v1/**
 apiDocs:
-  paths: "/v1/**"
   apiInfo:
     title: "EMS REST API"
     description: "Example message service so-called REST API."
@@ -101,10 +110,3 @@ apiDocs:
       name: "Ihor Hryshkov"
       url: "https://www.linkedin.com/in/ihor-hryshkov-87539724/"
       email: "igor.grishkov.olegovich@gmail.com"
-springfox:
-  documentation:
-    swaggerUi:
-      baseUrl: /v1/apidocs
-    openApi:
-      v3:
-        path: /v1/apidocs/json

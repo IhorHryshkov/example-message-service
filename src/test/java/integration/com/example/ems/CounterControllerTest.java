@@ -488,30 +488,6 @@ public class CounterControllerTest extends RootControllerTest {
         this.restTemplate.postForEntity(
             createURLWithPort(endpointCallbackApprove), callbackSuccess, Res.class);
     assertThat(responseEntity.getStatusCodeValue()).as("Status code is incorrect").isEqualTo(200);
-    assertThat(redisTemplate.opsForHash().hasKey("counterState::add::INIT", params201.toHashKey()))
-        .as("Counter add init is not found")
-        .isFalse();
-    assertThat(
-            redisTemplate
-                .opsForHash()
-                .hasKey("counterState::add::IN_PROGRESS", params201.toHashKey()))
-        .as("Counter add in progress is not found")
-        .isFalse();
-    assertThat(
-            redisTemplate.hasKey(
-                String.format(
-                    "userCache::getUserOrNotFound::ifNoneMatch::%s", params201.toHashUserId())))
-        .as("User get by ID found cache")
-        .isTrue();
-    assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE", resIdSuccess))
-        .as("State RESOLVE is add")
-        .isTrue();
-    assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE::expire", resIdSuccess))
-        .as("State RESOLVE expire is add")
-        .isTrue();
-    assertThat(redisTemplate.opsForHash().hasKey("state::callback::IN_PROGRESS", resIdSuccess))
-        .as("State IN_PROGRESS is not del")
-        .isFalse();
     counter =
         countersDAO
             .findById(new CountersIds(params201.getUserId(), params201.getTypeId()))
@@ -541,5 +517,29 @@ public class CounterControllerTest extends RootControllerTest {
         .isInstanceOf(Status.class);
     assertThat(counter.getUser().getStatus().getName()).as("Status name DB").isEqualTo("testName");
     assertThat(counter.getUser().getStatus().getId()).as("Status ID DB").isEqualTo(statusId);
+    assertThat(redisTemplate.opsForHash().hasKey("counterState::add::INIT", params201.toHashKey()))
+        .as("Counter add init is not found")
+        .isFalse();
+    assertThat(
+            redisTemplate
+                .opsForHash()
+                .hasKey("counterState::add::IN_PROGRESS", params201.toHashKey()))
+        .as("Counter add in progress is not found")
+        .isFalse();
+    assertThat(
+            redisTemplate.hasKey(
+                String.format(
+                    "userCache::getUserOrNotFound::ifNoneMatch::%s", params201.toHashUserId())))
+        .as("User get by ID found cache")
+        .isTrue();
+    assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE", resIdSuccess))
+        .as("State RESOLVE is add")
+        .isTrue();
+    assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE::expire", resIdSuccess))
+        .as("State RESOLVE expire is add")
+        .isTrue();
+    assertThat(redisTemplate.opsForHash().hasKey("state::callback::IN_PROGRESS", resIdSuccess))
+        .as("State IN_PROGRESS is not del")
+        .isFalse();
   }
 }
