@@ -464,19 +464,12 @@ public class UserControllerTest extends RootControllerTest {
     assertThat(user.getStatus()).as("User status is not null DB").isNotNull();
     assertThat(user.getStatus().getId()).as("User status ID DB").isEqualTo(statusIdOnline);
     assertThat(user.getStatus().getName()).as("User status name DB").isEqualTo("online");
-    assertThat(
-            redisTemplate.opsForHash().hasKey("userState::add::IN_PROGRESS", params201.toHashKey()))
-        .as("Counter add in progress is not found")
-        .isFalse();
     assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE", resIdSuccess))
         .as("State RESOLVE is add")
         .isTrue();
     assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE::expire", resIdSuccess))
         .as("State RESOLVE expire is add")
         .isTrue();
-    assertThat(redisTemplate.opsForHash().hasKey("state::callback::IN_PROGRESS", resIdSuccess))
-        .as("State IN_PROGRESS is not del")
-        .isFalse();
   }
 
   @Test

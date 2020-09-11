@@ -68,7 +68,12 @@ public class CounterController {
             example = "f02e8ce7-162e-4f78-9508-99d8886a9e61",
             in = ParameterIn.PATH,
             required = true,
-            schema = @Schema(type = "string", format = "uuid")),
+            schema =
+                @Schema(
+                    type = "string",
+                    format = "uuid",
+                    pattern =
+                        "^[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}$")),
         @Parameter(name = "params", hidden = true)
       })
   @ApiResponses(
@@ -116,8 +121,14 @@ public class CounterController {
                                   + "  \"timestamp\":1599829489630\n"
                                   + "}")
                     })),
-        @ApiResponse(responseCode = "204", description = "No Content"),
-        @ApiResponse(responseCode = "304", description = "Not Modified"),
+        @ApiResponse(
+            responseCode = "204",
+            description = "No Content",
+            content = @Content(schema = @Schema(hidden = true))),
+        @ApiResponse(
+            responseCode = "304",
+            description = "Not Modified",
+            content = @Content(schema = @Schema(hidden = true))),
         @ApiResponse(
             responseCode = "422",
             description = "Request body or query or path params data is incorrect",
@@ -190,7 +201,7 @@ public class CounterController {
   @PostMapping
   @Operation(
       tags = {"Counter Controller"},
-      summary = "Add counter by User ID and Type ID.",
+      summary = "Add or increment counter by User ID and Type ID.",
       description = "Adding counts for specifics type and user.")
   @ApiResponses(
       value = {
@@ -213,6 +224,26 @@ public class CounterController {
                                   + "     \"userId\":\"4e5d7d13-0b24-4529-bbe1-a68e50fa8121\",\n"
                                   + "     \"typeId\":3,\n"
                                   + "     \"count\":10\n"
+                                  + "   }\n"
+                                  + "}")
+                    })),
+        @ApiResponse(
+            responseCode = "202",
+            description = "Accepted",
+            content =
+                @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = Res.class),
+                    examples = {
+                      @ExampleObject(
+                          name = "202",
+                          description = "Accepted",
+                          value =
+                              "{\n"
+                                  + "   \"timestamp\":1599431725364,\n"
+                                  + "   \"resId\":\"78449aae-eac8-48b6-aa99-5c57bfee4d63\",\n"
+                                  + "   \"data\":{\n"
+                                  + "     \"state\":\"IN_PROGRESS\"\n"
                                   + "   }\n"
                                   + "}")
                     })),

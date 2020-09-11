@@ -23,9 +23,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 @EqualsAndHashCode
 @ToString
 @JsonInclude(Include.NON_NULL)
-@Schema(type = "object", name = "AddIn", title = "AddIn", description = "A consistent body object.")
+@Schema(
+    type = "object",
+    name = "CounterAddIn",
+    title = "CounterAdd",
+    description = "A consistent body for add or increment counter object.")
 public class AddIn implements Serializable {
-
   @Schema(
       name = "userId",
       description = "The user ID value",

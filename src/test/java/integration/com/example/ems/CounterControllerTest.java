@@ -517,15 +517,6 @@ public class CounterControllerTest extends RootControllerTest {
         .isInstanceOf(Status.class);
     assertThat(counter.getUser().getStatus().getName()).as("Status name DB").isEqualTo("testName");
     assertThat(counter.getUser().getStatus().getId()).as("Status ID DB").isEqualTo(statusId);
-    assertThat(redisTemplate.opsForHash().hasKey("counterState::add::INIT", params201.toHashKey()))
-        .as("Counter add init is not found")
-        .isFalse();
-    assertThat(
-            redisTemplate
-                .opsForHash()
-                .hasKey("counterState::add::IN_PROGRESS", params201.toHashKey()))
-        .as("Counter add in progress is not found")
-        .isFalse();
     assertThat(
             redisTemplate.hasKey(
                 String.format(
@@ -538,8 +529,5 @@ public class CounterControllerTest extends RootControllerTest {
     assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE::expire", resIdSuccess))
         .as("State RESOLVE expire is add")
         .isTrue();
-    assertThat(redisTemplate.opsForHash().hasKey("state::callback::IN_PROGRESS", resIdSuccess))
-        .as("State IN_PROGRESS is not del")
-        .isFalse();
   }
 }
