@@ -1,0 +1,104 @@
+asyncapi: '2.0.0'
+info:
+  title: EMS Callback API
+  description: Example message service STOMP callback API.
+  termsOfService: https://en.wikipedia.org/wiki/Terms_of_service
+  contact:
+    name: Ihor Hryshkov
+    url: https://www.linkedin.com/in/ihor-hryshkov-87539724/
+    email: igor.grishkov.olegovich@gmail.com
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  version: 0.0.1
+
+servers:
+  ems:
+    url: 'http://{hostname}:{port}/v1/callback'
+    protocol: stomp
+    variables:
+      hostname:
+        default: localhost
+      port:
+        default: '31111'
+
+channels:
+  /queue/{username}:
+    description: This channel is used to subscribe messages about successful processing for REST API methods.
+    parameters:
+      username:
+        description: Username of the user. Can be to get from REST API method.
+        schema:
+          type: string
+          minLength: 6
+          maxLength: 64
+          pattern: '^[A-Za-z0-9_-]+$'
+    subscribe:
+      message:
+        oneOf:
+          - $ref: '#/components/messages/userAdd'
+          - $ref: '#/components/messages/userUpdate'
+          - $ref: '#/components/messages/counterAdd'
+
+components:
+  schemas:
+    globalPayloads:
+      type: object
+      properties:
+        resId:
+          type: string
+          format: uuid
+          description: The response ID value you get from your request to REST API method and send for approve this message in REST API
+          example: b480586b-5053-4ab9-a5b6-e7e75fcc5fed
+        userId:
+          type: string
+          format: uuid
+          description: The user ID value for local mapping of operations by specific user in client
+          example: c652452d-992e-4c5f-82b4-85da2b7b1206
+    globalHeaders:
+      type: object
+      properties:
+        content-length:
+          description: Content length of body
+          type: integer
+          format: int64
+          example: 96
+        message-id:
+          description: Unique identifier for a message. It is duplicate of resId param in body.
+          type: string
+          format: uuid
+          example: b480586b-5053-4ab9-a5b6-e7e75fcc5fed
+        destination:
+          description: Full path of subscription
+          type: string
+          example: /queue/TesterPester
+        content-type:
+          description: Content type of message
+          type: string
+          example: application/json
+        subscription:
+          description: Unique name of subscription
+          type: string
+          example: sub-1
+  messages:
+    userAdd:
+      summary: Action to add new user.
+      description: Always get message when user successful create.
+      headers:
+        $ref: '#/components/schemas/globalHeaders'
+      payload:
+        $ref: '#/components/schemas/globalPayloads'
+    userUpdate:
+      summary: Action to update user status.
+      description: Always get message when user status and counter by status successful update.
+      headers:
+        $ref: '#/components/schemas/globalHeaders'
+      payload:
+        $ref: '#/components/schemas/globalPayloads'
+    counterAdd:
+      summary: Action to add or update counter by user.
+      description: Always get message when counter add or update successful.
+      headers:
+        $ref: '#/components/schemas/globalHeaders'
+      payload:
+        $ref: '#/components/schemas/globalPayloads'

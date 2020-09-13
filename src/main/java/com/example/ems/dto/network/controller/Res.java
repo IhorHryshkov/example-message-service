@@ -21,7 +21,12 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Schema(type = "object", name = "Res", title = "Res", description = "A consistent response object.")
 public class Res {
-  @Schema(name = "resId", description = "The response ID value", type = "string", format = "uuid")
+  @Schema(
+      name = "resId",
+      description = "The response ID value",
+      type = "string",
+      format = "uuid",
+      example = "b480586b-5053-4ab9-a5b6-e7e75fcc5fed")
   private String resId;
 
   @Schema(
@@ -44,6 +49,7 @@ public class Res {
       name = "timestamp",
       description = "The timestamp of response",
       type = "integer",
-      format = "int64")
+      format = "int64",
+      example = "1599997414862")
   private Long timestamp;
 }
