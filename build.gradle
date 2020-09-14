@@ -3,6 +3,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'com.adarshr.test-logger' version '2.1.0'
     id 'com.github.sherter.google-java-format' version '0.9'
+    id "com.github.node-gradle.node" version "2.2.4"
     id 'java'
 }
 
@@ -10,14 +11,39 @@ group = 'com.example'
 version = '0.0.1'
 sourceCompatibility = 11
 
+//Get build info object for get version in code
 springBoot {
     buildInfo()
 }
+//Install node JS for compile documentation of AsyncAPI
+node {
+    download = true
+    version = "12.18.3"
+}
+task installAsyncApi(type: NpmTask) {
+    args = ['install', '@asyncapi/generator@1.0.0-rc.10']
+}
+task buildAsyncApi(type: NpxTask) {
+    command = 'ag'
+    args = ['./src/main/resources/asyncapi/callback.yaml', '@asyncapi/html-template', '-o', './build/resources/main/asyncapi/html', '--force-write']
+}
+task uninstallAsyncApi(type: Delete) {
+    delete "node_modules"
+    delete "package-lock.json"
+}
 
+//Google formatting tasks
 clean.dependsOn(tasks.googleJavaFormat)
 verifyGoogleJavaFormat.mustRunAfter(tasks.googleJavaFormat)
 test.mustRunAfter(tasks.clean)
-bootRun.mustRunAfter(tasks.test)
+
+//Generation AsyncAPI docs tasks
+uninstallAsyncApi.dependsOn(tasks.buildAsyncApi)
+buildAsyncApi.dependsOn(tasks.installAsyncApi)
+bootRun.dependsOn(tasks.uninstallAsyncApi)
+buildAsyncApi.mustRunAfter(tasks.installAsyncApi)
+uninstallAsyncApi.mustRunAfter(tasks.buildAsyncApi)
+bootRun.mustRunAfter(tasks.uninstallAsyncApi)
 
 configurations {
     compileOnly {
@@ -58,7 +84,6 @@ dependencies {
 
 test {
     useJUnitPlatform()
-    maxHeapSize = '1G'
     testlogger {
         theme 'mocha'
         showExceptions true

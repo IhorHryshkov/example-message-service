@@ -21,6 +21,8 @@ import com.example.ems.dto.mq.QueueConf;
 import com.example.ems.network.controllers.exceptions.websocket.NoAckException;
 import com.example.ems.services.CallbackService;
 import com.example.ems.services.QueueService;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -57,6 +59,12 @@ class CallbackServiceTest {
         new CallbackMQ<>(queueNameExpected, resIdExpected, dataExpected);
     QueueConf queueConf = new QueueConf();
     QueueConf queueConfExpected = new QueueConf();
+    Map<String, Object> messageHeadersExpected =
+        new HashMap<>() {
+          {
+            put("message-id", resIdExpected);
+          }
+        };
 
     when(rabbitMQSettings.getWebsocket()).thenReturn(queueConf);
     when(queueService.getRabbitMQSettings()).thenReturn(rabbitMQSettings);
@@ -80,7 +88,7 @@ class CallbackServiceTest {
         .sendMessage(eq("websocket.testQueue"), eq(inExpected), eq(queueConfExpected));
     doThrow(new RuntimeException("Test"))
         .when(simpMessagingTemplate)
-        .convertAndSend(eq(destinationExpected), eq(dataExpected));
+        .convertAndSend(eq(destinationExpected), eq(dataExpected), eq(messageHeadersExpected));
 
     assertThat(catchThrowable(() -> callbackService.listen(message, in)))
         .as("isGoRetry some exception")
@@ -119,7 +127,7 @@ class CallbackServiceTest {
         .hasMessageContaining("Test");
     doNothing()
         .when(simpMessagingTemplate)
-        .convertAndSend(eq(destinationExpected), eq(dataExpected));
+        .convertAndSend(eq(destinationExpected), eq(dataExpected), eq(messageHeadersExpected));
     assertThat(catchThrowable(() -> callbackService.listen(message, in)))
         .as("convertAndSend successful")
         .isInstanceOf(NoAckException.class)

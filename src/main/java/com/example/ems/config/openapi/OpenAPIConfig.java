@@ -49,7 +49,7 @@ public class OpenAPIConfig {
   }
 
   @Bean
-  public OpenAPI springShopOpenAPI() {
+  public OpenAPI docsOpenAPI() {
     return new OpenAPI()
         .info(
             new Info()

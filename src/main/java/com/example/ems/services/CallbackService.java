@@ -11,6 +11,8 @@ import com.example.ems.dto.mq.CallbackMQ;
 import com.example.ems.network.controllers.exceptions.websocket.NoAckException;
 import com.example.ems.utils.enums.States;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.amqp.core.Message;
@@ -60,8 +62,14 @@ public class CallbackService {
         return;
       }
       if (this.stateDAO.add(inProgressKey, in.getResId(), in) == null) {
+        Map<String, Object> headers =
+            new HashMap<>() {
+              {
+                put("message-id", in.getResId());
+              }
+            };
         this.simpMessagingTemplate.convertAndSend(
-            String.format("/queue/%s", in.getQueueName()), in.getData());
+            String.format("/queue/%s", in.getQueueName()), in.getData(), headers);
       }
       throw new NoAckException(String.format("Waiting RESOLVE by res ID: %s", in.getResId()));
     } else {

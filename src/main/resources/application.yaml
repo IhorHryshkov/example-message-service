@@ -73,40 +73,44 @@ parameters:
     status: online
   sockets:
     callback:
-      appPrefix: "/v1"
-      destPrefixes: "/queue/"
-      endpointsSocks: "/v1/callback"
+      appPrefix: /v1
+      destPrefixes: /queue/
+      endpointsSocks: /v1/callback
+      endpointsCallbackDock: /v1/docs/callback
+      resourcesCallbackDock: classpath:/asyncapi/html/
   controllers:
     counter:
-      rootPath: "/v1/counter"
-      getById: "/{userId}"
+      rootPath: /v1/counter
+      getById: /{userId}
     status:
-      rootPath: "/v1/status"
+      rootPath: /v1/status
     type:
-      rootPath: "/v1/type"
+      rootPath: /v1/type
     user:
-      rootPath: "/v1/user"
-      update: "/{userId}"
+      rootPath: /v1/user
+      update: /{userId}
     callback:
-      rootPath: "/v1/callback/approve"
+      rootPath: /v1/callback/approve
 springdoc:
   show-actuator: true
   api-docs:
-    path: /v1/apidocs/json
+    path: '/v1/docs/restapi/json'
+    enabled: true
   swagger-ui:
     disable-swagger-default-url: true
     display-request-duration: true
-    path: /v1/apidocs
+    path: '/v1/docs/restapi/'
     operationsSorter: method
   paths-to-match: /v1/**
 apiDocs:
+  endpointsRestapiDock: /v1/docs/restapi
   apiInfo:
-    title: "EMS REST API"
-    description: "Example message service so-called REST API."
-    urlTermsOfService: "https://en.wikipedia.org/wiki/Terms_of_service"
-    license: "MIT License"
-    licenseUrl: "https://opensource.org/licenses/MIT"
+    title: EMS REST API
+    description: Example message service so-called REST API.
+    urlTermsOfService: https://en.wikipedia.org/wiki/Terms_of_service
+    license: MIT License
+    licenseUrl: https://opensource.org/licenses/MIT
     contact:
-      name: "Ihor Hryshkov"
-      url: "https://www.linkedin.com/in/ihor-hryshkov-87539724/"
-      email: "igor.grishkov.olegovich@gmail.com"
+      name: Ihor Hryshkov
+      url: https://www.linkedin.com/in/ihor-hryshkov-87539724/
+      email: igor.grishkov.olegovich@gmail.com
