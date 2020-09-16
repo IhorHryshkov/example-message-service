@@ -6,16 +6,16 @@
 # Example Message Service Project on Java
 > ![](https://img.shields.io/badge/-new%20opportunity-yellowgreen?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAQAAAD8x0bcAAAAxUlEQVR4AZXRT44BQQDG0bcTa93cYQYRf25CHAWHEGIpIo4yZxnNFdAWNbWYdDrUxvttv+qqpH0uN7eKzWWSOk6ewn+lo7YXPVc3a0ON2MjG3UVXTcfVr++XY0UsVzm5VZNtDOh7OADknta8jdgqZcBcMJQyFsyAlaCR/FJTsEyNfmL10UJ13Sg5mgimQKa0SY52Si2Ao7ve25sGHvYqbReFvrqBi7NMTVfhbmusGZvYeTj78iJ3UNZ+8F4mKTOztDDV8qk/f2FITtOgI4oAAAAASUVORK5CYII=) <img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Emoji_u1f91d_1f3fc.svg" alt="Good day bro" width="30">
 
-	The author of this project have a lot of expertise in different business solutions and open to new 
-	opportunities and is ready to consider interesting offers about:
-    • Consulting and analysis on architecture, choice of technologies, code and any problems in 
-      existing projects, if you are not sure about your staff;
+	The author of this project have a lot of expertise in different business solutions and open to new opportunities 
+	and is ready to consider interesting offers about:
+    • Consulting and analysis on architecture, choice of technologies, code and any problems in existing projects, 
+      if you are not sure about your staff;
     • Analysis, design, development and launch of startups;
     • Work in the company as: EMS, CTO, Tech/Team Lead or Senior/Middle Software Engineer;
     • Or other interesting offers.
     
-	Have only ONE problem, my verbal English is A2.2 level, but if you or your company ready to help 
-	me with this problem I will help you too.) 
+	Have only ONE problem, my verbal English is A2.2 level, but if you or your company ready to help me with this 
+	problem I will help you too.) 
 
 > ![](https://img.shields.io/badge/-warning-red?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAYAAACZ3F9/AAABjUlEQVQoU4WRv4sTURDHZ3bf/ophs4tkF0QIErvDwmBrcQcH/gGmsbCyEMHGWmwFS/8Bq7tGwsEVh/cXyMGltBEOkiLd2yjZ/Njse2/e8QIJmyNHphnmy/czM8wg3BOO4wyI6IFSqrnLgrvERqPxYjabnSLivyAIvkwmk8u7vp0gIi7a7XYqpSyHw2GutXb2gmEYvimK4m1Zlq+M2ff9E8bY1XQ6/V6Fd02kbrfr9Hq9EQC4RPQQAAgAtrxbRRAEXwHAWywWn2zbvtFae0T0uFarfTa5KIr366lV0AIACQAmA2PsGgACKeWBqRFRdTodv9/vi1W97uC67rnneWd5nv8wmuu6v8w7pJQvTV2v118vl8sPQoijDdhsNuuc88ysVmn0TWsdCCE+btZDnLdarUeDweD/aiJj7E8Yhu/G4/HvCnhh3iCEOF5rURQ9z/P8p1LqKaZp+oRzfqWUSqrntiwrAwCbiKKqbtv2KI7jQ7QsaxzH8bMsy8z590aSJCnn/K8B50Tk7yUqBkQsbwGKrqBiFJJSbwAAAABJRU5ErkJggg==) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Emoji_u1f60e.svg/240px-Emoji_u1f60e.svg.png" alt="Good day bro" width="28">
 
@@ -88,22 +88,22 @@ some important components of data security and integrity.
 ##### Step1 - Build project
 Init test environments and build
 ```bash
-VERSION=$(cat VERSION) \
-PORT={your service test port} \
-MQ_HOST={test rabbit host} \
-MQ_PORT={test rabbit port} \
-MQ_USER={test rabbit username} \
-MQ_PASS={test rabbit password} \
-PG_HOST={test postgres JDBC connection} \
-PG_USER={test postgres username} \
-PG_PASS={test postgres password} \
-SHOW_SQL=true \
-FORMAT_SQL=true \
-LOG_LEVEL=trace \
-REDIS_PASS={test redis password} \
-REDIS_HOST={test redis host} \
-REDIS_PORT={test redis port} \
-REDIS_DB={test redis DB number} \
+VERSION=$(cat VERSION) 
+PORT={your service test port} 
+MQ_HOST={test rabbit host} 
+MQ_PORT={test rabbit port} 
+MQ_USER={test rabbit username} 
+MQ_PASS={test rabbit password} 
+PG_HOST={test postgres JDBC connection} 
+PG_USER={test postgres username} 
+PG_PASS={test postgres password} 
+SHOW_SQL=true 
+FORMAT_SQL=true 
+LOG_LEVEL=trace 
+REDIS_PASS={test redis password} 
+REDIS_HOST={test redis host} 
+REDIS_PORT={test redis port} 
+REDIS_DB={test redis DB number} 
 ./gradlew clean build
 ```
 <br>
@@ -111,27 +111,27 @@ REDIS_DB={test redis DB number} \
 ##### Step2 - Run from jar
 Init prod environments and run from the jar.
 ```bash
-VERSION=$(cat VERSION) \
-PORT={your service prod port} \
-MQ_HOST={prod rabbit host} \
-MQ_PORT={prod rabbit port} \
-MQ_USER={prod rabbit username} \
-MQ_PASS={prod rabbit password} \
-PG_HOST={prod postgres JDBC connection} \
-PG_USER={prod postgres username} \
-PG_PASS={prod postgres password} \
-SHOW_SQL=false \
-FORMAT_SQL=false \
-LOG_LEVEL=warn \
-REDIS_PASS={prod redis password} \
-REDIS_HOST={prod redis host} \
-REDIS_PORT={prod redis port} \
-REDIS_DB={prod redis DB number} \
-mkdir -p {path to your release dir}/release/$VERSION \
-mkdir -p {path to your release dir}/release/$VERSION/static \
-cp /{path to dir when your project is build, default is project dir}/libs {path to your release dir}/release/$VERSION \
-cp /{path to your project dir}/static {path to your release dir}/release/$VERSION/static \
-cd {path to your release dir}/release/$VERSION
+VERSION=$(cat VERSION) 
+PORT={your service prod port} 
+MQ_HOST={prod rabbit host} 
+MQ_PORT={prod rabbit port} 
+MQ_USER={prod rabbit username} 
+MQ_PASS={prod rabbit password} 
+PG_HOST={prod postgres JDBC connection} 
+PG_USER={prod postgres username} 
+PG_PASS={prod postgres password} 
+SHOW_SQL=false 
+FORMAT_SQL=false 
+LOG_LEVEL=warn 
+REDIS_PASS={prod redis password} 
+REDIS_HOST={prod redis host} 
+REDIS_PORT={prod redis port} 
+REDIS_DB={prod redis DB number} 
+mkdir -p {path to your release dir}/releases/$VERSION 
+mkdir -p {path to your release dir}/releases/$VERSION/static 
+cp -r /{path to dir when your project is build, default is project dir}/libs/ems-$VERSION.jar {path to your release dir}/releases/$VERSION 
+cp -r /{path to your project dir}/static {path to your release dir}/releases/$VERSION 
+cd {path to your release dir}/releases/$VERSION
 java -jar ems-$VERSION.jar
 ```
 <br>
@@ -140,22 +140,22 @@ java -jar ems-$VERSION.jar
 ##### Step1 - Build project
 Init test environments and build
 ```bash
-VERSION=$(cat VERSION) \
-PORT={your service test port} \
-MQ_HOST={test rabbit host} \
-MQ_PORT={test rabbit port} \
-MQ_USER={test rabbit username} \
-MQ_PASS={test rabbit password} \
-PG_HOST={test postgres JDBC connection} \
-PG_USER={test postgres username} \
-PG_PASS={test postgres password} \
-SHOW_SQL=true \
-FORMAT_SQL=true \
-LOG_LEVEL=trace \
-REDIS_PASS={test redis password} \
-REDIS_HOST={test redis host} \
-REDIS_PORT={test redis port} \
-REDIS_DB={test redis DB number} \
+VERSION=$(cat VERSION) 
+PORT={your service test port} 
+MQ_HOST={test rabbit host} 
+MQ_PORT={test rabbit port} 
+MQ_USER={test rabbit username} 
+MQ_PASS={test rabbit password} 
+PG_HOST={test postgres JDBC connection} 
+PG_USER={test postgres username} 
+PG_PASS={test postgres password} 
+SHOW_SQL=true 
+FORMAT_SQL=true 
+LOG_LEVEL=trace 
+REDIS_PASS={test redis password} 
+REDIS_HOST={test redis host} 
+REDIS_PORT={test redis port} 
+REDIS_DB={test redis DB number} 
 ./gradlew clean build
 ```
 <br>
@@ -163,7 +163,7 @@ REDIS_DB={test redis DB number} \
 ##### Step2 - Build Docker
 Build docker image.
 ```bash
-VERSION=$(cat VERSION) \
+VERSION=$(cat VERSION) 
 docker build -t ems/java:$VERSION .
 ```
 <br>
@@ -171,22 +171,22 @@ docker build -t ems/java:$VERSION .
 ##### Step3 - Run Docker
 Init prod environments and run Docker image.
 ```bash
-VERSION=$(cat VERSION) \
-PORT={your service prod port} \
-MQ_HOST={prod rabbit host} \
-MQ_PORT={prod rabbit port} \
-MQ_USER={prod rabbit username} \
-MQ_PASS={prod rabbit password} \
-PG_HOST={prod postgres JDBC connection} \
-PG_USER={prod postgres username} \
-PG_PASS={prod postgres password} \
-SHOW_SQL=false \
-FORMAT_SQL=false \
-LOG_LEVEL=warn \
-REDIS_PASS={prod redis password} \
-REDIS_HOST={prod redis host} \
-REDIS_PORT={prod redis port} \
-REDIS_DB={prod redis DB number} \
+VERSION=$(cat VERSION) 
+PORT={your service prod port} 
+MQ_HOST={prod rabbit host} 
+MQ_PORT={prod rabbit port} 
+MQ_USER={prod rabbit username} 
+MQ_PASS={prod rabbit password} 
+PG_HOST={prod postgres JDBC connection} 
+PG_USER={prod postgres username} 
+PG_PASS={prod postgres password} 
+SHOW_SQL=false 
+FORMAT_SQL=false 
+LOG_LEVEL=warn 
+REDIS_PASS={prod redis password} 
+REDIS_HOST={prod redis host} 
+REDIS_PORT={prod redis port} 
+REDIS_DB={prod redis DB number} 
 docker run --name {your docker run name} \
 -e MQ_HOST -e MQ_PORT -e MQ_USER -e MQ_PASS \
 -e PG_HOST -e PG_USER -e PG_PASS -e SHOW_SQL \
