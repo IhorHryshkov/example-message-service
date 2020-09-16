@@ -6,14 +6,16 @@
 # Example Message Service Project on Java
 > ![](https://img.shields.io/badge/-new%20opportunity-yellowgreen?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAQAAAD8x0bcAAAAxUlEQVR4AZXRT44BQQDG0bcTa93cYQYRf25CHAWHEGIpIo4yZxnNFdAWNbWYdDrUxvttv+qqpH0uN7eKzWWSOk6ewn+lo7YXPVc3a0ON2MjG3UVXTcfVr++XY0UsVzm5VZNtDOh7OADknta8jdgqZcBcMJQyFsyAlaCR/FJTsEyNfmL10UJ13Sg5mgimQKa0SY52Si2Ao7ve25sGHvYqbReFvrqBi7NMTVfhbmusGZvYeTj78iJ3UNZ+8F4mKTOztDDV8qk/f2FITtOgI4oAAAAASUVORK5CYII=) <img src="https://upload.wikimedia.org/wikipedia/commons/7/79/Emoji_u1f91d_1f3fc.svg" alt="Good day bro" width="30">
 
-	The author of this project have a lot of expertize in different business in  is open to new opportunities and is ready to consider interesting offers about:
+	The author of this project have a lot of expertise in different business solutions and open to new opportunities 
+	and is ready to consider interesting offers about:
     • Consulting and analysis on architecture, choice of technologies, code and any problems in existing projects, 
       if you are not sure about your staff;
     • Analysis, design, development and launch of startups;
     • Work in the company as: EMS, CTO, Tech/Team Lead or Senior/Middle Software Engineer;
     • Or other interesting offers.
     
-	Have only ONE problem, my verbal English is A2.2 level, but if you or your company ready to help me with this problem I will help you too.) 
+	Have only ONE problem, my verbal English is A2.2 level, but if you or your company ready to help me with this 
+	problem I will help you too.) 
 
 > ![](https://img.shields.io/badge/-warning-red?style=for-the-badge&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAANCAYAAACZ3F9/AAABjUlEQVQoU4WRv4sTURDHZ3bf/ophs4tkF0QIErvDwmBrcQcH/gGmsbCyEMHGWmwFS/8Bq7tGwsEVh/cXyMGltBEOkiLd2yjZ/Njse2/e8QIJmyNHphnmy/czM8wg3BOO4wyI6IFSqrnLgrvERqPxYjabnSLivyAIvkwmk8u7vp0gIi7a7XYqpSyHw2GutXb2gmEYvimK4m1Zlq+M2ff9E8bY1XQ6/V6Fd02kbrfr9Hq9EQC4RPQQAAgAtrxbRRAEXwHAWywWn2zbvtFae0T0uFarfTa5KIr366lV0AIACQAmA2PsGgACKeWBqRFRdTodv9/vi1W97uC67rnneWd5nv8wmuu6v8w7pJQvTV2v118vl8sPQoijDdhsNuuc88ysVmn0TWsdCCE+btZDnLdarUeDweD/aiJj7E8Yhu/G4/HvCnhh3iCEOF5rURQ9z/P8p1LqKaZp+oRzfqWUSqrntiwrAwCbiKKqbtv2KI7jQ7QsaxzH8bMsy8z590aSJCnn/K8B50Tk7yUqBkQsbwGKrqBiFJJSbwAAAABJRU5ErkJggg==) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Emoji_u1f60e.svg/240px-Emoji_u1f60e.svg.png" alt="Good day bro" width="28">
 
