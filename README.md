@@ -88,22 +88,22 @@ some important components of data security and integrity.
 ##### Step1 - Build project
 Init test environments and build
 ```bash
-VERSION=$(cat VERSION) \
-PORT={your service test port} \
-MQ_HOST={test rabbit host} \
-MQ_PORT={test rabbit port} \
-MQ_USER={test rabbit username} \
-MQ_PASS={test rabbit password} \
-PG_HOST={test postgres JDBC connection} \
-PG_USER={test postgres username} \
-PG_PASS={test postgres password} \
-SHOW_SQL=true \
-FORMAT_SQL=true \
-LOG_LEVEL=trace \
-REDIS_PASS={test redis password} \
-REDIS_HOST={test redis host} \
-REDIS_PORT={test redis port} \
-REDIS_DB={test redis DB number} \
+VERSION=$(cat VERSION) 
+PORT={your service test port} 
+MQ_HOST={test rabbit host} 
+MQ_PORT={test rabbit port} 
+MQ_USER={test rabbit username} 
+MQ_PASS={test rabbit password} 
+PG_HOST={test postgres JDBC connection} 
+PG_USER={test postgres username} 
+PG_PASS={test postgres password} 
+SHOW_SQL=true 
+FORMAT_SQL=true 
+LOG_LEVEL=trace 
+REDIS_PASS={test redis password} 
+REDIS_HOST={test redis host} 
+REDIS_PORT={test redis port} 
+REDIS_DB={test redis DB number} 
 ./gradlew clean build
 ```
 <br>
@@ -111,27 +111,27 @@ REDIS_DB={test redis DB number} \
 ##### Step2 - Run from jar
 Init prod environments and run from the jar.
 ```bash
-VERSION=$(cat VERSION) \
-PORT={your service prod port} \
-MQ_HOST={prod rabbit host} \
-MQ_PORT={prod rabbit port} \
-MQ_USER={prod rabbit username} \
-MQ_PASS={prod rabbit password} \
-PG_HOST={prod postgres JDBC connection} \
-PG_USER={prod postgres username} \
-PG_PASS={prod postgres password} \
-SHOW_SQL=false \
-FORMAT_SQL=false \
-LOG_LEVEL=warn \
-REDIS_PASS={prod redis password} \
-REDIS_HOST={prod redis host} \
-REDIS_PORT={prod redis port} \
-REDIS_DB={prod redis DB number} \
-mkdir -p {path to your release dir}/release/$VERSION \
-mkdir -p {path to your release dir}/release/$VERSION/static \
-cp /{path to dir when your project is build, default is project dir}/libs {path to your release dir}/release/$VERSION \
-cp /{path to your project dir}/static {path to your release dir}/release/$VERSION/static \
-cd {path to your release dir}/release/$VERSION
+VERSION=$(cat VERSION) 
+PORT={your service prod port} 
+MQ_HOST={prod rabbit host} 
+MQ_PORT={prod rabbit port} 
+MQ_USER={prod rabbit username} 
+MQ_PASS={prod rabbit password} 
+PG_HOST={prod postgres JDBC connection} 
+PG_USER={prod postgres username} 
+PG_PASS={prod postgres password} 
+SHOW_SQL=false 
+FORMAT_SQL=false 
+LOG_LEVEL=warn 
+REDIS_PASS={prod redis password} 
+REDIS_HOST={prod redis host} 
+REDIS_PORT={prod redis port} 
+REDIS_DB={prod redis DB number} 
+mkdir -p {path to your release dir}/releases/$VERSION 
+mkdir -p {path to your release dir}/releases/$VERSION/static 
+cp -r /{path to dir when your project is build, default is project dir}/libs/ems-$VERSION.jar {path to your release dir}/releases/$VERSION 
+cp -r /{path to your project dir}/static {path to your release dir}/releases/$VERSION 
+cd {path to your release dir}/releases/$VERSION
 java -jar ems-$VERSION.jar
 ```
 <br>
@@ -140,22 +140,22 @@ java -jar ems-$VERSION.jar
 ##### Step1 - Build project
 Init test environments and build
 ```bash
-VERSION=$(cat VERSION) \
-PORT={your service test port} \
-MQ_HOST={test rabbit host} \
-MQ_PORT={test rabbit port} \
-MQ_USER={test rabbit username} \
-MQ_PASS={test rabbit password} \
-PG_HOST={test postgres JDBC connection} \
-PG_USER={test postgres username} \
-PG_PASS={test postgres password} \
-SHOW_SQL=true \
-FORMAT_SQL=true \
-LOG_LEVEL=trace \
-REDIS_PASS={test redis password} \
-REDIS_HOST={test redis host} \
-REDIS_PORT={test redis port} \
-REDIS_DB={test redis DB number} \
+VERSION=$(cat VERSION) 
+PORT={your service test port} 
+MQ_HOST={test rabbit host} 
+MQ_PORT={test rabbit port} 
+MQ_USER={test rabbit username} 
+MQ_PASS={test rabbit password} 
+PG_HOST={test postgres JDBC connection} 
+PG_USER={test postgres username} 
+PG_PASS={test postgres password} 
+SHOW_SQL=true 
+FORMAT_SQL=true 
+LOG_LEVEL=trace 
+REDIS_PASS={test redis password} 
+REDIS_HOST={test redis host} 
+REDIS_PORT={test redis port} 
+REDIS_DB={test redis DB number} 
 ./gradlew clean build
 ```
 <br>
@@ -163,7 +163,7 @@ REDIS_DB={test redis DB number} \
 ##### Step2 - Build Docker
 Build docker image.
 ```bash
-VERSION=$(cat VERSION) \
+VERSION=$(cat VERSION) 
 docker build -t ems/java:$VERSION .
 ```
 <br>
@@ -171,22 +171,22 @@ docker build -t ems/java:$VERSION .
 ##### Step3 - Run Docker
 Init prod environments and run Docker image.
 ```bash
-VERSION=$(cat VERSION) \
-PORT={your service prod port} \
-MQ_HOST={prod rabbit host} \
-MQ_PORT={prod rabbit port} \
-MQ_USER={prod rabbit username} \
-MQ_PASS={prod rabbit password} \
-PG_HOST={prod postgres JDBC connection} \
-PG_USER={prod postgres username} \
-PG_PASS={prod postgres password} \
-SHOW_SQL=false \
-FORMAT_SQL=false \
-LOG_LEVEL=warn \
-REDIS_PASS={prod redis password} \
-REDIS_HOST={prod redis host} \
-REDIS_PORT={prod redis port} \
-REDIS_DB={prod redis DB number} \
+VERSION=$(cat VERSION) 
+PORT={your service prod port} 
+MQ_HOST={prod rabbit host} 
+MQ_PORT={prod rabbit port} 
+MQ_USER={prod rabbit username} 
+MQ_PASS={prod rabbit password} 
+PG_HOST={prod postgres JDBC connection} 
+PG_USER={prod postgres username} 
+PG_PASS={prod postgres password} 
+SHOW_SQL=false 
+FORMAT_SQL=false 
+LOG_LEVEL=warn 
+REDIS_PASS={prod redis password} 
+REDIS_HOST={prod redis host} 
+REDIS_PORT={prod redis port} 
+REDIS_DB={prod redis DB number} 
 docker run --name {your docker run name} \
 -e MQ_HOST -e MQ_PORT -e MQ_USER -e MQ_PASS \
 -e PG_HOST -e PG_USER -e PG_PASS -e SHOW_SQL \
