@@ -4,3 +4,10 @@
 *local.*
 *.iml
 /*_local
+gradlew*
+/static/**
+/releases/**
+/gradle/**
+/build/**
+.gradle/**
+.cache/**
