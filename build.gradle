@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'com.example'
-version = '0.0.1'
+version = "$System.env.VERSION"
 sourceCompatibility = 11
 
 //Get build info object for get version in code
@@ -25,11 +25,16 @@ task installAsyncApi(type: NpmTask) {
 }
 task buildAsyncApi(type: NpxTask) {
     command = 'ag'
-    args = ['./src/main/resources/asyncapi/callback.yaml', '@asyncapi/html-template', '-o', './static/asyncapi/html', '--force-write']
+    args = ["$buildDir/resources/main/asyncapi/callback.yaml", '@asyncapi/html-template', '-o', "$projectDir/static/asyncapi/html", '--force-write']
 }
 task uninstallAsyncApi(type: Delete) {
     delete "node_modules"
     delete "package-lock.json"
+}
+task updateAsyncApiVersion(type: Copy) {
+    from "$projectDir/src/main/resources/asyncapi/callback.yaml"
+    into "$buildDir/resources/main/asyncapi/"
+    filter { line -> line.replaceAll('VERSION', "$System.env.VERSION") }
 }
 
 //Google formatting tasks
@@ -39,7 +44,9 @@ verifyGoogleJavaFormat.mustRunAfter(tasks.googleJavaFormat)
 //Generation AsyncAPI docs tasks
 uninstallAsyncApi.dependsOn(tasks.buildAsyncApi)
 buildAsyncApi.dependsOn(tasks.installAsyncApi)
+installAsyncApi.dependsOn(tasks.updateAsyncApiVersion)
 clean.dependsOn(tasks.uninstallAsyncApi)
+installAsyncApi.mustRunAfter(tasks.updateAsyncApiVersion)
 buildAsyncApi.mustRunAfter(tasks.installAsyncApi)
 uninstallAsyncApi.mustRunAfter(tasks.buildAsyncApi)
 

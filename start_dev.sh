@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+export VERSION=$(cat VERSION)
 export PORT=31111
 export MQ_HOST=localhost
 export MQ_PORT=5690

@@ -45,8 +45,6 @@ some important components of data security and integrity.
 
 ## Branches
 ### java-dev
-Runs from the host machine.
-
 <details>
   <summary>Click here to read more about git clone by branch name</summary>
   <br>
@@ -56,6 +54,7 @@ Runs from the host machine.
 #### List of environments
 | Env name | Description | Example |
 | :------: | ----------- | :-----: |
+| `VERSION` | Version of the project | 0.0.0 |
 | `PORT` | Port number for connecting to the service | 8080 |
 | `MQ_HOST` | Hostname for connect to the RabbitMQ | localhost |
 | `MQ_PORT` | Port number for connect to the RabbitMQ | 5672 |
@@ -72,25 +71,117 @@ Runs from the host machine.
 | `REDIS_PORT` | Port number for connect to the RedisDB | 6379 |
 | `REDIS_DB` | DB number in the RedisDB | 0 |
 
-#### CLI usage
+#### CLI usage Linux(Unix)
+##### Step1 - Build project
+Init test environments and build
 ```bash
-PORT=31111 \
-MQ_HOST=localhost \
-MQ_PORT=5690 \
-MQ_USER=rabbitmq \
-MQ_PASS=rabbitmq \
-PG_HOST=jdbc:postgresql://127.0.0.1:5452/ems_test \
-PG_USER=postgres \
-PG_PASS=postgres \
+VERSION=$(cat VERSION) \
+PORT={your service test port} \
+MQ_HOST={test rabbit host} \
+MQ_PORT={test rabbit port} \
+MQ_USER={test rabbit username} \
+MQ_PASS={test rabbit password} \
+PG_HOST={test postgres JDBC connection} \
+PG_USER={test postgres username} \
+PG_PASS={test postgres password} \
 SHOW_SQL=true \
 FORMAT_SQL=true \
 LOG_LEVEL=trace \
-REDIS_PASS=redis-test \
-REDIS_HOST=localhost \
-REDIS_PORT=6390 \
-REDIS_DB=0 \
-./gradlew clean build bootRun
+REDIS_PASS={test redis password} \
+REDIS_HOST={test redis host} \
+REDIS_PORT={test redis port} \
+REDIS_DB={test redis DB number} \
+./gradlew clean build
 ```
+<br>
+
+##### Step2 - Run from jar
+Init prod environments and run from the jar.
+```bash
+VERSION=$(cat VERSION) \
+PORT={your service prod port} \
+MQ_HOST={prod rabbit host} \
+MQ_PORT={prod rabbit port} \
+MQ_USER={prod rabbit username} \
+MQ_PASS={prod rabbit password} \
+PG_HOST={prod postgres JDBC connection} \
+PG_USER={prod postgres username} \
+PG_PASS={prod postgres password} \
+SHOW_SQL=false \
+FORMAT_SQL=false \
+LOG_LEVEL=warn \
+REDIS_PASS={prod redis password} \
+REDIS_HOST={prod redis host} \
+REDIS_PORT={prod redis port} \
+REDIS_DB={prod redis DB number} \
+mkdir -p {path to your release dir}/release/$VERSION \
+mkdir -p {path to your release dir}/release/$VERSION/static \
+cp /{path to dir when your project is build, default is project dir}/libs {path to your release dir}/release/$VERSION \
+cp /{path to your project dir}/static {path to your release dir}/release/$VERSION/static \
+cd {path to your release dir}/release/$VERSION
+java -jar ems-$VERSION.jar
+```
+<br>
+
+#### Docker usage Linux
+##### Step1 - Build project
+Init test environments and build
+```bash
+VERSION=$(cat VERSION) \
+PORT={your service test port} \
+MQ_HOST={test rabbit host} \
+MQ_PORT={test rabbit port} \
+MQ_USER={test rabbit username} \
+MQ_PASS={test rabbit password} \
+PG_HOST={test postgres JDBC connection} \
+PG_USER={test postgres username} \
+PG_PASS={test postgres password} \
+SHOW_SQL=true \
+FORMAT_SQL=true \
+LOG_LEVEL=trace \
+REDIS_PASS={test redis password} \
+REDIS_HOST={test redis host} \
+REDIS_PORT={test redis port} \
+REDIS_DB={test redis DB number} \
+./gradlew clean build
+```
+<br>
+
+##### Step2 - Build Docker
+Build docker image.
+```bash
+VERSION=$(cat VERSION) \
+docker build -t ems/java:$VERSION .
+```
+<br>
+
+##### Step3 - Run Docker
+Init prod environments and run Docker image.
+```bash
+VERSION=$(cat VERSION) \
+PORT={your service prod port} \
+MQ_HOST={prod rabbit host} \
+MQ_PORT={prod rabbit port} \
+MQ_USER={prod rabbit username} \
+MQ_PASS={prod rabbit password} \
+PG_HOST={prod postgres JDBC connection} \
+PG_USER={prod postgres username} \
+PG_PASS={prod postgres password} \
+SHOW_SQL=false \
+FORMAT_SQL=false \
+LOG_LEVEL=warn \
+REDIS_PASS={prod redis password} \
+REDIS_HOST={prod redis host} \
+REDIS_PORT={prod redis port} \
+REDIS_DB={prod redis DB number} \
+docker run --name {your docker run name} \
+-e MQ_HOST -e MQ_PORT -e MQ_USER -e MQ_PASS \
+-e PG_HOST -e PG_USER -e PG_PASS -e SHOW_SQL \
+-e FORMAT_SQL -e LOG_LEVEL -e REDIS_PASS -e REDIS_HOST \
+-e REDIS_PORT -e REDIS_DB -p $PORT:8080 ems/java:$VERSION
+```
+<br>
+
 ## Documentations for clients
 | Name | Example |
 | :------: | :-----: |
