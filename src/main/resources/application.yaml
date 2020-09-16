@@ -61,7 +61,7 @@ server:
     min-response-size: 1024
   http2:
     enabled: true
-  port: ${PORT}
+  port: ${PORT:8080}
 ---
 redis:
   cacheTtl: 600
@@ -77,7 +77,7 @@ parameters:
       destPrefixes: /queue/
       endpointsSocks: /v1/callback
       endpointsCallbackDock: /v1/docs/callback
-      resourcesCallbackDock: classpath:/asyncapi/html/
+      resourcesCallbackDock: 'file:./static/asyncapi/html/'
   controllers:
     counter:
       rootPath: /v1/counter

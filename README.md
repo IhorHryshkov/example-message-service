@@ -73,13 +73,6 @@ Runs from the host machine.
 | `REDIS_DB` | DB number in the RedisDB | 0 |
 
 #### CLI usage
-<details>
-  <summary>Click here to read more about use start script</summary>
-  <br>
-  Check and if needed modify script before use.
-<pre><code>./start_dev.sh</code></pre>
-</details>
-
 ```bash
 PORT=31111 \
 MQ_HOST=localhost \
@@ -96,7 +89,7 @@ REDIS_PASS=redis-test \
 REDIS_HOST=localhost \
 REDIS_PORT=6390 \
 REDIS_DB=0 \
-./gradlew clean test bootRun
+./gradlew clean build bootRun
 ```
 ## Documentations for clients
 | Name | Example |

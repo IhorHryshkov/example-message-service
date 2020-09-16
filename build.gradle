@@ -25,7 +25,7 @@ task installAsyncApi(type: NpmTask) {
 }
 task buildAsyncApi(type: NpxTask) {
     command = 'ag'
-    args = ['./src/main/resources/asyncapi/callback.yaml', '@asyncapi/html-template', '-o', './build/resources/main/asyncapi/html', '--force-write']
+    args = ['./src/main/resources/asyncapi/callback.yaml', '@asyncapi/html-template', '-o', './static/asyncapi/html', '--force-write']
 }
 task uninstallAsyncApi(type: Delete) {
     delete "node_modules"
@@ -35,15 +35,13 @@ task uninstallAsyncApi(type: Delete) {
 //Google formatting tasks
 clean.dependsOn(tasks.googleJavaFormat)
 verifyGoogleJavaFormat.mustRunAfter(tasks.googleJavaFormat)
-test.mustRunAfter(tasks.clean)
 
 //Generation AsyncAPI docs tasks
 uninstallAsyncApi.dependsOn(tasks.buildAsyncApi)
 buildAsyncApi.dependsOn(tasks.installAsyncApi)
-bootRun.dependsOn(tasks.uninstallAsyncApi)
+clean.dependsOn(tasks.uninstallAsyncApi)
 buildAsyncApi.mustRunAfter(tasks.installAsyncApi)
 uninstallAsyncApi.mustRunAfter(tasks.buildAsyncApi)
-bootRun.mustRunAfter(tasks.uninstallAsyncApi)
 
 configurations {
     compileOnly {
