@@ -8,8 +8,7 @@ out
 gen
 /.cache/**
 /gradle/**
-gradle.bat
-gradlew
+gradlew*
 /.gradle/**
 /build/**
 /static/**
