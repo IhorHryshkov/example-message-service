@@ -37,6 +37,8 @@
 
 - [Overview](#overview)
 - [Requirements](#requirements)
+    * [Diagram](#diagram)
+    * [Java](#java)
 - [Branches](#branches)
     * [diagrams](#diagrams)
         * [EMS](#ems)
@@ -57,12 +59,17 @@
 - [Documentations for clients](#documentations-for-clients)
 - [Author](#author)
 
-### Overview
+## Overview
 The Example Message Service project was created to showcase the author’s skills in software 
 development and architecture, it is not for use in the real world because it is not part of 
 some important components of data security and integrity.
 
-### Requirements
+## Requirements
+### Diagram
+* CSV UML reader
+* Microsoft Visio 2010
+* https://lucidchart.com
+### Java
 * Java 11
 * Gradle 6.5.1
 * PostgresDB 11.5
@@ -70,6 +77,88 @@ some important components of data security and integrity.
 * RedisDB 6.0.5
 
 ## Branches
+### diagrams
+Diagrams design the architecture and work of the project: API, Activity, Architecture, CI/CD, Deployment, ERD, Sequence and Use Case.
+#### EMS
+Example Message Service diagrams 
+##### API
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/API/Flowchart"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/API/Flowchart/EMS_APIFlowchart_1.0.0.svg" width="100px;" alt="API_Flowchart"/><br /><sub><b>API Flowchart</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/API/Swimlane"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/API/Swimlane/EMS_APISwimlane_1.0.0.svg" width="100px;" alt="API_Swimlane"/><br /><sub><b>API Swimlane</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/API/UML"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/API/UML/EMS_UML_API_WebSocket_1.0.0.svg" width="100px;" alt="API_UML"/><br /><sub><b>API UML</b></sub></a><br /></td>
+  </tr>
+</table>
+
+##### Activity S
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/Activity"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/Activity/EMS_CounterActivity_1.0.0.svg" width="100px;" alt="CounterActivity"/><br /><sub><b>Counter Activity</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/Activity"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/Activity/EMS_SendReceiveActivity_1.0.0.svg" width="100px;" alt="SendReceiveActivity"/><br /><sub><b>Send<->Receive Activity</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/Activity"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/Activity/EMS_StatusActivity_1.0.1.svg" width="100px;" alt="StatusActivity"/><br /><sub><b>Status Activity</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/Activity"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/Activity/EMS_UserActivity_1.0.0.svg" width="100px;" alt="UserActivity"/><br /><sub><b>User Activity</b></sub></a><br /></td>
+  </tr>
+</table>
+
+##### Architecture
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/Architecture"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/Architecture/EMS_Architecture_1.0.0.svg" width="100px;" alt="Architecture"/><br /><sub><b>Architecture</b></sub></a><br /></td>
+  </tr>
+</table>
+
+##### CI/CD
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/CI-CD"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/CI-CD/EMS_CI_CD_pipeline_1.0.0.svg" width="100px;" alt="CI/CD"/><br /><sub><b>CI/CD</b></sub></a><br /></td>
+  </tr>
+</table>
+
+##### Deployment
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/Deployment"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/Deployment/EMS_Deployment_1.0.0%20-%20Higher%20Level%20UML%20Deployment%20Diagram.svg" width="100px;" alt="Deployment"/><br /><sub><b>Deployment</b></sub></a><br /></td>
+  </tr>
+</table>
+
+##### ERD(Entity Relationship Diagram)
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/ERD"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/ERD/EMS_DB_ERD_1.0.1.svg" width="100px;" alt="ERD"/><br /><sub><b>ERD</b></sub></a><br /></td>
+  </tr>
+</table>
+
+##### Sequence
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/Sequence"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/Sequence/EMS_User-Application-Service_Sequence_1.0.0.svg" width="100px;" alt="Sequence"/><br /><sub><b>Sequence</b></sub></a><br /></td>
+  </tr>
+</table>
+
+##### Use Case
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMS/UseCase"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMS/UseCase/EMS_UseCase_1.0.0.svg" width="100px;" alt="UseCase"/><br /><sub><b>Use Case</b></sub></a><br /></td>
+  </tr>
+</table>
+
+#### EMA
+Example Message Application diagrams 
+##### Activity A
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMA/Activity"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMA/Activity/EMA_Activity_1.0.0.svg" width="100px;" alt="Activity"/><br /><sub><b>Activity</b></sub></a><br /></td>
+  </tr>
+</table>
+
+##### User Flow
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMA/UserFlow/Mobile"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMA/UserFlow/Mobile/EMA_MobileUserFlow_1.0.0.svg" width="100px;" alt="Mobile"/><br /><sub><b>Mobile</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/IhorHryshkov/example-message-service/tree/diagrams/EMA/UserFlow/Web"><img src="https://raw.githubusercontent.com/IhorHryshkov/example-message-service/diagrams/EMA/UserFlow/Web/EMA_WebUserFlow_1.0.1.svg" width="100px;" alt="Web"/><br /><sub><b>Web</b></sub></a><br /></td>
+  </tr>
+</table>
+
 ### java-dev
 <details>
   <summary>Click here to read more about git clone by branch name</summary>
