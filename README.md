@@ -55,7 +55,8 @@
             * [User Flow](#user-flow)
     * [java-dev](#java-dev)
         * [List of environments](#list-of-environments)
-        * [CLI usage](#cli-usage)
+        * [CLI usage Linux(Unix)](#cli-usage-linuxunix)
+        * [Docker usage Linux](#docker-usage-linux)
 - [Documentations for clients](#documentations-for-clients)
 - [Author](#author)
 
