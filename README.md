@@ -39,8 +39,10 @@
 - [Requirements](#requirements)
     * [Diagram](#diagram)
     * [Java](#java)
+    * [React](#react)
 - [Branches](#branches)
     * [diagrams](#diagrams)
+        * [Status D](#status-d)
         * [EMS](#ems)
             * [API](#api)
             * [Activity S](#activity-s)
@@ -54,9 +56,14 @@
             * [Activity A](#activity-a)
             * [User Flow](#user-flow)
     * [java-dev](#java-dev)
+        * [Status-J](#status-j)
         * [List of environments](#list-of-environments)
         * [CLI usage Linux(Unix)](#cli-usage-linuxunix)
         * [Docker usage Linux](#docker-usage-linux)
+    * [react-dev](#react-dev)
+        * [Status-R](#status-r)
+        * [List of environments](#list-of-environments)
+        * [CLI usage Linux(Unix)](#cli-usage-linuxunix)
 - [Documentations for clients](#documentations-for-clients)
 - [Author](#author)
 
@@ -76,10 +83,16 @@ some important components of data security and integrity.
 * PostgresDB 11.5
 * RabbitMQ 3.8.5
 * RedisDB 6.0.5
+### React
+* Node 12.8.4
+* RabbitMQ 3.8.5
+* EMS Service 0.0.1
 
 ## Branches
 ### diagrams
 Diagrams design the architecture and work of the project: API, Activity, Architecture, CI/CD, Deployment, ERD, Sequence and Use Case.
+#### Status-D
+![](https://img.shields.io/badge/-ready-green?style=for-the-badge)
 #### EMS
 Example Message Service diagrams 
 ##### API
@@ -166,6 +179,9 @@ Example Message Application diagrams
   <br>
 <pre><code>git clone -b java-dev {URL http or git}</code></pre>
 </details>
+
+#### Status-J
+![](https://img.shields.io/badge/-ready-green?style=for-the-badge)
 
 #### List of environments
 | Env name | Description | Example |
@@ -295,6 +311,37 @@ docker run --name {your docker run name} \
 -e PG_HOST -e PG_USER -e PG_PASS -e SHOW_SQL \
 -e FORMAT_SQL -e LOG_LEVEL -e REDIS_PASS -e REDIS_HOST \
 -e REDIS_PORT -e REDIS_DB -p $PORT:8080 ems/java:$VERSION
+```
+<br>
+
+### react-dev
+<details>
+  <summary>Click here to read more about git clone by branch name</summary>
+  <br>
+<pre><code>git clone -b react-dev {URL http or git}</code></pre>
+</details>
+
+#### Status-R
+![](https://img.shields.io/badge/-in%20progress-orange?style=for-the-badge)
+
+#### List of environments
+| Env name | Description | Example |
+| :------: | ----------- | :-----: |
+| `PORT` | Port number for connecting to the client | 3000 |
+| `REACT_APP_VERSION` | Version of the project | 0.0.0 |
+| `REACT_APP_BASE_URL` | URL for connect to the EMS service | localhost |
+| `REACT_APP_PROXY_URL` | URL for connect to the proxy RabbitMQ | localhost |
+
+#### CLI usage Linux(Unix)
+##### Step1 - Run from npm
+Init prod environments and run from npm.
+```bash
+REACT_APP_VERSION=$(cat VERSION)
+PORT={your client prod port}
+REACT_APP_BASE_URL={your EMS service prod URL}
+REACT_APP_PROXY_URL={your proxy RabbitMQ prod URL}
+
+npm start
 ```
 <br>
 
