@@ -26,6 +26,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
   @Value("${parameters.sockets.callback.appPrefix}")
   private String appPrefix;
 
+  @Value("${parameters.sockets.origins}")
+  private String[] origins;
+
   @Override
   public void configureMessageBroker(MessageBrokerRegistry config) {
     config.enableSimpleBroker(destPrefixes);
@@ -34,6 +37,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
-    registry.addEndpoint(endpointsSocks).withSockJS();
+    registry.addEndpoint(endpointsSocks).setAllowedOrigins(origins).withSockJS();
   }
 }

@@ -4,17 +4,15 @@
  * @version 1.0.0
  * @since 2020-09-13T19:24
  */
-package com.example.ems.config.docs;
+package com.example.ems.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
-public class DocsResourceConfig implements WebMvcConfigurer {
+public class ResourceConfig implements WebMvcConfigurer {
 
   @Value("${parameters.sockets.callback.endpointsCallbackDock}")
   private String endpointsCallbackDock;
@@ -24,6 +22,17 @@ public class DocsResourceConfig implements WebMvcConfigurer {
 
   @Value("${apiDocs.endpointsRestapiDock}")
   private String endpointsRestDock;
+
+  @Value("${server.cors.mapping}")
+  private String mapping;
+
+  @Value("${server.cors.origins}")
+  private String[] origins;
+
+  @Override
+  public void addCorsMappings(CorsRegistry registry) {
+    registry.addMapping(mapping).allowedOrigins(origins);
+  }
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {

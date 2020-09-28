@@ -38,8 +38,8 @@
 - [Overview](#overview)
 - [Requirements](#requirements)
 - [Branches](#branches)
-    * [diagrams](#architect)
     * [java-dev](#java-dev)
+        * [Status](#status)
         * [List of environments](#list-of-environments)
         * [CLI usage Linux(Unix)](#cli-usage-linuxunix)
         * [Docker usage Linux](#docker-usage-linux)
@@ -65,6 +65,9 @@ some important components of data security and integrity.
   <br>
 <pre><code>git clone -b java-dev {URL http or git}</code></pre>
 </details>
+
+#### Status
+![](https://img.shields.io/badge/-ready-green?style=for-the-badge)
 
 #### List of environments
 | Env name | Description | Example |
