@@ -1,0 +1,33 @@
+.app-main-logo {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-main-logo.light {
+    background: white;
+}
+
+.app-main-logo.dark {
+    background: black;
+}
+
+.app-logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+
+.main-container {
+    height: 100vh;
+    width: 100vw;
+}
+
+.main-container.light {
+    background-color: white;
+}
+
+.main-container.dark {
+    background-color: black;
+}
