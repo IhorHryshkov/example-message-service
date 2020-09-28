@@ -39,6 +39,7 @@
 - [Requirements](#requirements)
 - [Branches](#branches)
     * [diagrams](#diagrams)
+        * [Status](#status)    
         * [EMS](#ems)
             * [API](#api)
             * [Activity S](#activity-s)
@@ -66,6 +67,8 @@ some important components of data security and integrity.
 ## Branches
 ### diagrams
 Diagrams design the architecture and work of the project: API, Activity, Architecture, CI/CD, Deployment, ERD, Sequence and Use Case.
+#### Status
+![](https://img.shields.io/badge/-ready-green?style=for-the-badge)
 #### EMS
 Example Message Service diagrams 
 ##### API
