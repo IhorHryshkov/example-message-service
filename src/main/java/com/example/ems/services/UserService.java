@@ -106,6 +106,7 @@ public class UserService {
   }
 
   // id - still the same as a id name
+
   /**
    * Listener of AMQP messages, add new user and send message to web socket. If has an error then it
    * will retry send message to web socket queue
@@ -133,13 +134,19 @@ public class UserService {
         } else {
           user.setStatus(status);
         }
+        log.debug("User1: {}", user);
         user = usersDAO.save(user);
+        log.debug("User2: {}", status);
+        Types type =
+            typesDAO.findByNameIgnoreCase(status.getName()).stream().findFirst().orElse(null);
+        userCounterComponent.incCounter(type, user, null, "userState::add::%s", data.toHashKey());
         AddOut addOut = new AddOut(user.getId().toString(), data.getResId());
         log.debug("addOut: {}", addOut);
         queueService.sendMessage(
             String.format("websocket.%s", in.getQueueName()),
             new CallbackMQ<>(in.getQueueName(), in.getResId(), addOut),
             queueService.getRabbitMQSettings().getWebsocket());
+        stateDAO.del(String.format("userState::add::%s", States.INIT), data.toHashKey());
       }
     }
     stateDAO.del(String.format("userState::add::%s", States.IN_PROGRESS), data.toHashKey());
@@ -188,6 +195,7 @@ public class UserService {
   }
 
   // id - still the same as a exchange name
+
   /**
    * Listener of AMQP messages, update user status, increment counter and send message to web
    * socket. If has an error then it will retry send message to web socket queue

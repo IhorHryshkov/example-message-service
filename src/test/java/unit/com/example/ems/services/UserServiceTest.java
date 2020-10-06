@@ -53,6 +53,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
+
   @Mock private UsersDAO usersDAO;
   @Mock private StatusDAO statusDAO;
   @Mock private StateDAO stateDAO;
@@ -133,6 +134,7 @@ class UserServiceTest {
   void listenUserAdd() {
     String keyInProgressExpected = "userState::add::IN_PROGRESS";
     String hashKeyExpected = "9e7cd9cb5a63a3591e16f4d835f32a1c4a84ab66e39ae27aa448c03b66bf63e7";
+    String keyInitExpected = "userState::add::INIT";
     AddIn add = new AddIn();
     add.setUsername("Tester");
     add.setResId("aaaaaaaa-fdb5-442a-9493-9797c3ab8736");
@@ -166,8 +168,13 @@ class UserServiceTest {
     QueueConf queueConfExpected = new QueueConf();
     queueConfExpected.setExchange("testExchange");
     Status status = new Status();
+    status.setName("online");
+    Types type = new Types();
+    type.setName("online");
+    List<Types> typesEmpty = Collections.emptyList();
+    List<Types> types = Collections.singletonList(type);
     List<Status> statusesEmpty = Collections.emptyList();
-    List<Status> statuses = Collections.singletonList(new Status());
+    List<Status> statuses = Collections.singletonList(status);
     List<Users> usersEmpty = Collections.emptyList();
     List<Users> users = Collections.singletonList(userNewStatus);
 
@@ -185,9 +192,17 @@ class UserServiceTest {
         .thenReturn(statuses);
     when(usersDAO.findByUsername(eq("Tester"))).thenReturn(users).thenReturn(usersEmpty);
     when(usersDAO.save(any(Users.class))).thenReturn(userNewStatus).thenReturn(user);
+    when(typesDAO.findByNameIgnoreCase(eq("online"))).thenReturn(typesEmpty).thenReturn(types);
+    doThrow(new RuntimeException("Test"))
+        .when(userCounterComponent)
+        .incCounter(
+            any(), eq(userExpected), isNull(), eq("userState::add::%s"), eq(hashKeyExpected));
     doThrow(new RuntimeException("Test"))
         .when(queueService)
         .sendMessage(eq("websocket.Tester"), eq(outExpectedNewStatus), eq(queueConfExpected));
+    when(stateDAO.del(eq(keyInitExpected), eq(hashKeyExpected)))
+        .thenThrow(new RuntimeException("Test"))
+        .thenReturn(true, true);
     doThrow(new RuntimeException("Test"))
         .when(queueService)
         .removeDeclares(eq("user.add.Tester"), eq("testExchange"));
@@ -209,12 +224,29 @@ class UserServiceTest {
     // If default status not found delete in progress state and declared queue
     userService.listenUserAdd(message, in);
     assertThat(catchThrowable(() -> userService.listenUserAdd(message, in)))
+        .as("incCounter some exception")
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageContaining("Test");
+    doNothing()
+        .when(userCounterComponent)
+        .incCounter(
+            any(), eq(userExpected), isNull(), eq("userState::add::%s"), eq(hashKeyExpected));
+
+    assertThat(catchThrowable(() -> userService.listenUserAdd(message, in)))
         .as("sendMessage some exception")
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageContaining("Test");
+    assertThat(catchThrowable(() -> userService.listenUserAdd(message, in)))
+        .as("del init some exception")
         .isInstanceOf(RuntimeException.class)
         .hasMessageContaining("Test");
     doNothing()
         .when(queueService)
         .sendMessage(eq("websocket.Tester"), eq(outExpected), eq(queueConfExpected));
+    assertThat(catchThrowable(() -> userService.listenUserAdd(message, in)))
+        .as("del in progress some exception")
+        .isInstanceOf(RuntimeException.class)
+        .hasMessageContaining("Test");
     // Successful delete in progress and declared queue and send message to websocket
     userService.listenUserAdd(message, in);
   }

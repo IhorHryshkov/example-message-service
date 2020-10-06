@@ -29,9 +29,12 @@ public class ResourceConfig implements WebMvcConfigurer {
   @Value("${server.cors.origins}")
   private String[] origins;
 
+  @Value("${server.cors.methods}")
+  private String[] methods;
+
   @Override
   public void addCorsMappings(CorsRegistry registry) {
-    registry.addMapping(mapping).allowedOrigins(origins);
+    registry.addMapping(mapping).allowedOrigins(origins).allowedMethods(methods);
   }
 
   @Override

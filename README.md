@@ -88,6 +88,9 @@ some important components of data security and integrity.
 | `REDIS_HOST` | Hostname for connect to the RedisDB | localhost |
 | `REDIS_PORT` | Port number for connect to the RedisDB | 6379 |
 | `REDIS_DB` | DB number in the RedisDB | 0 |
+| `REST_CORS_ORIGINS` | CORS origins for rest API | * |
+| `REST_CORS_METHODS` | CORS methods for rest API | GET, POST, PUT, HEAD |
+| `CALLBACK_CORS_ORIGINS` | CORS origins for callback API | * |
 
 #### CLI usage Linux(Unix)
 ##### Step1 - Build project
@@ -109,6 +112,10 @@ REDIS_PASS={test redis password}
 REDIS_HOST={test redis host} 
 REDIS_PORT={test redis port} 
 REDIS_DB={test redis DB number} 
+REST_CORS_ORIGINS={test rest cors origins}
+REST_CORS_METHODS={test rest cors methods}
+CALLBACK_CORS_ORIGINS={test callback cors origins}
+
 ./gradlew clean build
 ```
 <br>
@@ -132,6 +139,9 @@ REDIS_PASS={prod redis password}
 REDIS_HOST={prod redis host} 
 REDIS_PORT={prod redis port} 
 REDIS_DB={prod redis DB number} 
+REST_CORS_ORIGINS={prod rest cors origins}
+REST_CORS_METHODS={prod rest cors methods}
+CALLBACK_CORS_ORIGINS={prod callback cors origins}
 mkdir -p {path to your release dir}/releases/$VERSION 
 mkdir -p {path to your release dir}/releases/$VERSION/static 
 cp -r /{path to dir when your project is build, default is project dir}/libs/ems-$VERSION.jar {path to your release dir}/releases/$VERSION 
@@ -161,6 +171,9 @@ REDIS_PASS={test redis password}
 REDIS_HOST={test redis host} 
 REDIS_PORT={test redis port} 
 REDIS_DB={test redis DB number} 
+REST_CORS_ORIGINS={test rest cors origins}
+REST_CORS_METHODS={test rest cors methods}
+CALLBACK_CORS_ORIGINS={test callback cors origins}
 ./gradlew clean build
 ```
 <br>
@@ -192,11 +205,15 @@ REDIS_PASS={prod redis password}
 REDIS_HOST={prod redis host} 
 REDIS_PORT={prod redis port} 
 REDIS_DB={prod redis DB number} 
+REST_CORS_ORIGINS={prod rest cors origins}
+REST_CORS_METHODS={prod rest cors methods}
+CALLBACK_CORS_ORIGINS={prod callback cors origins}
 docker run --name {your docker run name} \
 -e MQ_HOST -e MQ_PORT -e MQ_USER -e MQ_PASS \
 -e PG_HOST -e PG_USER -e PG_PASS -e SHOW_SQL \
 -e FORMAT_SQL -e LOG_LEVEL -e REDIS_PASS -e REDIS_HOST \
--e REDIS_PORT -e REDIS_DB -p $PORT:8080 ems/java:$VERSION
+-e REDIS_PORT -e REDIS_DB -e REST_CORS_ORIGINS -e REST_CORS_METHODS \
+-e CALLBACK_CORS_ORIGINS -p $PORT:8080 ems/java:$VERSION
 ```
 <br>
 

@@ -64,7 +64,8 @@ server:
   port: ${PORT:8080}
   cors:
     mapping: "/v1/**"
-    origins: "*"
+    origins: ${REST_CORS_ORIGINS:"*"}
+    methods: ${REST_CORS_METHODS:"GET, POST, PUT, HEAD"}
 
 ---
 redis:
@@ -76,7 +77,7 @@ parameters:
   default:
     status: online
   sockets:
-    origins: "*"
+    origins: ${CALLBACK_CORS_ORIGINS:"*"}
     callback:
       appPrefix: /v1
       destPrefixes: /queue/

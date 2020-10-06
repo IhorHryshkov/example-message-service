@@ -17,6 +17,9 @@ export REDIS_PASS=redis-test
 export REDIS_HOST=localhost
 export REDIS_PORT=6390
 export REDIS_DB=1
+export REST_CORS_ORIGINS="*"
+export REST_CORS_METHODS="GET, POST, PUT, HEAD"
+export CALLBACK_CORS_ORIGINS="*"
 
 ./gradlew clean build
 #./gradlew bootRun
