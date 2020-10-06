@@ -56,15 +56,15 @@
             * [Activity A](#activity-a)
             * [User Flow](#user-flow)
     * [java-dev](#java-dev)
-        * [Status-J](#status-j)
-        * [List of environments](#list-of-environments)
-        * [CLI usage Linux(Unix)](#cli-usage-linuxunix)
-        * [Docker usage Linux](#docker-usage-linux)
+        * [Status J](#status-j)
+        * [List of environments J](#list-of-environments-j)
+        * [CLI usage Linux(Unix) J](#cli-usage-linuxunix-j)
+        * [Docker usage Linux J](#docker-usage-linux-j)
     * [react-dev](#react-dev)
-        * [Status-R](#status-r)
-        * [List of environments](#list-of-environments)
-        * [CLI usage Linux(Unix)](#cli-usage-linuxunix)
-- [Documentations for clients](#documentations-for-clients)
+        * [Status R](#status-r)
+        * [List of environments R](#list-of-environments-r)
+        * [CLI usage Linux(Unix) R](#cli-usage-linuxunix-r)
+- [Documentations for clients](#documentations-for-clients-r)
 - [Author](#author)
 
 ## Overview
@@ -91,7 +91,7 @@ some important components of data security and integrity.
 ## Branches
 ### diagrams
 Diagrams design the architecture and work of the project: API, Activity, Architecture, CI/CD, Deployment, ERD, Sequence and Use Case.
-#### Status-D
+#### Status D
 ![](https://img.shields.io/badge/-ready-green?style=for-the-badge)
 #### EMS
 Example Message Service diagrams 
@@ -180,10 +180,10 @@ Example Message Application diagrams
 <pre><code>git clone -b java-dev {URL http or git}</code></pre>
 </details>
 
-#### Status-J
+#### Status J
 ![](https://img.shields.io/badge/-ready-green?style=for-the-badge)
 
-#### List of environments
+#### List of environments J
 | Env name | Description | Example |
 | :------: | ----------- | :-----: |
 | `VERSION` | Version of the project | 0.0.0 |
@@ -202,8 +202,11 @@ Example Message Application diagrams
 | `REDIS_HOST` | Hostname for connect to the RedisDB | localhost |
 | `REDIS_PORT` | Port number for connect to the RedisDB | 6379 |
 | `REDIS_DB` | DB number in the RedisDB | 0 |
+| `REST_CORS_ORIGINS` | CORS origins for rest API | * |
+| `REST_CORS_METHODS` | CORS methods for rest API | GET, POST, PUT, HEAD |
+| `CALLBACK_CORS_ORIGINS` | CORS origins for callback API | * |
 
-#### CLI usage Linux(Unix)
+#### CLI usage Linux(Unix) J
 ##### Step1 - Build project
 Init test environments and build
 ```bash
@@ -223,6 +226,10 @@ REDIS_PASS={test redis password}
 REDIS_HOST={test redis host} 
 REDIS_PORT={test redis port} 
 REDIS_DB={test redis DB number} 
+REST_CORS_ORIGINS={test rest cors origins}
+REST_CORS_METHODS={test rest cors methods}
+CALLBACK_CORS_ORIGINS={test callback cors origins}
+
 ./gradlew clean build
 ```
 <br>
@@ -246,6 +253,9 @@ REDIS_PASS={prod redis password}
 REDIS_HOST={prod redis host} 
 REDIS_PORT={prod redis port} 
 REDIS_DB={prod redis DB number} 
+REST_CORS_ORIGINS={prod rest cors origins}
+REST_CORS_METHODS={prod rest cors methods}
+CALLBACK_CORS_ORIGINS={prod callback cors origins}
 mkdir -p {path to your release dir}/releases/$VERSION 
 mkdir -p {path to your release dir}/releases/$VERSION/static 
 cp -r /{path to dir when your project is build, default is project dir}/libs/ems-$VERSION.jar {path to your release dir}/releases/$VERSION 
@@ -255,7 +265,7 @@ java -jar ems-$VERSION.jar
 ```
 <br>
 
-#### Docker usage Linux
+#### Docker usage Linux J
 ##### Step1 - Build project
 Init test environments and build
 ```bash
@@ -275,6 +285,9 @@ REDIS_PASS={test redis password}
 REDIS_HOST={test redis host} 
 REDIS_PORT={test redis port} 
 REDIS_DB={test redis DB number} 
+REST_CORS_ORIGINS={test rest cors origins}
+REST_CORS_METHODS={test rest cors methods}
+CALLBACK_CORS_ORIGINS={test callback cors origins}
 ./gradlew clean build
 ```
 <br>
@@ -306,11 +319,15 @@ REDIS_PASS={prod redis password}
 REDIS_HOST={prod redis host} 
 REDIS_PORT={prod redis port} 
 REDIS_DB={prod redis DB number} 
+REST_CORS_ORIGINS={prod rest cors origins}
+REST_CORS_METHODS={prod rest cors methods}
+CALLBACK_CORS_ORIGINS={prod callback cors origins}
 docker run --name {your docker run name} \
 -e MQ_HOST -e MQ_PORT -e MQ_USER -e MQ_PASS \
 -e PG_HOST -e PG_USER -e PG_PASS -e SHOW_SQL \
 -e FORMAT_SQL -e LOG_LEVEL -e REDIS_PASS -e REDIS_HOST \
--e REDIS_PORT -e REDIS_DB -p $PORT:8080 ems/java:$VERSION
+-e REDIS_PORT -e REDIS_DB -e REST_CORS_ORIGINS -e REST_CORS_METHODS \
+-e CALLBACK_CORS_ORIGINS -p $PORT:8080 ems/java:$VERSION
 ```
 <br>
 
@@ -321,10 +338,10 @@ docker run --name {your docker run name} \
 <pre><code>git clone -b react-dev {URL http or git}</code></pre>
 </details>
 
-#### Status-R
+#### Status R
 ![](https://img.shields.io/badge/-in%20progress-orange?style=for-the-badge)
 
-#### List of environments
+#### List of environments R
 | Env name | Description | Example |
 | :------: | ----------- | :-----: |
 | `PORT` | Port number for connecting to the client | 3000 |
@@ -332,7 +349,7 @@ docker run --name {your docker run name} \
 | `REACT_APP_BASE_URL` | URL for connect to the EMS service | localhost |
 | `REACT_APP_PROXY_URL` | URL for connect to the proxy RabbitMQ | localhost |
 
-#### CLI usage Linux(Unix)
+#### CLI usage Linux(Unix) R
 ##### Step1 - Run from npm
 Init prod environments and run from npm.
 ```bash

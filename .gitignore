@@ -13,3 +13,5 @@ gradlew*
 /build/**
 /static/**
 /releases/**
+/node_modules/**
+*local*
