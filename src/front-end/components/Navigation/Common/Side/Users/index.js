@@ -6,17 +6,18 @@
  */
 //--------index.js--------
 
-import '../../../../../assets/css/components/navigation/SideSettings.css'
+import '../../../../../assets/css/components/navigation/SideUsers.css'
 import React, {Component}    from 'react';
 import {ButtonGroup, Button} from 'react-bootstrap';
 import {connect}             from "react-redux";
 
-import {selectUser, loadUser} from '../../../../../mq/actions/navigation/Common/Side/Users';
+import {selectUser, allUsers} from '../../../../../mq/actions/navigation/Common/Side/Users';
+import LoadData               from '../../../../Common/Spinner';
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		selectUser: payload => dispatch(selectUser(payload)),
-		loadUser  : payload => dispatch(loadUser(payload))
+		allUsers  : payload => dispatch(allUsers(payload))
 	};
 };
 const mapStateToProps    = (state) => {
@@ -24,27 +25,43 @@ const mapStateToProps    = (state) => {
 };
 
 class Index extends Component {
-	render() {
-		const {selectUser, users, mode} = this.props;
-		return (
-			<ButtonGroup id={"side-users-chat"} vertical style={{width: "100%"}}>
-				{
-					users && users.length > 0 ? users.map(user =>
-						<Button
-							block
-							id={"side-users-chat"}
-							key={user.id}
-							variant={`outline-${mode}`}
-							active={user.isChat}
-							disabled={user.status.name !== "Online"}
-							onClick={() => selectUser(user.id)}>
-							{user.username}
-						</Button>
-					) : ''
-				}
 
-			</ButtonGroup>
-		);
+	componentDidMount() {
+		this.props.allUsers();
+	}
+
+	_renderInProgress() {
+		const {strings, mode} = this.props;
+		return <LoadData {...{
+			mode,
+			text      : strings.load,
+			size      : "xl",
+			classNames: "absolute"
+		}}/>;
+	}
+
+	_renderUsers() {
+		const {selectUser, users, mode} = this.props;
+		return <ButtonGroup id={"side-users-chat"} vertical className={"users-button-group"}>
+			{
+				users && users.length > 0 ? users.map(user =>
+					<Button
+						block
+						id={"side-users-chat"}
+						key={user.id}
+						variant={`outline-${mode}`}
+						active={user.isChat}
+						onClick={() => selectUser(user.id)}>
+						{user.username}
+					</Button>
+				) : ''
+			}
+		</ButtonGroup>
+	}
+
+	render() {
+		const {progress} = this.props;
+		return progress ? this._renderInProgress() : this._renderUsers();
 	}
 }
 

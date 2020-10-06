@@ -19,16 +19,18 @@ class SideSettingsServiceImpl extends RootService {
 	}
 
 	add(obj) {
-		obj.data.timestamp = new Date().getTime();
 		return this._preferencesDao.add(obj);
 	}
 
 	async all(obj) {
-		const result         = await this._preferencesDao.getByKey(obj);
-		const preferencesTTL = new Date().getTime() - result.timestamp;
-		const {maxTTL}       = this._defaultParams.constants.global.preferences;
-		if (preferencesTTL > maxTTL) {
-			result.user.id = "";
+		let result     = await this._preferencesDao.getByKey(obj);
+		result         = result ? result : {
+			user: {timestamp: 0}
+		};
+		const calcTTL  = new Date().getTime() - result.user.timestamp;
+		const {maxTTL} = this._defaultParams.constants.global.preferences;
+		if (calcTTL > maxTTL) {
+			result.user.endTTL = true;
 		}
 		return result;
 	}

@@ -2,7 +2,8 @@
 	"constants":{
 		"global"      :{
 			"preferences":{
-				"maxTTL":300000
+				"maxTTL"   :300000,
+				"retryTime":2000
 			},
 			"network"    :{
 				"timeout"  :5000,
@@ -39,6 +40,16 @@
 				"UPDATE_COUNTER":"UPDATE_COUNTER"
 			}
 		},
+		"status"      :{
+			"prefixStorageKey" :"EMS_",
+			"postfixStorageKey":"_pref",
+			"network"          :{
+				"all":{
+					"path"  :"/v1/status",
+					"method":"get"
+				}
+			}
+		},
 		"chat"        :{
 			"actions"   :{
 				"SEND_MESSAGE":"chat/sendMessage"
@@ -49,23 +60,46 @@
 				}
 			}
 		},
+		"counter"     :{
+			"network":{
+				"getById":{
+					"path"  :"/v1/counter",
+					"method":"get"
+				},
+				"add"    :{
+					"path"  :"/v1/counter",
+					"method":"post"
+				}
+			},
+			"actions":{
+				"COUNTER_GETBYID_SUCCESS":"counter/getByIdSuccess",
+				"COUNTER_GETBYID"        :"counter/getById"
+			}
+		},
 		"user"        :{
+			"default": {
+				"status": "online"
+			},
 			"network"   :{
-				"all":{
+				"all"   :{
 					"path"  :"/v1/user",
 					"method":"get"
 				},
-				"add":{
+				"add"   :{
 					"path"  :"/v1/user",
 					"method":"post"
+				},
+				"update":{
+					"path"  :"/v1/user",
+					"method":"put"
 				}
 			},
 			"actions"   :{
 				"USER_SELECT"        :"user/select",
 				"USER_SELECT_SUCCESS":"user/selectSuccess",
-				"USER_GET"           :"user/get",
-				"USER_GET_PROGRESS"  :"user/getProgress",
-				"USER_GET_SUCCESS"   :"user/getSuccess",
+				"USER_ALL"           :"user/all",
+				"USER_ALL_PROGRESS"  :"user/allProgress",
+				"USER_ALL_SUCCESS"   :"user/allSuccess",
 				"USER_ADD"           :"user/add",
 				"USER_ADD_PROGRESS"  :"user/addProgress",
 				"USER_ADD_SUCCESS"   :"user/addSuccess",

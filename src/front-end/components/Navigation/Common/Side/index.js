@@ -41,12 +41,7 @@ class Index extends Component {
 				<div className={`sidenav sidenav-inner ${side} ${mode}`}
 					 id="side-menu-body">
 					<CustomScroll removeTracksWhenNotUsed mode={mode === 'light' ? 'dark' : 'light'}>
-						<Container style={{
-							width       : "100%",
-							paddingLeft : "2px",
-							paddingRight: "2px",
-							direction   : "ltr"
-						}}>
+						<Container className={"sidenav-inner-scroll-container"}>
 							{body}
 						</Container>
 					</CustomScroll>

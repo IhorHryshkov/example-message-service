@@ -14,11 +14,6 @@
 			"type"       :"object",
 			"description":"all preferences",
 			"properties" :{
-				"timestamp"       :{
-					"type"       :"number",
-					"description":"timestamp create preferences",
-					"minimum"    :0
-				},
 				"mode"            :{
 					"type"       :"string",
 					"description":"mode name.",
@@ -63,29 +58,11 @@
 					"description":"user preferences",
 					"properties" :{
 						"id"      :{
-							"anyOf":[
-								{
-									"type"       :"string",
-									"pattern"    :"[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
-									"description":"id of the user.",
-									"maxLength"  :36,
-									"minLength"  :36
-								},
-								{
-									"type"       :"string",
-									"pattern"    :"Guest",
-									"description":"guest user.",
-									"maxLength"  :5,
-									"minLength"  :5
-								}
-							]
-						},
-						"guest"   :{
 							"type"       :"string",
-							"description":"Name of guest user.",
-							"maxLength"  :5,
-							"minLength"  :5,
-							"pattern"    :"Guest"
+							"pattern"    :"[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+							"description":"id of the user.",
+							"maxLength"  :36,
+							"minLength"  :36
 						},
 						"username":{
 							"type"       :"string",
@@ -93,11 +70,15 @@
 							"maxLength"  :64,
 							"minLength"  :6,
 							"pattern"    :"[A-Za-z0-9_-]+"
+						},
+						"timestamp":{
+							"type"       :"number",
+							"description":"timestamp create user",
+							"minimum"    :0
 						}
 					},
 					"required"   :[
 						"id",
-						"guest",
 						"username"
 					]
 				}

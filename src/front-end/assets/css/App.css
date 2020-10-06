@@ -4,14 +4,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-}
-
-.app-main-logo.light {
-    background: white;
-}
-
-.app-main-logo.dark {
-    background: black;
+    background-color: transparent;
 }
 
 .app-logo {
@@ -25,9 +18,9 @@
 }
 
 .main-container.light {
-    background-color: white;
+    background-color: #d2d2e1;
 }
 
 .main-container.dark {
-    background-color: black;
+    background-color: #2d2d1e;
 }

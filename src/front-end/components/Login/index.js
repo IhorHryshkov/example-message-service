@@ -6,11 +6,12 @@
  */
 //--------index.js--------
 
-import React, {Component} from 'react';
-import {Button, Card, Form, InputGroup, Spinner} from 'react-bootstrap';
-import {addUser, addUserSuccess} from '../../mq/actions/user';
-import {connect} from 'react-redux';
-import {Formik} from 'formik';
+import React, {Component}               from 'react';
+import {Button, Card, Form, InputGroup} from 'react-bootstrap';
+import {addUser, addUserSuccess}        from '../../mq/actions/user';
+import {connect}                        from 'react-redux';
+import {Formik}                         from 'formik';
+import LoadData                         from '../Common/Spinner';
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -24,15 +25,14 @@ const mapStateToProps = (state) => {
 
 class Login extends Component {
 	componentDidUpdate(prevProps, prevState, snapshot) {
-		const {progress, store, user} = this.props;
-		if (!progress && progress !== prevProps.progress) {
+		const {progress, store, user, exception} = this.props;
+		if (!progress && progress !== prevProps.progress && !exception) {
 			store.app.dispatch(addUserSuccess(user));
 		}
 	}
 
 	render() {
-		// const {mode}            = this.props.values;
-		const {strings, schema, progress, exception} = this.props;
+		const {strings, schema, progress, exception, mode, oldUser} = this.props;
 		return (
 			<Card className={"text-center"}>
 				<Card.Header as="h5">{strings.login}</Card.Header>
@@ -40,7 +40,12 @@ class Login extends Component {
 					<fieldset disabled={progress}>
 						<Formik
 							validationSchema={schema}
-							onSubmit={(values) => this.props.addUser(values)}
+							onSubmit={(values) => this.props.addUser(
+								{
+									...values,
+									id         : oldUser.id,
+									oldUsername: oldUser.username
+								})}
 							initialValues={{
 								username: ''
 							}}
@@ -56,7 +61,8 @@ class Login extends Component {
 								<Form.Group controlId="formGridUsername">
 									<InputGroup>
 										<InputGroup.Prepend>
-											<InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+											<InputGroup.Text
+												id="inputGroupPrepend">@</InputGroup.Text>
 										</InputGroup.Prepend>
 										<Form.Control
 											name={'username'}
@@ -69,23 +75,17 @@ class Login extends Component {
 											isInvalid={!!errors.username || exception}
 										/>
 										<Form.Control.Feedback type="invalid">
-											{errors.username ? errors.username : exception ? exception : ''}
+											{errors.username ? errors.username : exception
+												? exception : ''}
 										</Form.Control.Feedback>
 									</InputGroup>
 								</Form.Group>
 								<Button variant="primary" block type='submit'>
-									{progress ? <>
-											<Spinner
-												as="span"
-												animation="border"
-												size="sm"
-												role="status"
-												aria-hidden="true"
-											/>
-											<span className="sr-only">
-												{strings.login}...
-											</span></> :
-										strings.go}
+									{progress ? <LoadData {...{
+										mode,
+										text: strings.login,
+										size: "sm"
+									}}/> : strings.go}
 								</Button>
 							</Form>
 						)}

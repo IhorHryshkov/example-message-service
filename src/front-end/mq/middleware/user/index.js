@@ -76,10 +76,16 @@ function* workerLogin(action) {
 		yield put({
 			type: USER_ADD_PROGRESS
 		});
-		const result = yield call(
-			userService.add,
-			payload
-		);
+
+		const result = payload.oldUsername &&
+		payload.oldUsername === payload.username
+			? yield call(
+				userService.update,
+				payload
+			) : yield call(
+				userService.add,
+				payload
+			);
 		if (result.status === 202) {
 			yield put({
 				payload,
@@ -104,6 +110,7 @@ function* workerLogin(action) {
 function* workerListener(action) {
 	try {
 		const {username}      = action.payload;
+		const timestamp       = new Date().getTime();
 		const result          = yield call(
 			webSocket.receive,
 			username
@@ -123,7 +130,26 @@ function* workerListener(action) {
 					type   : USER_ADD_SUCCESS,
 					payload: {
 						username,
-						id: userId
+						id: userId,
+						timestamp
+					}
+				});
+				yield call(
+					callbackService.add,
+					{
+						username,
+						resId
+					}
+				);
+				break;
+			}
+			case enums.UPDATE_USER: {
+				yield put({
+					type   : USER_ADD_SUCCESS,
+					payload: {
+						username,
+						id: userId,
+						timestamp
 					}
 				});
 				yield call(
@@ -136,7 +162,7 @@ function* workerListener(action) {
 				break;
 			}
 			default:
-				console.log(`Callback not found: ${callbackRes.data.callback}`);
+				console.log(`Callback not found: ${callbackRes.callback}`);
 		}
 		yield put({
 			payload: action.payload,

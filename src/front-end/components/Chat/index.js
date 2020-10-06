@@ -32,13 +32,12 @@ class Chat extends Component {
 				</CustomScroll>
 			</Row>
 			<Row className={"send-message-row"}>
-				<InputMessage/>
+				<InputMessage {...this.props}/>
 			</Row>
 		</Col>;
 	}
 
 	_loadMessages() {
-		console.log(this.props);
 		const {messages} = this.props;
 		return messages && messages.length > 0 ? messages.map(message =>
 			<Row key={message.id} className={`send-message-list ${message.own ? 'right' : 'left'}`}>

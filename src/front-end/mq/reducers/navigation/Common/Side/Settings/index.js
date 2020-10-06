@@ -6,54 +6,54 @@
  */
 //--------index.js--------
 
-import {constants} from "../../../../../../../config/front-end/constants.json";
+import {constants}      from "../../../../../../../config/front-end/constants.json";
+import LocalizedStrings from 'react-localization';
+import localization     from "../../../../../../../config/front-end/components/navigation/Side/Settings/localization";
 
 const {CHANGE_MODE, CHANGE_SIDE_MENU, INIT_LOCAL_PREF} = constants.sideSettings.actions;
 
-const {USER_ADD_SUCCESS} = constants.user.actions;
+const {USER_ADD_SUCCESS}        = constants.user.actions;
+const {COUNTER_GETBYID_SUCCESS} = constants.counter.actions;
 
 const {settings, users} = constants.navigation.buttonId;
 
 const initialState = {
+	loadSettings    : true,
 	mode            : "light",
 	darkLightChecked: true,
 	leftRightChecked: true,
-	counters        : [
-		{
-			"name"  : "Message",
-			"counts": 20
-		},
-		{
-			"name"  : "Online",
-			"counts": 2
-		},
-		{
-			"name"  : "Offline",
-			"counts": 1
-		}
-	],
+	counterProgress : true,
+	strings         : new LocalizedStrings(localization),
+	counters        : [],
 	nav_side        : {
 		left : users,
 		right: settings
 	},
 	user            : {
 		username: "",
-		id      : "",
-		guest   : "Guest"
+		id      : ""
 	}
 };
 
 export default (state = initialState, action) => {
 	switch (action.type) {
 		case USER_ADD_SUCCESS: {
-			const {id, username} = action.payload;
+			const {id, username, timestamp} = action.payload;
 			return {
 				...state,
 				user: {
 					...state.user,
 					id,
-					username
+					username,
+					timestamp
 				}
+			};
+		}
+		case COUNTER_GETBYID_SUCCESS: {
+			return {
+				...state,
+				counters       : action.payload,
+				counterProgress: false
 			};
 		}
 		case CHANGE_MODE: {
@@ -74,7 +74,10 @@ export default (state = initialState, action) => {
 			}
 		}
 		case INIT_LOCAL_PREF: {
-			return {...state, ...action.payload};
+			return {
+				...state, ...action.payload,
+				loadSettings: false
+			};
 		}
 		default:
 			return state;

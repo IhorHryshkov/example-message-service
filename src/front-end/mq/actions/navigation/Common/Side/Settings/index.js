@@ -9,6 +9,14 @@
 import {constants} from "../../../../../../../config/front-end/constants.json";
 
 const {CHANGE_MODE, CHANGE_SIDE_MENU, GET_LOCAL_PREF, ADD_LOCAL_PREF} = constants.sideSettings.actions;
+const {COUNTER_GETBYID} = constants.counter.actions;
+
+export const allUserCounters = payload => {
+	return {
+		payload,
+		type: COUNTER_GETBYID
+	}
+};
 
 export const changeMode = () => {
 	return {type: CHANGE_MODE}

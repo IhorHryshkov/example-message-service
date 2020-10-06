@@ -9,7 +9,7 @@
 
 class UserRequestImpl {
 	constructor({netConfig, defaultParams}) {
-		this._net = netConfig.getAxios();
+		this._net           = netConfig.getAxios();
 		this._defaultParams = defaultParams;
 	}
 
@@ -28,6 +28,15 @@ class UserRequestImpl {
 			{params}
 		);
 	}
+
+	async update({id, statusId}) {
+		const {network} = this._defaultParams.constants.user;
+		return await this._net[network.update.method](
+			`${network.update.path}/${id}`,
+			{statusId}
+		);
+	}
+
 }
 
 export default UserRequestImpl;

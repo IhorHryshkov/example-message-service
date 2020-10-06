@@ -1,0 +1,22 @@
+{
+	"title"      :"get status by id",
+	"description":"get status from array by id",
+	"type"       :"object",
+	"properties" :{
+		"id"  :{
+			"type"       :"number",
+			"description":"status ID"
+		},
+		"name":{
+			"type"       :"string",
+			"description":"status name",
+			"maxLength"  :64,
+			"minLength"  :3,
+			"pattern"    :"[A-Za-z0-9_-]+"
+		}
+	},
+	"required"   :[
+		"id",
+		"name"
+	]
+}

@@ -24,6 +24,14 @@
     padding: 0 5px 0 5px;
 }
 
+.textarea-message-error {
+    position: absolute;
+    top: -23px;
+    text-align: end;
+    padding-right: 5px;
+    font-weight: bold
+}
+
 textarea {
     resize: none;
 }

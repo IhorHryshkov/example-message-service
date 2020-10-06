@@ -8,12 +8,12 @@
 
 import {constants} from "../../../../../../../config/front-end/constants.json";
 
-const {USER_GET, USER_SELECT} = constants.user.actions;
+const {USER_ALL, USER_SELECT} = constants.user.actions;
 
-export const loadUser = payload => {
+export const allUsers = payload => {
 	return {
 		payload,
-		type: USER_GET
+		type: USER_ALL
 	}
 };
 

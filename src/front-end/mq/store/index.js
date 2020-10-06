@@ -14,13 +14,15 @@ import sagaSettings         from "../middleware/navigation/Common/Side/Settings"
 
 const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const initMiddleware = createSagaMiddleware();
-const store          = createStore(reducerSettings,
+const store          = createStore(
+	reducerSettings,
 	storeEnhancers(applyMiddleware(initMiddleware))
 );
-const init           = ({dbConfig, defaultParams}) => {
+const init           = ({netConfig, dbConfig, defaultParams}) => {
 	initMiddleware.run(
 		sagaSettings,
 		{
+			netConfig,
 			dbConfig,
 			defaultParams
 		}

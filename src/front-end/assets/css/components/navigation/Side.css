@@ -162,6 +162,13 @@
     background: rgba(255, 255, 255, .8);
 }
 
+.sidenav-inner-scroll-container {
+    width: 100%;
+    padding-left: 2px;
+    padding-right: 2px;
+    direction: ltr
+}
+
 /*!* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) *!*/
 @media screen and (max-height: 510px) {
     .menu-image-header-footer {

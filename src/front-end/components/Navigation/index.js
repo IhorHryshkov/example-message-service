@@ -116,8 +116,8 @@ class Navigation extends Component {
 			endX            : this.props.swipe.endX,
 			swiping         : this.props.swipe.swiping,
 			minSwipeDistance: this.props.minSwipeDistance,
-			left            : this.props.values.pref.nav_side.left,
-			right           : this.props.values.pref.nav_side.right
+			left            : this.props.side_names.left,
+			right           : this.props.side_names.right
 		});
 	}
 
@@ -180,7 +180,10 @@ class Navigation extends Component {
 		const {side} = this.props.store;
 		return (
 			<Provider store={side.users}>
-				<SideUsers {...{mode: this.props.mode}} store={this.props.store}/>
+				<SideUsers {...{
+					mode : this.props.mode,
+					store: this.props.store
+				}}/>
 			</Provider>
 		);
 	}

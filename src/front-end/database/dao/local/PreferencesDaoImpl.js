@@ -1,5 +1,5 @@
 /**
- *@project example-message-service
+ * @project example-message-service
  * @author Ihor Hryshkov
  * @version 1.0.0
  * @since 2020-09-19T01:02
@@ -20,12 +20,18 @@ class PreferencesDaoImpl extends RootDao {
 
 	add(obj) {
 		return new Promise((resolve, reject) => {
-			const validateError = this._validator.validateSchema(this.add.name, obj);
+			const validateError = this._validator.validateSchema(
+				this.add.name,
+				obj
+			);
 			if (validateError) {
 				return reject(validateError);
 			}
 			const {key, data} = obj;
-			this._db.setItem(key, JSON.stringify(data));
+			this._db.setItem(
+				key,
+				JSON.stringify(data)
+			);
 			return resolve(this._defaultParams.messages.info.success);
 		});
 	}
@@ -33,7 +39,10 @@ class PreferencesDaoImpl extends RootDao {
 	remove(obj) {
 		return new Promise((resolve, reject) => {
 			try {
-				const validateError = this._validator.validateSchema(this.remove.name, obj);
+				const validateError = this._validator.validateSchema(
+					this.remove.name,
+					obj
+				);
 				if (validateError) {
 					return reject(validateError);
 				}
@@ -52,19 +61,26 @@ class PreferencesDaoImpl extends RootDao {
 	getByKey(obj) {
 		return new Promise((resolve, reject) => {
 			try {
-				let validateError = this._validator.validateSchema(this.remove.name, obj);
+				let validateError = this._validator.validateSchema(
+					this.remove.name,
+					obj
+				);
 				if (validateError) {
 					return reject(validateError);
 				}
-				const {key}   = obj;
-				let result    = this._db.getItem(key);
-				result        = JSON.parse(result);
-				validateError = this._validator.validateSchema(this.getByKey.name, {
-					key,
-					data: result
-				});
-				if (validateError) {
-					return reject(validateError);
+				const {key} = obj;
+				let result  = JSON.parse(this._db.getItem(key));
+				if (result) {
+					validateError = this._validator.validateSchema(
+						this.getByKey.name,
+						{
+							key,
+							data: result
+						}
+					);
+					if (validateError) {
+						return reject(validateError);
+					}
 				}
 				return resolve(result);
 			} catch (e) {

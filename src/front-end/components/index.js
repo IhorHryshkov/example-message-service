@@ -12,9 +12,9 @@ import {Container}                  from 'react-bootstrap';
 import {connect, Provider}          from "react-redux";
 import {addLocalPref, getLocalPref} from "../mq/actions/navigation/Common/Side/Settings";
 import Login                        from './Login';
-// import Chat                         from './Chat';
 import Navigation                   from './Navigation';
 import Chat                         from './Chat';
+import LoadData                     from './Common/Spinner';
 
 const mapStateToProps    = (state) => {
 	return state;
@@ -55,23 +55,34 @@ class App extends Component {
 	}
 
 	_renderLogin() {
-		const {mode, defaultParams, store} = this.props;
+		const {mode, defaultParams, store, user} = this.props;
 		return <div className={`app-main-logo ${mode}`}>
 			<Provider store={store.user}>
 				<Login
 					{...{
 						mode,
 						defaultParams,
-						store
+						store,
+						oldUser: user
 					}}
 				/>
 			</Provider>
 		</div>;
 	}
 
-	_loadMain() {
+	_renderInProgress() {
+		const {strings, mode} = this.props;
+		return <LoadData {...{
+			mode      : mode === 'light' ? 'dark' : 'light',
+			text      : strings.load,
+			size      : "lg",
+			classNames: "absolute"
+		}}/>;
+	}
+
+	_renderMain() {
 		const {store, defaultParams, mode, nav_side, user} = this.props;
-		const {navigation, chat}                                 = store;
+		const {navigation, chat}                           = store;
 		return <>
 			<Provider store={navigation}>
 				<Navigation {...{
@@ -89,12 +100,10 @@ class App extends Component {
 	}
 
 	render() {
-		const {mode, user} = this.props;
+		const {mode, user, loadSettings} = this.props;
 		return (
-			<Container fluid id="App" className={`main-container ${mode}`} style={{
-				backgroundColor: '#d2d2e1'
-			}}>
-				{user.username ? this._loadMain() : this._renderLogin()}
+			<Container fluid id="App" className={`main-container ${mode}`}>
+				{loadSettings ? this._renderInProgress() : user.endTTL ? this._renderLogin() : this._renderMain()}
 			</Container>
 		);
 	}

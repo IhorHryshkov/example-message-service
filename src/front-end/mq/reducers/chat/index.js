@@ -18,7 +18,8 @@ const strings   = new LocalizedStrings(localization);
 
 const initialState = {
 	strings,
-	schema  : Yup.object({
+	exceptionMessage: null,
+	schema          : Yup.object({
 		message: Yup.string()
 			.min(
 				message.min,
@@ -26,11 +27,12 @@ const initialState = {
 			)
 			.required(strings.message.required)
 	}),
-	messages: [
+	messages        : [
 		{
-			id  : "f0c9f0a2-ac24-4fda-bff8-39f1a6baa153",
-			own : true,
-			body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla hendrerit gravida tempor. Ut venenatis convallis augue laoreet malesuada. Proin non gravida est, ut porta libero. Nullam ac pretium ipsum, ac convallis eros. Maecenas imperdiet, mi sit amet cursus pellentesque, augue mauris ullamcorper nunc, egestas aliquet ex magna in tellus. Etiam sit amet nisl ultrices, bibendum ex sit amet, maximus libero. Nunc in sem molestie erat facilisis lobortis vel ac lectus. Mauris porttitor nunc posuere bibendum congue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Proin sodales ullamcorper tincidunt.\n" +
+			timestamp: 1601374436890,
+			id       : "f0c9f0a2-ac24-4fda-bff8-39f1a6baa153",
+			own      : true,
+			body     : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla hendrerit gravida tempor. Ut venenatis convallis augue laoreet malesuada. Proin non gravida est, ut porta libero. Nullam ac pretium ipsum, ac convallis eros. Maecenas imperdiet, mi sit amet cursus pellentesque, augue mauris ullamcorper nunc, egestas aliquet ex magna in tellus. Etiam sit amet nisl ultrices, bibendum ex sit amet, maximus libero. Nunc in sem molestie erat facilisis lobortis vel ac lectus. Mauris porttitor nunc posuere bibendum congue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Proin sodales ullamcorper tincidunt.\n" +
 				"\n" +
 				"Nam at laoreet odio. Nunc at urna iaculis, porta enim vel, elementum nisl. Duis nunc tellus, volutpat quis porta sed, venenatis non lectus. Nunc neque est, vestibulum eu convallis imperdiet, pharetra vitae nibh. Mauris vel ullamcorper metus. Phasellus eu leo congue, congue sapien in, varius mi. Donec sollicitudin condimentum nisi, eu luctus orci fermentum sit amet. Cras vehicula, purus id euismod mattis, quam nunc malesuada purus, quis dictum nunc nulla blandit sapien. Donec fringilla ipsum id lacinia mattis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque accumsan risus massa, at commodo mauris facilisis eu. Donec quis ullamcorper metus. Sed tempus nisi et nisi fermentum, sed ullamcorper nunc accumsan. Mauris tempor blandit felis in porttitor.\n" +
 				"\n" +
@@ -41,14 +43,16 @@ const initialState = {
 				"In ut felis et tellus tincidunt pulvinar eget ac ex. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam eleifend purus eu est tincidunt placerat. Curabitur pharetra tortor vel nisl mattis, at malesuada ante lacinia. Donec mattis justo quis sagittis sagittis. Donec at porttitor est. Morbi nisi dui, egestas vitae interdum ut, ornare a ipsum. Aenean at lorem id felis egestas lacinia in vel enim. Ut non finibus tortor, a luctus augue. Quisque tempus metus sit amet lacus rhoncus, sit amet egestas dui porttitor. Maecenas at mauris erat."
 		},
 		{
-			id  : "f0c9f0a2-ac24-4fda-bff8-39f1a6baa777",
-			own : false,
-			body: "Ooooohohohohohohohoho"
+			timestamp: 1601374448337,
+			id       : "f0c9f0a2-ac24-4fda-bff8-39f1a6baa777",
+			own      : false,
+			body     : "Ooooohohohohohohohoho"
 		},
 		{
-			id  : "f0c9f0a2-ac24-4fda-bff8-39f1a6baa156",
-			own : true,
-			body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla hendrerit gravida tempor. Ut venenatis convallis augue laoreet malesuada. Proin non gravida est, ut porta libero. Nullam ac pretium ipsum, ac convallis eros. Maecenas imperdiet, mi sit amet cursus pellentesque, augue mauris ullamcorper nunc, egestas aliquet ex magna in tellus. Etiam sit amet nisl ultrices, bibendum ex sit amet, maximus libero. Nunc in sem molestie erat facilisis lobortis vel ac lectus. Mauris porttitor nunc posuere bibendum congue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Proin sodales ullamcorper tincidunt.\n" +
+			timestamp: 1601374508486,
+			id       : "f0c9f0a2-ac24-4fda-bff8-39f1a6baa156",
+			own      : true,
+			body     : "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla hendrerit gravida tempor. Ut venenatis convallis augue laoreet malesuada. Proin non gravida est, ut porta libero. Nullam ac pretium ipsum, ac convallis eros. Maecenas imperdiet, mi sit amet cursus pellentesque, augue mauris ullamcorper nunc, egestas aliquet ex magna in tellus. Etiam sit amet nisl ultrices, bibendum ex sit amet, maximus libero. Nunc in sem molestie erat facilisis lobortis vel ac lectus. Mauris porttitor nunc posuere bibendum congue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Proin sodales ullamcorper tincidunt.\n" +
 				"\n" +
 				"Nam at laoreet odio. Nunc at urna iaculis, porta enim vel, elementum nisl. Duis nunc tellus, volutpat quis porta sed, venenatis non lectus. Nunc neque est, vestibulum eu convallis imperdiet, pharetra vitae nibh. Mauris vel ullamcorper metus. Phasellus eu leo congue, congue sapien in, varius mi. Donec sollicitudin condimentum nisi, eu luctus orci fermentum sit amet. Cras vehicula, purus id euismod mattis, quam nunc malesuada purus, quis dictum nunc nulla blandit sapien. Donec fringilla ipsum id lacinia mattis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Quisque accumsan risus massa, at commodo mauris facilisis eu. Donec quis ullamcorper metus. Sed tempus nisi et nisi fermentum, sed ullamcorper nunc accumsan. Mauris tempor blandit felis in porttitor.\n" +
 				"\n" +
@@ -59,9 +63,10 @@ const initialState = {
 				"In ut felis et tellus tincidunt pulvinar eget ac ex. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam eleifend purus eu est tincidunt placerat. Curabitur pharetra tortor vel nisl mattis, at malesuada ante lacinia. Donec mattis justo quis sagittis sagittis. Donec at porttitor est. Morbi nisi dui, egestas vitae interdum ut, ornare a ipsum. Aenean at lorem id felis egestas lacinia in vel enim. Ut non finibus tortor, a luctus augue. Quisque tempus metus sit amet lacus rhoncus, sit amet egestas dui porttitor. Maecenas at mauris erat."
 		},
 		{
-			id  : "f0c9f0a2-ac24-4fda-bff8-39f1a6baa177",
-			own : false,
-			body: "The box-shadow property enables you to cast a drop shadow from the frame of almost any element. If a border-radius is specified on the element with a box shadow, the box shadow takes on the same rounded corners. The z-ordering of multiple box shadows is the same as multiple text shadows (the first specified shadow is on top).\n" +
+			timestamp: 1601374515444,
+			id       : "f0c9f0a2-ac24-4fda-bff8-39f1a6baa177",
+			own      : false,
+			body     : "The box-shadow property enables you to cast a drop shadow from the frame of almost any element. If a border-radius is specified on the element with a box shadow, the box shadow takes on the same rounded corners. The z-ordering of multiple box shadows is the same as multiple text shadows (the first specified shadow is on top).\n" +
 				"\n" +
 				"Box-shadow generator is an interactive tool allowing you to generate a box-shadow."
 		}

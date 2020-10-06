@@ -11,12 +11,15 @@ import React, {Component}      from 'react';
 import {Badge, Card, Col, Row} from 'react-bootstrap';
 import {connect}               from "react-redux";
 
-import {changeMode, changeSideMenu} from '../../../../../mq/actions/navigation/Common/Side/Settings';
+import {changeMode, changeSideMenu, allUserCounters} from '../../../../../mq/actions/navigation/Common/Side/Settings';
+import LoadData                                      from '../../../../Common/Spinner';
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		changeMode    : () => dispatch(changeMode()),
-		changeSideMenu: () => dispatch(changeSideMenu())
+		allUserCounters: payload => dispatch(allUserCounters(payload)),
+		changeMode     : () => dispatch(changeMode()),
+		changeSideMenu : () => dispatch(changeSideMenu())
+
 	};
 };
 
@@ -26,12 +29,25 @@ const mapStateToProps = (state) => {
 
 class Index extends Component {
 
-	_loadCounters() {
+	componentDidMount() {
+		this.props.allUserCounters(this.props.user.id);
+	}
+
+	_renderInProgress() {
+		const {strings, mode} = this.props;
+		return <LoadData {...{
+			mode,
+			text: strings.load,
+			size: "xl"
+		}}/>;
+	}
+
+	_renderCounters() {
 		const {counters, mode} = this.props;
 		return counters && counters.length > 0 ? counters.map(counter =>
-			<Row key={counter.name} className={"side-menu-body2-row"}>
+			<Row key={counter.type.name} className={"side-menu-body2-row"}>
 				<Col className={"side-menu-body2-col name"}>
-					{counter.name}
+					{counter.type.name}
 				</Col>
 				<Col className={"side-menu-body2-col counts"}>
 					<Badge pill variant={mode}>
@@ -43,7 +59,7 @@ class Index extends Component {
 	}
 
 	render() {
-		const {changeMode, changeSideMenu, settings_titles, mode, darkLightChecked, leftRightChecked, user} = this.props;
+		const {changeMode, changeSideMenu, settings_titles, mode, darkLightChecked, leftRightChecked, user, counterProgress} = this.props;
 		return (
 			<>
 				<Card.Body id="side-menu-body" className={`side-menu-username ${mode}`}>
@@ -53,7 +69,7 @@ class Index extends Component {
 					{settings_titles.counters}
 				</Card.Header>
 				<Card.Body id="side-menu-body" className={`side-menu-body2 ${mode}`}>
-					{this._loadCounters()}
+					{counterProgress ? this._renderInProgress() : this._renderCounters()}
 				</Card.Body>
 				<Card.Header id="side-menu-body" className={`side-menu-header ${mode}`}>
 					{settings_titles.mode}
