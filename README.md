@@ -59,12 +59,13 @@
         * [Status J](#status-j)
         * [List of environments J](#list-of-environments-j)
         * [CLI usage Linux(Unix) J](#cli-usage-linuxunix-j)
-        * [Docker usage Linux J](#docker-usage-linux-j)
+        * [Docker usage Linux(Unix) J](#docker-usage-linux-j)
+        * [Documentations for clients J](#documentations-for-clients-j)
     * [react-dev](#react-dev)
         * [Status R](#status-r)
         * [List of environments R](#list-of-environments-r)
         * [CLI usage Linux(Unix) R](#cli-usage-linuxunix-r)
-- [Documentations for clients](#documentations-for-clients-r)
+        * [Docker usage Linux(Unix) R](#docker-usage-linux-r)
 - [Author](#author)
 
 ## Overview
@@ -84,9 +85,10 @@ some important components of data security and integrity.
 * RabbitMQ 3.8.5
 * RedisDB 6.0.5
 ### React
-* Node 12.8.4
+* Node 12.19.0
 * RabbitMQ 3.8.5
-* EMS Service 0.0.1
+* EMS Service 
+    - Java: 0.0.3
 
 ## Branches
 ### diagrams
@@ -266,8 +268,8 @@ java -jar ems-$VERSION.jar
 <br>
 
 #### Docker usage Linux J
-##### Step1 - Build project
-Init test environments and build
+##### Step1 - Init test env
+Init test environments
 ```bash
 VERSION=$(cat VERSION) 
 PORT={your service test port} 
@@ -288,19 +290,24 @@ REDIS_DB={test redis DB number}
 REST_CORS_ORIGINS={test rest cors origins}
 REST_CORS_METHODS={test rest cors methods}
 CALLBACK_CORS_ORIGINS={test callback cors origins}
-./gradlew clean build
 ```
 <br>
 
-##### Step2 - Build Docker
+##### Step2.1 - Build Docker
 Build docker image.
 ```bash
-VERSION=$(cat VERSION) 
 docker build -t ems/java:$VERSION .
 ```
 <br>
 
-##### Step3 - Run Docker
+##### Step2.2 - Build docker-compose
+Build docker image.
+```bash
+docker-compose build --force-rm --no-cache
+```
+<br>
+
+##### Step3.1 - Run Docker
 Init prod environments and run Docker image.
 ```bash
 VERSION=$(cat VERSION) 
@@ -322,6 +329,7 @@ REDIS_DB={prod redis DB number}
 REST_CORS_ORIGINS={prod rest cors origins}
 REST_CORS_METHODS={prod rest cors methods}
 CALLBACK_CORS_ORIGINS={prod callback cors origins}
+
 docker run --name {your docker run name} \
 -e MQ_HOST -e MQ_PORT -e MQ_USER -e MQ_PASS \
 -e PG_HOST -e PG_USER -e PG_PASS -e SHOW_SQL \
@@ -329,6 +337,40 @@ docker run --name {your docker run name} \
 -e REDIS_PORT -e REDIS_DB -e REST_CORS_ORIGINS -e REST_CORS_METHODS \
 -e CALLBACK_CORS_ORIGINS -p $PORT:8080 ems/java:$VERSION
 ```
+<br>
+
+##### Step3.2 - Run docker-compose
+Init prod environments and run Docker image.
+```bash
+VERSION=$(cat VERSION) 
+PORT={your service prod port} 
+MQ_HOST={prod rabbit host} 
+MQ_PORT={prod rabbit port} 
+MQ_USER={prod rabbit username} 
+MQ_PASS={prod rabbit password} 
+PG_HOST={prod postgres JDBC connection} 
+PG_USER={prod postgres username} 
+PG_PASS={prod postgres password} 
+SHOW_SQL=false 
+FORMAT_SQL=false 
+LOG_LEVEL=warn 
+REDIS_PASS={prod redis password} 
+REDIS_HOST={prod redis host} 
+REDIS_PORT={prod redis port} 
+REDIS_DB={prod redis DB number} 
+REST_CORS_ORIGINS={prod rest cors origins}
+REST_CORS_METHODS={prod rest cors methods}
+CALLBACK_CORS_ORIGINS={prod callback cors origins}
+
+docker-compose up -d
+```
+<br>
+
+#### Documentations for clients J
+| Name | Example |
+| :------: | :-----: |
+| So-called REST API | `http://{hostname}:{port}/v1/docs/restapi` |
+| Callback API(Web Socket) | `http://{hostname}:{port}/v1/docs/callback` |
 <br>
 
 ### react-dev
@@ -339,34 +381,110 @@ docker run --name {your docker run name} \
 </details>
 
 #### Status R
-![](https://img.shields.io/badge/-in%20progress-orange?style=for-the-badge)
+![](https://img.shields.io/badge/-ready-green?style=for-the-badge)
 
 #### List of environments R
-| Env name | Description | Example |
-| :------: | ----------- | :-----: |
-| `PORT` | Port number for connecting to the client | 3000 |
-| `REACT_APP_VERSION` | Version of the project | 0.0.0 |
-| `REACT_APP_BASE_URL` | URL for connect to the EMS service | localhost |
-| `REACT_APP_PROXY_URL` | URL for connect to the proxy RabbitMQ | localhost |
+|       Env name        | Description                              |  Example  |
+| :-------------------: | ---------------------------------------- | :-------: |
+|        `PORT`         | Port number for connecting to the client |   3000    |
+| `REACT_APP_BASE_URL`  | URL for connect to the EMS service       | localhost |
+| `REACT_APP_PROXY_URL` | URL for connect to the proxy RabbitMQ    | localhost |
+| `REACT_APP_SOCKET_PROXY_LOGIN`  | Login for connect to the proxy RabbitMQ       | rabbitmq |
+| `REACT_APP_SOCKET_PROXY_PASS` | Password for connect to the proxy RabbitMQ    | rabbitmq |
 
 #### CLI usage Linux(Unix) R
 ##### Step1 - Run from npm
-Init prod environments and run from npm.
+##### Step1 - Run test from npm
+Init test environments and run tests.
+```bash
+REACT_APP_VERSION=$(cat VERSION)
+PORT={your client test port}
+REACT_APP_BASE_URL={your EMS service test URL}
+REACT_APP_PROXY_URL={your proxy RabbitMQ test URL}
+REACT_APP_SOCKET_PROXY_LOGIN={your proxy RabbitMQ test login}
+REACT_APP_SOCKET_PROXY_PASS={your proxy RabbitMQ test password}
+
+npm run test
+```
+<br>
+
+##### Step2 - Run prod from npm
+Init prod environments and run ```serve -s build```.
 ```bash
 REACT_APP_VERSION=$(cat VERSION)
 PORT={your client prod port}
 REACT_APP_BASE_URL={your EMS service prod URL}
 REACT_APP_PROXY_URL={your proxy RabbitMQ prod URL}
+REACT_APP_SOCKET_PROXY_LOGIN={your proxy RabbitMQ prod login}
+REACT_APP_SOCKET_PROXY_PASS={your proxy RabbitMQ prod password}
 
-npm start
+npm install -g serve
+npm run build && serve -s build
 ```
 <br>
 
-## Documentations for clients
-| Name | Example |
-| :------: | :-----: |
-| So-called REST API | `http://{hostname}:{port}/v1/docs/restapi` |
-| Callback API(Web Socket) | `http://{hostname}:{port}/v1/docs/callback` |
+#### Docker usage Linux(Unix) R
+##### Step1 - Init test env
+Init test environments
+```bash
+REACT_APP_VERSION=$(cat VERSION)
+PORT={your client test port}
+REACT_APP_BASE_URL={your EMS service test URL}
+REACT_APP_PROXY_URL={your proxy RabbitMQ test URL}
+REACT_APP_SOCKET_PROXY_LOGIN={your proxy RabbitMQ test login}
+REACT_APP_SOCKET_PROXY_PASS={your proxy RabbitMQ test password}
+
+npm run test
+```
+<br>
+
+##### Step2.1 - Build Docker
+Init prod environments and build docker image.
+```bash
+REACT_APP_VERSION=$(cat VERSION)
+PORT={your client prod port}
+REACT_APP_BASE_URL={your EMS service prod URL}
+REACT_APP_PROXY_URL={your proxy RabbitMQ prod URL}
+REACT_APP_SOCKET_PROXY_LOGIN={your proxy RabbitMQ prod login}
+REACT_APP_SOCKET_PROXY_PASS={your proxy RabbitMQ prod password}
+
+docker build -t ema/react:$REACT_APP_VERSION .
+```
+<br>
+
+##### Step2.2 - Build docker-compose
+Build docker image.
+```bash
+REACT_APP_VERSION=$(cat VERSION)
+PORT={your client prod port}
+REACT_APP_BASE_URL={your EMS service prod URL}
+REACT_APP_PROXY_URL={your proxy RabbitMQ prod URL}
+REACT_APP_SOCKET_PROXY_LOGIN={your proxy RabbitMQ prod login}
+REACT_APP_SOCKET_PROXY_PASS={your proxy RabbitMQ prod password}
+
+docker-compose build --force-rm --no-cache
+```
+<br>
+
+##### Step3.1 - Run Docker
+Run Docker image.
+```bash
+REACT_APP_VERSION=$(cat VERSION)
+PORT={your client prod port}
+
+docker run --name {your docker run name} $PORT:80 ems/react:$REACT_APP_VERSION
+```
+<br>
+
+##### Step3.2 - Run docker-compose
+Init prod environments and run Docker image.
+```bash
+REACT_APP_VERSION=$(cat VERSION)
+PORT={your client prod port}
+
+docker-compose up -d
+```
+<br>
 
 ## Author
 <table>
