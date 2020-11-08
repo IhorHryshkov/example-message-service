@@ -1,7 +1,8 @@
 /**
  * @project ems
  * @author Ihor Hryshkov
- * @version 1.0.0
+ * @version 1.0.1
+ * @updated 2020-10-16T13:09
  * @since 2020-09-04T12:19
  */
 package integration.com.example.ems;
@@ -485,21 +486,11 @@ public class UserControllerTest extends RootControllerTest {
     assertThat(user.getStatus().getName()).as("User status name DB").isEqualTo("online");
     Counters counter = countersDAO.findByKeysUserId(user.getId()).stream().findFirst().orElse(null);
     assertThat(counter).as("Counter is not null DB").isNotNull();
-    assertThat(counter.getUser()).as("Counter user is not null DB").isNotNull();
-    assertThat(counter.getUser().getId().toString()).as("Counter user ID DB").isEqualTo(newUserId);
-    assertThat(counter.getUser().getUsername())
-        .as("Counter user username DB")
-        .isEqualTo("testUser2");
-    assertThat(counter.getUser().getStatus()).as("Counter user status is not null DB").isNotNull();
-    assertThat(counter.getUser().getStatus().getId())
-        .as("Counter user status ID DB")
-        .isEqualTo(statusIdOnline);
-    assertThat(counter.getUser().getStatus().getName())
-        .as("Counter user status name DB")
-        .isEqualTo("online");
-    assertThat(counter.getType()).as("Counter type is not null DB").isNotNull();
-    assertThat(counter.getType().getId()).as("Counter type ID DB").isEqualTo(typeId);
-    assertThat(counter.getType().getName()).as("Counter type name DB").isEqualTo("online");
+    assertThat(counter.getKeys()).as("Counter keys is not null DB").isNotNull();
+    assertThat(counter.getKeys().getTypeId()).as("Counter key type ID DB").isEqualTo(typeId);
+    assertThat(counter.getKeys().getUserId())
+        .as("Counter key user ID DB")
+        .isEqualTo(UUID.fromString(newUserId));
     assertThat(counter.getCounts()).as("Counter counts DB").isEqualTo(1L);
     assertThat(redisTemplate.opsForHash().hasKey("state::callback::RESOLVE", resIdSuccess))
         .as("State RESOLVE is add")
@@ -741,23 +732,11 @@ public class UserControllerTest extends RootControllerTest {
     assertThat(user.getStatus().getName()).as("User status name DB").isEqualTo("testName");
     Counters counter = countersDAO.findByKeysUserId(user.getId()).stream().findFirst().orElse(null);
     assertThat(counter).as("Counter is not null DB").isNotNull();
-    assertThat(counter.getUser()).as("Counter user is not null DB").isNotNull();
-    assertThat(counter.getUser().getId().toString())
-        .as("Counter user ID DB")
-        .isEqualTo(userIdOnline);
-    assertThat(counter.getUser().getUsername())
-        .as("Counter user username DB")
-        .isEqualTo("testUserOnline");
-    assertThat(counter.getUser().getStatus()).as("Counter user status is not null DB").isNotNull();
-    assertThat(counter.getUser().getStatus().getId())
-        .as("Counter user status ID DB")
-        .isEqualTo(statusId);
-    assertThat(counter.getUser().getStatus().getName())
-        .as("Counter user status name DB")
-        .isEqualTo("testName");
-    assertThat(counter.getType()).as("Counter type is not null DB").isNotNull();
-    assertThat(counter.getType().getId()).as("Counter type ID DB").isEqualTo(typeIdTest);
-    assertThat(counter.getType().getName()).as("Counter type name DB").isEqualTo("testName");
+    assertThat(counter.getKeys()).as("Counter keys is not null DB").isNotNull();
+    assertThat(counter.getKeys().getTypeId()).as("Counter key type ID DB").isEqualTo(typeIdTest);
+    assertThat(counter.getKeys().getUserId())
+        .as("Counter key user ID DB")
+        .isEqualTo(UUID.fromString(userIdOnline));
     assertThat(counter.getCounts()).as("Counter counts DB").isEqualTo(1L);
   }
 }

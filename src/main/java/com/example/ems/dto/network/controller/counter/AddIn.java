@@ -89,6 +89,6 @@ public class AddIn implements Serializable {
   }
 
   public String toStringKey() {
-    return String.format("%s::%s::%d", userId, typeId, count);
+    return String.format("%s::%d", userId, typeId);
   }
 }

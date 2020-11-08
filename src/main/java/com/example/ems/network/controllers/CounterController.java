@@ -33,11 +33,7 @@ import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "Counter Controller", description = "Controller for processing counters data of user")
@@ -91,34 +87,20 @@ public class CounterController {
                           description = "Success",
                           value =
                               "{\n"
-                                  + "  \"resId\":\"960f9730-b0f4-49b8-adfc-8cedfea1db14\",\n"
-                                  + "  \"data\":[\n"
+                                  + "  \"resId\": \"6942ba47-a967-446b-8fe2-b9fa58513b95\",\n"
+                                  + "  \"data\": [\n"
                                   + "    {\n"
-                                  + "      \"user\":{\n"
-                                  + "        \"id\":\"f02e8ce7-162e-4f78-9508-99d8886a9e61\",\n"
-                                  + "        \"username\":\"testUser\",\n"
-                                  + "        \"meta\":null,\n"
-                                  + "        \"createdAt\":1599828403580,\n"
-                                  + "        \"updatedAt\":1599828403580,\n"
-                                  + "        \"status\":{\n"
-                                  + "          \"id\":1358,\n"
-                                  + "          \"name\":\"testName\",\n"
-                                  + "          \"createdAt\":1599828403564,\n"
-                                  + "          \"updatedAt\":1599828403564\n"
-                                  + "        }\n"
+                                  + "      \"keys\": {\n"
+                                  + "        \"userId\":"
+                                  + " \"b5c4f333-9824-490b-9f8d-451ef5e71da6\",\n"
+                                  + "        \"typeId\": 1\n"
                                   + "      },\n"
-                                  + "      \"type\":{\n"
-                                  + "        \"id\":490,\n"
-                                  + "        \"name\":\"testName\",\n"
-                                  + "        \"createdAt\":1599828403572,\n"
-                                  + "        \"updatedAt\":1599828403572\n"
-                                  + "      },\n"
-                                  + "      \"counts\":20,\n"
-                                  + "      \"createdAt\":1599828403586,\n"
-                                  + "      \"updatedAt\":1599828403740\n"
+                                  + "      \"counts\": 79,\n"
+                                  + "      \"createdAt\": 1601974201791,\n"
+                                  + "      \"updatedAt\": 1602773160779\n"
                                   + "    }\n"
                                   + "  ],\n"
-                                  + "  \"timestamp\":1599829489630\n"
+                                  + "  \"timestamp\": 1602846689185\n"
                                   + "}")
                     })),
         @ApiResponse(
@@ -206,7 +188,7 @@ public class CounterController {
   @ApiResponses(
       value = {
         @ApiResponse(
-            responseCode = "200",
+            responseCode = "201",
             description = "Success",
             content =
                 @Content(
@@ -214,7 +196,7 @@ public class CounterController {
                     schema = @Schema(implementation = Res.class),
                     examples = {
                       @ExampleObject(
-                          name = "200",
+                          name = "201",
                           description = "Success",
                           value =
                               "{\n"

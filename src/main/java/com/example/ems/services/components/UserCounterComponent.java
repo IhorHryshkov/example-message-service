@@ -1,7 +1,8 @@
 /**
  * @project ems
  * @author Ihor Hryshkov
- * @version 1.0.0
+ * @version 1.0.1
+ * @updated 2020-10-16T13:03
  * @since 2020-08-17T05:29
  */
 package com.example.ems.services.components;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class UserCounterComponent {
+
   private final CountersDAO countersDAO;
   private final UsersDAO usersDAO;
   private final StateDAO stateDAO;
@@ -50,14 +52,12 @@ public class UserCounterComponent {
       Counters counter;
       count = count == null || count <= 0 ? 1L : count;
       if (type == null) {
-        log.warn("Type name {} not found", user.getStatus().getName());
+        log.warn("Type is null");
       } else {
         CountersIds countersIds = new CountersIds(user.getId(), type.getId());
         counter = this.countersDAO.findById(countersIds).orElse(null);
         if (counter == null) {
           counter = new Counters(countersIds, BigInteger.valueOf(count));
-          counter.setType(type);
-          counter.setUser(user);
         } else {
           counter.setCounts(counter.getCounts().add(BigInteger.valueOf(count)));
         }

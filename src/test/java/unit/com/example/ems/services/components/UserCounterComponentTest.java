@@ -1,7 +1,8 @@
 /**
  * @project ems
  * @author Ihor Hryshkov
- * @version 1.0.0
+ * @version 1.0.1
+ * @updated 2020-10-16T13:05
  * @since 2020-08-13T09:35
  */
 package unit.com.example.ems.services.components;
@@ -53,8 +54,6 @@ class UserCounterComponentTest {
     CountersIds countersIdsExpected = new CountersIds(user.getId(), type.getId());
     Counters counterFind = new Counters(countersIds, BigInteger.valueOf(10));
     Counters counterNewExpect = new Counters(countersIds, BigInteger.valueOf(1));
-    counterNewExpect.setType(type);
-    counterNewExpect.setUser(user);
     Counters counterFindAndAddExpect = new Counters(countersIds, BigInteger.valueOf(15));
 
     when(stateDAO.exist(eq(keyExpect), eq(hashExpected))).thenReturn(true, false);

@@ -152,8 +152,8 @@ java -jar ems-$VERSION.jar
 <br>
 
 #### Docker usage Linux
-##### Step1 - Build project
-Init test environments and build
+##### Step1 - Init test env
+Init test environments
 ```bash
 VERSION=$(cat VERSION) 
 PORT={your service test port} 
@@ -174,19 +174,24 @@ REDIS_DB={test redis DB number}
 REST_CORS_ORIGINS={test rest cors origins}
 REST_CORS_METHODS={test rest cors methods}
 CALLBACK_CORS_ORIGINS={test callback cors origins}
-./gradlew clean build
 ```
 <br>
 
-##### Step2 - Build Docker
+##### Step2.1 - Build Docker
 Build docker image.
 ```bash
-VERSION=$(cat VERSION) 
 docker build -t ems/java:$VERSION .
 ```
 <br>
 
-##### Step3 - Run Docker
+##### Step2.2 - Build docker-compose
+Build docker image.
+```bash
+docker-compose build --force-rm --no-cache
+```
+<br>
+
+##### Step3.1 - Run Docker
 Init prod environments and run Docker image.
 ```bash
 VERSION=$(cat VERSION) 
@@ -208,12 +213,40 @@ REDIS_DB={prod redis DB number}
 REST_CORS_ORIGINS={prod rest cors origins}
 REST_CORS_METHODS={prod rest cors methods}
 CALLBACK_CORS_ORIGINS={prod callback cors origins}
+
 docker run --name {your docker run name} \
 -e MQ_HOST -e MQ_PORT -e MQ_USER -e MQ_PASS \
 -e PG_HOST -e PG_USER -e PG_PASS -e SHOW_SQL \
 -e FORMAT_SQL -e LOG_LEVEL -e REDIS_PASS -e REDIS_HOST \
 -e REDIS_PORT -e REDIS_DB -e REST_CORS_ORIGINS -e REST_CORS_METHODS \
 -e CALLBACK_CORS_ORIGINS -p $PORT:8080 ems/java:$VERSION
+```
+<br>
+
+##### Step3.2 - Run docker-compose
+Init prod environments and run Docker image.
+```bash
+VERSION=$(cat VERSION) 
+PORT={your service prod port} 
+MQ_HOST={prod rabbit host} 
+MQ_PORT={prod rabbit port} 
+MQ_USER={prod rabbit username} 
+MQ_PASS={prod rabbit password} 
+PG_HOST={prod postgres JDBC connection} 
+PG_USER={prod postgres username} 
+PG_PASS={prod postgres password} 
+SHOW_SQL=false 
+FORMAT_SQL=false 
+LOG_LEVEL=warn 
+REDIS_PASS={prod redis password} 
+REDIS_HOST={prod redis host} 
+REDIS_PORT={prod redis port} 
+REDIS_DB={prod redis DB number} 
+REST_CORS_ORIGINS={prod rest cors origins}
+REST_CORS_METHODS={prod rest cors methods}
+CALLBACK_CORS_ORIGINS={prod callback cors origins}
+
+docker-compose up -d
 ```
 <br>
 

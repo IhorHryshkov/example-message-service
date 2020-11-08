@@ -1,7 +1,8 @@
 /**
  * @project ems
  * @author Ihor Hryshkov
- * @version 1.0.0
+ * @version 1.0.1
+ * @updated 2020-10-16T13:05
  * @since 2020-09-01T10:34
  */
 package integration.com.example.ems;
@@ -52,6 +53,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 
 public class CounterControllerTest extends RootControllerTest {
+
   @Autowired private RedisTemplate<Object, Object> redisTemplate;
   @Autowired private AmqpAdmin amqpAdmin;
   @Autowired private CountersDAO countersDAO;
@@ -92,8 +94,6 @@ public class CounterControllerTest extends RootControllerTest {
     Counters counters = new Counters();
     counters.setKeys(countersIds);
     counters.setCounts(BigInteger.valueOf(10L));
-    counters.setUser(user);
-    counters.setType(type);
     countersDAO.save(counters);
   }
 
@@ -218,25 +218,9 @@ public class CounterControllerTest extends RootControllerTest {
     assertThat(resData).as("Check list data is empty").isNotEmpty();
     Counters counter = mapper.convertValue(resData.get(0), Counters.class);
     assertThat(counter.getCounts()).as("Result count").isEqualTo(10);
-    assertThat(counter.getKeys()).as("Keys is null").isNull();
-    assertThat(counter.getType())
-        .as("Type is not null and Types class")
-        .isNotNull()
-        .isInstanceOf(Types.class);
-    assertThat(counter.getUser())
-        .as("User is not null and Users class")
-        .isNotNull()
-        .isInstanceOf(Users.class);
-    assertThat(counter.getType().getName()).as("Type name").isEqualTo("testName");
-    assertThat(counter.getType().getId()).as("Type ID").isEqualTo(typeId);
-    assertThat(counter.getUser().getUsername()).as("Username").isEqualTo("testUser");
-    assertThat(counter.getUser().getId()).as("User ID").isEqualTo(UUID.fromString(userId));
-    assertThat(counter.getUser().getStatus())
-        .as("Status is not null and Status class")
-        .isNotNull()
-        .isInstanceOf(Status.class);
-    assertThat(counter.getUser().getStatus().getName()).as("Status name").isEqualTo("testName");
-    assertThat(counter.getUser().getStatus().getId()).as("Status ID").isEqualTo(statusId);
+    assertThat(counter.getKeys()).as("Keys is not null").isNotNull();
+    assertThat(counter.getKeys().getTypeId()).as("Keys type ID").isEqualTo(typeId);
+    assertThat(counter.getKeys().getUserId()).as("Keys user ID").isEqualTo(UUID.fromString(userId));
     assertThat(redisTemplate.hasKey(ifNoneMatchCacheKey)).as("Check data in cache").isTrue();
     GetByIdOut<?> cache = (GetByIdOut<?>) redisTemplate.boundValueOps(ifNoneMatchCacheKey).get();
     assertThat(cache).as("Cache is not null").isNotNull();
@@ -250,26 +234,6 @@ public class CounterControllerTest extends RootControllerTest {
     assertThat(counter.getKeys().getUserId())
         .as("Keys user ID cache")
         .isEqualTo(UUID.fromString(userId));
-    assertThat(counter.getType())
-        .as("Type is not null and Types class cache")
-        .isNotNull()
-        .isInstanceOf(Types.class);
-    assertThat(counter.getUser())
-        .as("User is not null and Users class cache")
-        .isNotNull()
-        .isInstanceOf(Users.class);
-    assertThat(counter.getType().getName()).as("Type name cache").isEqualTo("testName");
-    assertThat(counter.getType().getId()).as("Type ID cache").isEqualTo(typeId);
-    assertThat(counter.getUser().getUsername()).as("Username cache").isEqualTo("testUser");
-    assertThat(counter.getUser().getId()).as("User ID cache").isEqualTo(UUID.fromString(userId));
-    assertThat(counter.getUser().getStatus())
-        .as("Status is not null and Status class cache")
-        .isNotNull()
-        .isInstanceOf(Status.class);
-    assertThat(counter.getUser().getStatus().getName())
-        .as("Status name cache")
-        .isEqualTo("testName");
-    assertThat(counter.getUser().getStatus().getId()).as("Status ID cache").isEqualTo(statusId);
 
     // If data is not change
     headers.setIfNoneMatch(ifNoneMatch);
@@ -294,24 +258,6 @@ public class CounterControllerTest extends RootControllerTest {
     assertThat(counter.getKeys().getUserId())
         .as("Keys user ID DB")
         .isEqualTo(UUID.fromString(userId));
-    assertThat(counter.getType())
-        .as("Type is not null and Types class DB")
-        .isNotNull()
-        .isInstanceOf(Types.class);
-    assertThat(counter.getUser())
-        .as("User is not null and Users class DB")
-        .isNotNull()
-        .isInstanceOf(Users.class);
-    assertThat(counter.getType().getName()).as("Type name DB").isEqualTo("testName");
-    assertThat(counter.getType().getId()).as("Type ID DB").isEqualTo(typeId);
-    assertThat(counter.getUser().getUsername()).as("Username DB").isEqualTo("testUser");
-    assertThat(counter.getUser().getId()).as("User ID DB").isEqualTo(UUID.fromString(userId));
-    assertThat(counter.getUser().getStatus())
-        .as("Status is not null and Status class DB")
-        .isNotNull()
-        .isInstanceOf(Status.class);
-    assertThat(counter.getUser().getStatus().getName()).as("Status name DB").isEqualTo("testName");
-    assertThat(counter.getUser().getStatus().getId()).as("Status ID DB").isEqualTo(statusId);
   }
 
   @Test
@@ -393,7 +339,7 @@ public class CounterControllerTest extends RootControllerTest {
     // Test if add counter in progress
     stateDAO.add(
         "counterState::add::IN_PROGRESS",
-        "982579205d960eb63253c7c0452fa255cca271fd084b299e4143965243c74577",
+        "3a8b5fd19043a5fc90197f1d423e0a58b8bd98cb6d8859d5edc3c543f634a9ad",
         "testData");
     ResponseEntity<Res> responseEntity =
         this.restTemplate.postForEntity(createURLWithPort(endpointExpected), params202, Res.class);
@@ -499,24 +445,6 @@ public class CounterControllerTest extends RootControllerTest {
     assertThat(counter.getKeys().getUserId())
         .as("Keys user ID DB")
         .isEqualTo(UUID.fromString(userId));
-    assertThat(counter.getType())
-        .as("Type is not null and Types class DB")
-        .isNotNull()
-        .isInstanceOf(Types.class);
-    assertThat(counter.getUser())
-        .as("User is not null and Users class DB")
-        .isNotNull()
-        .isInstanceOf(Users.class);
-    assertThat(counter.getType().getName()).as("Type name DB").isEqualTo("testName");
-    assertThat(counter.getType().getId()).as("Type ID DB").isEqualTo(typeId);
-    assertThat(counter.getUser().getUsername()).as("Username DB").isEqualTo("testUser");
-    assertThat(counter.getUser().getId()).as("User ID DB").isEqualTo(UUID.fromString(userId));
-    assertThat(counter.getUser().getStatus())
-        .as("Status is not null and Status class DB")
-        .isNotNull()
-        .isInstanceOf(Status.class);
-    assertThat(counter.getUser().getStatus().getName()).as("Status name DB").isEqualTo("testName");
-    assertThat(counter.getUser().getStatus().getId()).as("Status ID DB").isEqualTo(statusId);
     assertThat(
             redisTemplate.hasKey(
                 String.format(

@@ -37,13 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -381,8 +375,7 @@ public class UserController {
                                   + "   \"timestamp\":1599431725364,\n"
                                   + "   \"resId\":\"78449aae-eac8-48b6-aa99-5c57bfee4d63\",\n"
                                   + "   \"data\":{\n"
-                                  + "     \"userId\":\"4e5d7d13-0b24-4529-bbe1-a68e50fa8121\",\n"
-                                  + "     \"statusId\":1\n"
+                                  + "     \"username\":\"TesterPester\"\n"
                                   + "   }\n"
                                   + "}")
                     })),

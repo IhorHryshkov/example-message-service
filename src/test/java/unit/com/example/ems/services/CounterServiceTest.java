@@ -89,7 +89,7 @@ class CounterServiceTest {
     addExpected.setTypeId(1);
     addExpected.setCount(1L);
     addExpected.setResId("aaaaaaaa-fdb5-442a-9493-9797c3ab8736");
-    String hashKeyExpected = "8a69a6ef51814f854047e49ed1a539d33f6096ec858454ed3499c9a918fcd8d7";
+    String hashKeyExpected = "3a8b5fd19043a5fc90197f1d423e0a58b8bd98cb6d8859d5edc3c543f634a9ad";
     String userIdHashExpected = "3496fdbcd7ecef849bec992d9441d86fe8cba183882421327c37a9ed45e70b7d";
 
     Users user = new Users();
@@ -142,7 +142,7 @@ class CounterServiceTest {
   void listenCounterAdd() {
     String keyInProgressExpected = "counterState::add::IN_PROGRESS";
     String keyInitExpected = "counterState::add::INIT";
-    String hashKeyExpected = "8a69a6ef51814f854047e49ed1a539d33f6096ec858454ed3499c9a918fcd8d7";
+    String hashKeyExpected = "3a8b5fd19043a5fc90197f1d423e0a58b8bd98cb6d8859d5edc3c543f634a9ad";
     AddIn add = new AddIn();
     add.setUserId("88239958-fdb5-442a-9493-9797c3ab8736");
     add.setTypeId(1);
