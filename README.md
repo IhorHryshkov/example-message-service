@@ -65,7 +65,7 @@
         * [Status R](#status-r)
         * [List of environments R](#list-of-environments-r)
         * [CLI usage Linux(Unix) R](#cli-usage-linuxunix-r)
-        * [Docker usage Linux(Unix) R](#docker-usage-linux-r)
+        * [Docker usage Linux(Unix) R](#docker-usage-linuxunix-r)
 - [Author](#author)
 
 ## Overview
