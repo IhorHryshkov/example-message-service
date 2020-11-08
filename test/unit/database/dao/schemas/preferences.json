@@ -1,0 +1,11 @@
+{
+	"add": {
+		"path": "/preferences/add.json"
+	},
+	"remove": {
+		"path": "/preferences/remove.json"
+	},
+	"getByKey": {
+		"path": "/preferences/getByKey.json"
+	}
+}

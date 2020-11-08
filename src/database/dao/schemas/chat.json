@@ -1,0 +1,8 @@
+{
+	"add": {
+		"path": "/chat/add.json"
+	},
+	"getById": {
+		"path": "/chat/getById.json"
+	}
+}

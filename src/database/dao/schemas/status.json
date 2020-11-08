@@ -1,0 +1,8 @@
+{
+	"add": {
+		"path": "/status/add.json"
+	},
+	"getByName": {
+		"path": "/status/getByName.json"
+	}
+}

@@ -1,28 +1,26 @@
 {
-	"short_name"      : "ems",
-	"name"            : "EMS: Web App",
-	"icons"           : [
+	"short_name": "ems",
+	"name": "EMS: Web App",
+	"icons": [
 		{
-			"src"  : "img/ico/favicon.ico",
+			"src": "img/ico/favicon.ico",
 			"sizes": "96x96 64x64 32x32 24x24 16x16",
-			"type" : "image/x-icon"
+			"type": "image/x-icon"
 		},
 		{
-			"src"  : "img/logo/logo-192.light",
-			"type" : "image/png",
+			"src": "img/logo/logo-192.light",
+			"type": "image/png",
 			"sizes": "192x192"
 		},
 		{
-			"src"  : "img/logo/logo-512.light",
-			"type" : "image/png",
+			"src": "img/logo/logo-512.light",
+			"type": "image/png",
 			"sizes": "512x512"
 		}
 	],
-	"start_url"       : ".",
-	"display"         : "standalone",
-	"theme_color"     : "#000000",
-	"background_color": "#ffffff",
-	"permissions"     : [
-		"alarms"
-	]
+	"start_url": "./index.html",
+	"display": "standalone",
+	"theme_color": "#000000",
+	"background_color": "#000000",
+	"permissions": ["alarms"]
 }

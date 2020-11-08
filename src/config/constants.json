@@ -1,0 +1,172 @@
+{
+	"constants": {
+		"global": {
+			"database": {
+				"name": "EMS",
+				"version": 1
+			},
+			"preferences": {
+				"maxOnlineTTL": 3000000,
+				"retryTime": 2000
+			},
+			"network": {
+				"timeout": 5000,
+				"webSocket": {
+					"servicePath": "/v1/callback",
+					"proxyPath": "/ws",
+					"serviceQueue": "/queue/",
+					"proxyQueue": "/topic/",
+					"serviceReconnect": 1000,
+					"proxyReconnect": 1000,
+					"sockListenerErrorRetry": 2000,
+					"sockListenerRetry": 2
+				}
+			},
+			"actions": {
+				"IS_INIT_SOCKET": "global/isInitSocket",
+				"INIT_SOCKET": "global/initSocket",
+				"LISTEN_SOCKET": "global/listenSocket",
+				"RESET": "global/reset",
+				"ERROR": "global/error",
+				"PROGRESS": "global/progress",
+				"SUCCESS": "global/success"
+			}
+		},
+		"callback": {
+			"prefixStorageKey": "EMS_",
+			"postfixStorageKey": "_callback",
+			"network": {
+				"approve": {
+					"path": "/v1/callback/approve",
+					"method": "post"
+				}
+			},
+			"enums": {
+				"ADD_USER": "ADD_USER",
+				"UPDATE_USER": "UPDATE_USER",
+				"UPDATE_COUNTER": "UPDATE_COUNTER"
+			}
+		},
+		"status": {
+			"network": {
+				"all": {
+					"path": "/v1/status",
+					"method": "get"
+				}
+			}
+		},
+		"type": {
+			"network": {
+				"all": {
+					"path": "/v1/type",
+					"method": "get"
+				}
+			}
+		},
+		"chat": {
+			"actions": {
+				"SEND_MESSAGE": "chat/sendMessage",
+				"INIT_CHAT": "chat/init",
+				"LOAD_CHAT": "chat/load",
+				"LOAD_CHAT_SUCCESS": "chat/loadSuccess",
+				"UPDATE_CHAT": "chat/update"
+			},
+			"validation": {
+				"message": {
+					"min": 1
+				}
+			}
+		},
+		"counter": {
+			"network": {
+				"getById": {
+					"path": "/v1/counter",
+					"method": "get"
+				},
+				"add": {
+					"path": "/v1/counter",
+					"method": "post"
+				}
+			},
+			"actions": {
+				"COUNTER_GETBYID_SUCCESS": "counter/getByIdSuccess",
+				"COUNTER_GETBYID": "counter/getById"
+			}
+		},
+		"user": {
+			"database": {
+				"name": "users"
+			},
+			"default": {
+				"status": "online",
+				"type": "message"
+			},
+			"network": {
+				"all": {
+					"path": "/v1/user",
+					"method": "get"
+				},
+				"add": {
+					"path": "/v1/user",
+					"method": "post"
+				},
+				"update": {
+					"path": "/v1/user",
+					"method": "put"
+				}
+			},
+			"actions": {
+				"USER_SELECT": "user/select",
+				"USER_SELECT_SUCCESS": "user/selectSuccess",
+				"USER_ALL": "user/all",
+				"USER_ALL_PROGRESS": "user/allProgress",
+				"USER_ALL_SUCCESS": "user/allSuccess",
+				"USER_ADD": "user/add",
+				"USER_ADD_PROGRESS": "user/addProgress",
+				"USER_ADD_SUCCESS": "user/addSuccess",
+				"USER_MESSAGE_COUNT_UPDATE": "user/messageCount",
+				"USERNAME_BUSY": "user/usernameBusy"
+			},
+			"validation": {
+				"username": {
+					"min": 6,
+					"max": 64,
+					"regex": "^[A-Za-z0-9_-]+$"
+				}
+			}
+		},
+		"sideSettings": {
+			"prefixStorageKey": "EMS_",
+			"postfixStorageKey": "_pref",
+			"actions": {
+				"CHANGE_MODE": "sideSettings/changeMode",
+				"CHANGE_SIDE_MENU": "sideSettings/changeSideMenu",
+				"GET_LOCAL_PREF": "sideSettings/getLocalPref",
+				"ADD_LOCAL_PREF": "sideSettings/addRemotePref",
+				"INIT_LOCAL_PREF": "sideSettings/initLocalPref"
+			}
+		},
+		"navigation": {
+			"minSwipeDistance": 100,
+			"buttonId": {
+				"settings": "settings",
+				"chats": "chats"
+			},
+			"actions": {
+				"HIDE_NAVIGATION": "navigation/hideNavigation",
+				"HIDE_NAVIGATION_UPDATE": "navigation/hideNavigationUpdate",
+				"CLOSE_ALL": "navigation/closeAllMenu",
+				"OPEN_MENU": "navigation/openMenu",
+				"CLOSE_MENU": "navigation/closeMenu",
+				"ALL_CLICK_MENU": "navigation/allClickMenu",
+				"ALL_KEY_MENU": "navigation/allKeyMenu",
+				"TOUCH_START_MENU": "navigation/touchStartMenu",
+				"TOUCH_MOVE_MENU": "navigation/touchMoveMenu",
+				"TOUCH_END_MENU": "navigation/touchEndMenu",
+				"TOUCH_CLEAN_MENU": "navigation/touchCleanMenu",
+				"SELECT_ITEM_MENU": "navigation/selectItemMenu",
+				"UPDATE_ITEM_MENU": "navigation/updateItemMenu"
+			}
+		}
+	}
+}

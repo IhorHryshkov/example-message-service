@@ -1,0 +1,239 @@
+.navigation {
+	top: 0;
+	-webkit-transition: transform 1s;
+	-moz-transition: transform 1s;
+	-o-transition: transform 1s;
+	transition: transform 1s;
+}
+
+.navigation.hide {
+	transform: translate(0, -65px);
+}
+
+/*Brand navbar styles*/
+.navbar-brand {
+	font: 300 20px "Oswald", sans-serif;
+}
+
+.navbar-brand.light {
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.navbar-brand.dark {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.brand-text-left-round {
+	padding: 6px 10px 8px 15px;
+	margin: 0;
+	letter-spacing: 1px;
+	border-radius: 50px 0 0 50px;
+}
+
+.brand-text-left-round.light {
+	color: #fff !important;
+}
+
+.brand-text-left-round.dark {
+	color: #000 !important;
+}
+
+/**************************************/
+/*Menu navbar styles*/
+.menu-navbar {
+	display: flex;
+	opacity: 1;
+	visibility: visible;
+	flex-grow: 0;
+	max-width: 100%;
+	flex-wrap: nowrap !important;
+}
+
+@media screen and (max-width: 810px) {
+	.menu-navbar {
+		max-width: 0 !important;
+		opacity: 0 !important;
+		visibility: hidden !important;
+	}
+}
+
+/**************************************/
+/**************Containers**************/
+.navbar-container {
+	min-width: 100%;
+	padding-right: 0;
+	padding-left: 0;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.nav {
+	margin: 0;
+}
+
+.nav.top {
+	flex-wrap: nowrap;
+	border-radius: 0 50px 50px 0;
+	padding-right: 20px;
+}
+
+.nav.top.light {
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.nav.top.dark {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.nav.menu {
+	background: transparent;
+}
+
+/***********************************/
+/**************Buttons**************/
+.get-started-button,
+.get-started-button:active,
+.get-started-button.active,
+.get-started-button:focus {
+	border-radius: 0 50px 50px 0;
+	border-left: 1px dotted;
+}
+
+.get-started-button.light,
+.get-started-button.light:active,
+.get-started-button.active.light,
+.get-started-button.light:focus {
+	background: rgba(0, 150, 0, 0.8);
+	color: #fff;
+	border-color: #fff;
+}
+
+.get-started-button.dark,
+.get-started-button.dark:active,
+.get-started-button.active.dark,
+.get-started-button.dark:focus {
+	background: rgba(0, 255, 0, 0.8);
+	color: #000;
+	border-color: #000;
+}
+
+.get-started-button.light:hover {
+	background: rgba(255, 255, 255, 0.8);
+	border-color: #000;
+	color: #000;
+	box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.8);
+}
+
+.get-started-button.dark:hover {
+	background: rgba(0, 0, 0, 0.8);
+	border-color: #fff;
+	color: #fff;
+	box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.8);
+}
+
+.sign-in-button,
+.sign-in-button:active,
+.sign-in-button.active,
+.sign-in-button:focus {
+	border-right: 0 solid;
+	border-radius: 50px 0 0 50px;
+}
+
+.sign-in-button,
+.sign-in-button:active,
+.sign-in-button.active,
+.sign-in-button:focus {
+	background: transparent;
+}
+
+.sign-in-button.light:hover {
+	background: rgba(255, 255, 255, 0.8);
+	border-color: #fff;
+	color: #000;
+	box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.8);
+}
+
+.sign-in-button.dark:hover {
+	background: rgba(0, 0, 0, 0.8);
+	border-color: #fff;
+	color: #fff;
+	box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.8);
+}
+
+/*************************************/
+/**************Input******************/
+.navbar-search {
+	height: 44px;
+	min-width: 40px !important;
+	width: 1px;
+	flex-wrap: nowrap;
+	flex-grow: 1 !important;
+	margin: 0 !important;
+	padding: 1px;
+	border-radius: 50px 50px 50px 50px;
+}
+
+.navbar-search.light {
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.navbar-search.dark {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.navbar-search-input,
+.navbar-search-input:active,
+.navbar-search-input.active,
+.navbar-search-input:focus {
+	height: 100%;
+	width: 1px;
+	font: 300 16px "Oswald", sans-serif;
+	flex-grow: 1 !important;
+	margin: 0;
+	padding: 3px;
+	border-radius: 0 50px 50px 0;
+	background-image: none;
+	-webkit-box-shadow: none;
+	outline: 0;
+	outline-offset: 0;
+	box-shadow: none;
+	-webkit-transition: width 1s;
+	-moz-transition: width 1s;
+	-o-transition: width 1s;
+	transition: width 1s;
+}
+
+.navbar-search-input.light,
+.navbar-search-input.light:active,
+.navbar-search-input.light.active,
+.navbar-search-input.light:focus {
+	border-color: transparent;
+	background: #fff;
+	color: #000;
+}
+
+.navbar-search-input.dark,
+.navbar-search-input.dark:active,
+.navbar-search-input.dark.active,
+.navbar-search-input.dark:focus {
+	border-color: transparent;
+	background: #000;
+	color: #fff;
+}
+
+.navbar-search-img {
+	height: 16px;
+	width: 16px;
+	padding: 0;
+	margin: 0 5px 0 5px;
+}
+
+.navbar-search-img.light {
+	fill: #fff;
+}
+
+.navbar-search-img.dark {
+	fill: #000;
+}
+
+/*************************************/

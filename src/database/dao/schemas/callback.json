@@ -1,0 +1,11 @@
+{
+	"add": {
+		"path": "/callback/add.json"
+	},
+	"remove": {
+		"path": "/callback/remove.json"
+	},
+	"getByKey": {
+		"path": "/callback/getByKey.json"
+	}
+}

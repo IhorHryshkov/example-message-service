@@ -1,0 +1,53 @@
+.message {
+	border-color: transparent;
+}
+
+.message.right {
+	margin-left: auto;
+	align-self: flex-end;
+	border-radius: 15px 0 15px 15px;
+	box-shadow: -3px 3px 5px grey;
+}
+
+.message.right.light {
+	color: black;
+	background-color: rgba(255, 255, 255, 0.8);
+}
+
+.message.right.dark {
+	color: white;
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+.message.left {
+	margin-right: auto;
+	box-shadow: 3px 3px 5px grey;
+	border-radius: 0 15px 15px 15px;
+}
+
+.message.left.light {
+	color: black;
+	background-color: rgba(144, 238, 144, 0.6);
+}
+
+.message.left.dark {
+	color: white;
+	background-color: rgba(30, 60, 30, 0.6);
+}
+
+.message-row {
+	width: 95%;
+	padding: 5px;
+}
+
+.message-row.right {
+	float: right;
+}
+
+.message-row.left {
+	float: left;
+}
+
+.message-body {
+	white-space: pre-wrap;
+}

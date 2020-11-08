@@ -1,0 +1,16 @@
+{
+	"title": "get counter by id",
+	"type": "object",
+	"description": "get counts of type by type ID.",
+	"properties": {
+		"id": {
+			"type": "number",
+			"description": "id of the type"
+		},
+		"counts": {
+			"type": "number",
+			"description": "counts by type"
+		}
+	},
+	"required": ["id", "counts"]
+}

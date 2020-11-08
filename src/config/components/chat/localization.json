@@ -1,0 +1,10 @@
+{
+	"en": {
+		"message": {
+			"placeholder": "Shift+Enter or click to button for send message",
+			"min": "Message is too short!",
+			"required": "Message is required"
+		},
+		"load": "Init chat..."
+	}
+}

@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  ema:
+    container_name: "ema-react"
+    image: "ema/react:${REACT_APP_VERSION}"
+    build:
+      context: .
+      args:
+        REACT_APP_SERVER_BASE_URL: "${REACT_APP_SERVER_BASE_URL}"
+        REACT_APP_SOCKET_PROXY_URL: "${REACT_APP_SOCKET_PROXY_URL}"
+        REACT_APP_SOCKET_PROXY_LOGIN: "${REACT_APP_SOCKET_PROXY_LOGIN}"
+        REACT_APP_SOCKET_PROXY_PASS: "${REACT_APP_SOCKET_PROXY_PASS}"
+    ports:
+      - "${PORT}:8080"

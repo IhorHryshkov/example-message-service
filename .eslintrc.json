@@ -1,0 +1,81 @@
+{
+	"parserOptions" :{
+		"ecmaVersion" :2018,
+		"sourceType"  :"module",
+		"ecmaFeatures":{
+			"jsx":true
+		}
+	},
+	"ignorePatterns":[
+		"**/*.css",
+		"**/*.svg",
+		"**/*.json"
+	],
+	"parser"        :"babel-eslint",
+	"extends"       :[
+		"eslint:recommended",
+		"plugin:import/errors",
+		"plugin:import/warnings",
+		"plugin:react/recommended",
+		"airbnb",
+		"prettier",
+		"prettier/react"
+	],
+	"globals"       :{
+		"window"        :true,
+		"document"      :true,
+		"localStorage"  :true,
+		"sessionStorage":true,
+		"Event"         :true
+	},
+	"rules"         :{
+		"prefer-promise-reject-errors"   :"off",
+		"no-shadow"                      :"off",
+		"no-nested-ternary"              :"off",
+		"react/prefer-stateless-function":"off",
+		"react/prop-types"               :"off",
+		"class-methods-use-this"         :[
+			"error",
+			{
+				"exceptMethods":[
+					"getById",
+					"add",
+					"remove",
+					"update",
+					"all",
+					"init"
+				]
+			}
+		],
+		"no-mixed-spaces-and-tabs"       :[
+			"error",
+			"smart-tabs"
+		],
+		"no-param-reassign"              :[
+			"error",
+			{
+				"props"                         :true,
+				"ignorePropertyModificationsFor":[
+					"client"
+				]
+			}
+		],
+		"no-console"                     :"error",
+		"camelcase"                      :"off",
+		"no-empty"                       :[
+			"error",
+			{
+				"allowEmptyCatch":true
+			}
+		],
+		"no-underscore-dangle"           :[
+			"error",
+			{
+				"allow"         :[
+					"__REDUX_DEVTOOLS_EXTENSION_COMPOSE__"
+				],
+				"allowAfterThis":true
+			}
+		]
+	}
+}

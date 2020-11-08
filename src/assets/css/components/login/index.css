@@ -1,0 +1,30 @@
+.root-card {
+	background-color: transparent;
+	border-radius: 15px;
+}
+
+.root-card.light {
+	border-color: rgba(0, 0, 0, 0.5);
+}
+
+.root-card.dark {
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.root-card-header {
+	background-color: transparent;
+}
+
+.root-card-header.light {
+	border-color: rgba(0, 0, 0, 0.5);
+	color: black;
+}
+
+.root-card-header.dark {
+	border-color: rgba(255, 255, 255, 0.5);
+	color: white;
+}
+
+.root-button {
+	border-radius: 50px;
+}

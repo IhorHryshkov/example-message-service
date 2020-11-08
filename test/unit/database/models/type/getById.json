@@ -1,0 +1,19 @@
+{
+	"title": "get type by id",
+	"description": "get type from array by id",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "number",
+			"description": "type ID"
+		},
+		"name": {
+			"type": "string",
+			"description": "type name",
+			"maxLength": 64,
+			"minLength": 3,
+			"pattern": "[A-Za-z0-9_-]+"
+		}
+	},
+	"required": ["id", "name"]
+}

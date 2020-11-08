@@ -1,0 +1,97 @@
+.flip-container {
+	perspective: 1000px;
+	margin: 0 !important;
+	/*flex-grow: 0.1 !important;*/
+}
+
+.flip-container,
+.front,
+.back {
+	width: 44px;
+	height: 44px;
+}
+
+.flipper {
+	transform-style: preserve-3d;
+
+	position: relative;
+	animation-name: flipping;
+	animation-duration: 12s;
+	animation-delay: 4s;
+	animation-iteration-count: infinite;
+}
+
+.front,
+.back {
+	backface-visibility: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.front {
+	z-index: 2;
+	transform: rotateY(0deg);
+}
+
+.back {
+	transform: rotateY(180deg);
+}
+
+@keyframes flipping {
+	0% {
+		transform: rotateY(0deg);
+	}
+	25% {
+		transform: rotateY(180deg);
+	}
+	50% {
+		transform: rotateY(180deg);
+	}
+	75% {
+		transform: rotateY(360deg);
+	}
+	100% {
+		transform: rotateY(360deg);
+	}
+}
+
+.brand-logo {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 44px;
+	height: 44px;
+	padding: 1px 0 0 0;
+	margin: 0;
+	border-radius: 50px 50px 50px 50px;
+	-webkit-transition: background 1s;
+	-moz-transition: background 1s;
+	-o-transition: background 1s;
+	transition: background 1s;
+}
+
+.brand-logo.light {
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.brand-logo.dark {
+	background: rgba(255, 255, 255, 0.8);
+}
+
+.brand-logo-img {
+	width: 30px;
+	height: 30px;
+	-webkit-transition: fill 1s;
+	-moz-transition: fill 1s;
+	-o-transition: fill 1s;
+	transition: fill 1s;
+}
+
+.brand-logo-img.light {
+	fill: #fff;
+}
+
+.brand-logo-img.dark {
+	fill: #000;
+}

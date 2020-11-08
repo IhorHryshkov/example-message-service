@@ -1,0 +1,17 @@
+{
+	"en": {
+		"site": "Chats",
+		"user": "User",
+		"up": "Up",
+		"down": "Down",
+		"menu": "Menu",
+		"settings": "Settings",
+		"settings_titles": {
+			"counters": "User statistics",
+			"darkLight": "Dark/Light",
+			"mode": "Mode",
+			"menuSide": "Menu side",
+			"leftRight": "Left/Right"
+		}
+	}
+}

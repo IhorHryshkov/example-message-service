@@ -1,0 +1,13 @@
+{
+	"rootDir"               : "test",
+	"moduleFileExtensions"  : [
+		"js",
+		"jsx"
+	],
+	"testPathIgnorePatterns": [
+		"/node_modules/"
+	],
+	"testMatch"             : [
+		"<rootDir>/unit/**/*_test.[tj]s?(x)"
+	]
+}

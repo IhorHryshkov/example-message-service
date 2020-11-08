@@ -1,0 +1,21 @@
+{
+	"title": "all counter",
+	"description": "get all counters data for show counts of type",
+	"type": "array",
+	"uniqueItems": true,
+	"items": {
+		"type": "object",
+		"description": "counts of type by user.",
+		"properties": {
+			"id": {
+				"type": "number",
+				"description": "id of the type"
+			},
+			"counts": {
+				"type": "number",
+				"description": "counts by type"
+			}
+		},
+		"required": ["id", "counts"]
+	}
+}

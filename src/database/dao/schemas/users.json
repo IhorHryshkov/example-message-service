@@ -1,0 +1,11 @@
+{
+	"add": {
+		"path": "/users/add.json"
+	},
+	"getById": {
+		"path": "/users/getById.json"
+	},
+	"all": {
+		"path": "/users/all.json"
+	}
+}

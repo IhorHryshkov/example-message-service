@@ -1,0 +1,11 @@
+{
+	"add": {
+		"path": "/type/add.json"
+	},
+	"getByName": {
+		"path": "/type/getByName.json"
+	},
+	"getById": {
+		"path": "/type/getById.json"
+	}
+}

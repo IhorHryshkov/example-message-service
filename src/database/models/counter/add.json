@@ -1,0 +1,28 @@
+{
+	"title": "add counter",
+	"description": "add counter data for show counts of type",
+	"type": "array",
+	"uniqueItems": true,
+	"items": {
+		"type": "object",
+		"description": "counts of type by user.",
+		"properties": {
+			"keys": {
+				"type": "object",
+				"description": "Counter keys",
+				"properties": {
+					"typeId": {
+						"type": "number",
+						"description": "id of the type"
+					}
+				},
+				"required": ["typeId"]
+			},
+			"counts": {
+				"type": "number",
+				"description": "counts by type"
+			}
+		},
+		"required": ["keys", "counts"]
+	}
+}

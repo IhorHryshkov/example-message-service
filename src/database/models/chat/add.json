@@ -1,0 +1,38 @@
+{
+	"title": "add messages",
+	"description": "add messages for chat",
+	"type": "object",
+	"properties": {
+		"id": {
+			"type": "string",
+			"pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+			"description": "id of the chat message.",
+			"maxLength": 36,
+			"minLength": 36
+		},
+		"user_id": {
+			"type": "string",
+			"pattern": "[0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12}",
+			"description": "id of the chat user message.",
+			"maxLength": 36,
+			"minLength": 36
+		},
+		"chat_id": {
+			"type": "string",
+			"pattern": "[A-Fa-f0-9]{128}",
+			"description": "id of the chat.",
+			"maxLength": 128,
+			"minLength": 128
+		},
+		"body": {
+			"type": "string",
+			"description": "body of chat message.",
+			"minLength": 1
+		},
+		"timestamp": {
+			"type": "number",
+			"description": "timestamp of chat message."
+		}
+	},
+	"required": ["id", "user_id", "chat_id", "body", "timestamp"]
+}

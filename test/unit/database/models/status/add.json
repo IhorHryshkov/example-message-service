@@ -1,0 +1,24 @@
+{
+	"title": "add journal statuses",
+	"description": "add journal statuses data for send to server only IDs",
+	"type": "array",
+	"uniqueItems": true,
+	"items": {
+		"type": "object",
+		"description": "status of user",
+		"properties": {
+			"id": {
+				"type": "number",
+				"description": "status ID"
+			},
+			"name": {
+				"type": "string",
+				"description": "status name",
+				"maxLength": 64,
+				"minLength": 3,
+				"pattern": "[A-Za-z0-9_-]+"
+			}
+		},
+		"required": ["id", "name"]
+	}
+}

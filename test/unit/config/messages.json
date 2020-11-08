@@ -1,0 +1,14 @@
+{
+	"error": {
+		"dataIncorrect": {
+			"message": "Validate data is incorrect",
+			"code": "ERROR"
+		}
+	},
+	"info": {
+		"success": {
+			"message": "Success",
+			"code": "SUCCESS"
+		}
+	}
+}

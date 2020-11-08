@@ -1,0 +1,11 @@
+{
+	"add": {
+		"path": "/counter/add.json"
+	},
+	"getById": {
+		"path": "/counter/getById.json"
+	},
+	"all": {
+		"path": "/counter/all.json"
+	}
+}

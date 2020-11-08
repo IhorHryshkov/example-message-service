@@ -1,0 +1,22 @@
+.root-user-chat {
+	width: 100%;
+}
+
+.user-chat-badge {
+	position: absolute;
+	margin-top: 1px;
+}
+
+.user-chat-badge.right {
+	right: 0;
+}
+
+.user-chat-badge.left {
+	left: 0;
+}
+
+.user-chat-button {
+	width: 100%;
+	border-radius: 50px;
+	margin-top: 5px;
+}
