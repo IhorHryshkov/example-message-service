@@ -40,6 +40,7 @@
     * [Diagram](#diagram)
     * [Java](#java)
     * [React](#react)
+    * [NodeJS](#nodejs)
 - [Branches](#branches)
     * [diagrams](#diagrams)
         * [Status D](#status-d)
@@ -66,6 +67,18 @@
         * [List of environments R](#list-of-environments-r)
         * [CLI usage Linux(Unix) R](#cli-usage-linuxunix-r)
         * [Docker usage Linux(Unix) R](#docker-usage-linuxunix-r)
+    * [nodejs-dev](#nodejs-dev)
+        * [Status N](#status-n)
+    * [android-kotlin-dev](#android-kotlin-dev)
+        * [Status A](#status-a)
+    * [flutter-dev](#flutter-dev)
+        * [Status F](#status-f)
+    * [go-dev](#go-dev)
+        * [Status G](#status-g)
+    * [ios-swift-dev](#ios-swift-dev)
+        * [Status I](#status-i)
+    * [python-dev](#python-dev)
+        * [Status P](#status-p)
 - [Author](#author)
 
 ## Overview
@@ -89,6 +102,11 @@ some important components of data security and integrity.
 * RabbitMQ 3.8.5
 * EMS Service 
     - Java: 0.0.3
+### NodeJS
+* Node 12.19.0
+* PostgresDB 11.5
+* RabbitMQ 3.8.5
+* RedisDB 6.0.5
 
 ## Branches
 ### diagrams
@@ -485,6 +503,66 @@ PORT={your client prod port}
 docker-compose up -d
 ```
 <br>
+
+### nodejs-dev
+<details>
+  <summary>Click here to read more about git clone by branch name</summary>
+  <br>
+<pre><code>git clone -b nodejs-dev {URL http or git}</code></pre>
+</details>
+
+#### Status N
+![](https://img.shields.io/badge/-in%20progress-orange?style=for-the-badge)
+
+### android-kotlin-dev
+<details>
+  <summary>Click here to read more about git clone by branch name</summary>
+  <br>
+<pre><code>git clone -b android-kotlin-dev {URL http or git}</code></pre>
+</details>
+
+#### Status A
+![](https://img.shields.io/badge/-not%20started-red?style=for-the-badge)
+
+### flutter-dev
+<details>
+  <summary>Click here to read more about git clone by branch name</summary>
+  <br>
+<pre><code>git clone -b flutter-dev {URL http or git}</code></pre>
+</details>
+
+#### Status F
+![](https://img.shields.io/badge/-not%20started-red?style=for-the-badge)
+
+### go-dev
+<details>
+  <summary>Click here to read more about git clone by branch name</summary>
+  <br>
+<pre><code>git clone -b go-dev {URL http or git}</code></pre>
+</details>
+
+#### Status G
+![](https://img.shields.io/badge/-not%20started-red?style=for-the-badge)
+
+### ios-swift-dev
+<details>
+  <summary>Click here to read more about git clone by branch name</summary>
+  <br>
+<pre><code>git clone -b ios-swift-dev {URL http or git}</code></pre>
+</details>
+
+#### Status I
+![](https://img.shields.io/badge/-not%20started-red?style=for-the-badge)
+
+### python-dev
+<details>
+  <summary>Click here to read more about git clone by branch name</summary>
+  <br>
+<pre><code>git clone -b python-dev {URL http or git}</code></pre>
+</details>
+
+#### Status P
+![](https://img.shields.io/badge/-not%20started-red?style=for-the-badge)
 
 ## Author
 <table>
