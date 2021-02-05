@@ -1,8 +1,0 @@
-{
-	"add"     : {
-		"path": "/local/status/add.json"
-	},
-	"getByKey": {
-		"path": "/local/status/getByKey.json"
-	}
-}

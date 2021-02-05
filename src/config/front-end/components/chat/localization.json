@@ -1,9 +1,0 @@
-{
-	"en":{
-		"message":{
-			"placeholder":"Enter message",
-			"min"        :"Message is too short!",
-			"required"   :"Message is required"
-		}
-	}
-}
